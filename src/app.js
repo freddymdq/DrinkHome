@@ -18,37 +18,6 @@ const server = app.listen(PORT, ()=>{
 const MONGO = "mongodb+srv://freddymdq:federico@cluster0.wm7ahcr.mongodb.net/ecommerce?retryWrites=true&w=majority"
 const connect = mongoose.connect(MONGO);
 
-const consult = async () =>{
-
-  //agrupar por precio de mayor a menor
- /*  const result = await productModel.aggregate([
-    {$group: {_id:'$price', products:{$push: "$$ROOT"}}},
-    {$sort: {_id:-1}}
-  ]) */
-
-  // agrupar productos por categoria
-  /* const category = await productModel.aggregate([
-    {$group: {_id:'$category', products:{$push: "$$ROOT"}}},
-  ])
-  console.log(JSON.stringify(category, null,'\t')); */
-
-  // promedio de precio de los productos segun categoria
-  /* const promed = await productModel.aggregate([
-    {$match: {category:"whisky"}},
-    {$group: {_id: "whisky", promedio:{$avg: "$price" }}}
-  ])
-  console.log(JSON.stringify(promed, null,'\t')) */
-
-  //promedio de precios general de producto
- /*  const promed1 = await productModel.aggregate([
-    {$group: {_id: "products", promedio:{$avg: "$price" }}}
-  ])
-  console.log(JSON.stringify(promed1, null,'\t'))  */
-}
-consult()
-
-
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 // Estaticos

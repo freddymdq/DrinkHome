@@ -6,7 +6,7 @@ const router = Router();
 const CartManager = new CartManagerMongo();
 
 // muestra el el cart el producto detallado
-router.get('/cart/:id', CartManager.getCartDetails)
+router.get('/details/:id', CartManager.getCartDetails)
 router.get('/', CartManager.getCarts);
 router.get('/:id', CartManager.getCartById);
 router.post('/', CartManager.addCart);
