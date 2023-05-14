@@ -29,7 +29,6 @@ app.set('view engine', 'handlebars');
 
 // routes
 app.use('/', viewsRouter)
-app.use('/realTimeProducts', viewsRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/products/', productRouter);
 app.use('/api/carts/', cartRouter);

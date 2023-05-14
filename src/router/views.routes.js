@@ -7,7 +7,7 @@ const router = Router();
 //const accesManager = new AccesManager()
 router.get('/', async (req, res) => {
   const { page = 1, limit, query } = req.query;
-  const opt = { page, limit: parseInt(limit) || 8, lean: true };
+  const opt = { page, limit: parseInt(limit) || 16, lean: true };
   opt.sort = { price: -1 };
   const filter = {};
   if (query) {
@@ -50,7 +50,7 @@ router.get('/products', async (req, res) => {
     const { docs, hasPrevPage, hasNextPage, nextPage, prevPage } = await productModel.paginate(filter, opt);
     const products = docs;
     const message = products.length === 0 ? 'No se encontraron productos' : '';
-    res.render('home', {
+    res.render('prod', {
         title: "Drink Home",
       products,
       hasPrevPage,
@@ -63,20 +63,6 @@ router.get('/products', async (req, res) => {
   });
 
 // vista cart
-/* router.get('/:cartId', async (req, res) => {
-  const cartId = req.params.cartId;
-  // Filtrar solicitudes para favicon.ico 
-  // esto si no lo pongo me da un error, creo que es por el icono de la page
-  if (cartId === 'favicon.ico') {
-    return res.status(204).end();
-  }
-  const cart = await cartModel.findById(cartId);
-  const total = cart.items.reduce((acc, item) => {
-    return acc + (item.product.price * item.quantity);
-  }, 0);
-  res.render('cart', { cart, total });
-});
- */
 router.get("/cart/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -84,6 +70,11 @@ router.get("/cart/:id", async (req, res) => {
       .findById(id)
       .populate("products.product")
       .lean();
+      // Filtrar solicitudes para favicon.ico 
+      // esto si no lo pongo me da un error, creo que es por el icono de la page
+      if (cart === 'favicon.ico') {
+        return res.status(204).end();
+      }
 
     // Suma los precios de los productos en el carrito
     const total = cart.products.reduce((acc, product) => {
