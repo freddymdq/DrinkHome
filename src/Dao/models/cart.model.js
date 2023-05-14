@@ -1,8 +1,8 @@
 import mongoosePaginate from 'mongoose-paginate-v2'
 import mongoose from 'mongoose';
-import productModel from './products.model.js';
 
-const Product = mongoose.model('Products', productModel.schema);
+/* import productModel from './products.model.js'; */
+/* const Product = mongoose.model('Products', productModel.schema); */
 
 const collection = 'cart';
 

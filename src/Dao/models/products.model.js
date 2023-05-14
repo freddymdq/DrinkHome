@@ -20,6 +20,10 @@ const schema = new mongoose.Schema({
         type: String,
         require: true
     },
+    status: {
+        type: Boolean,
+        require: true
+    },
     img: {
         type: String,
         require: true

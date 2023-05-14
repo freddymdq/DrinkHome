@@ -83,7 +83,7 @@ router.get("/cart/:id", async (req, res) => {
 
     res.render("cart", { title: "Carrito", cart, total });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).send({ message: error.message });
   }
 });
 

@@ -24,7 +24,7 @@ export default class CartManagerMongo {
       return res.status(500).json({ error: 'Error al obtener los detalles del carrito.' });
     }
   }
-    // muestra todos los carts
+// muestra todos los carts
 async getCarts(req, res) {
   try {
 // await accesManager.createRecord('TODOS LOS CARRITOS');
