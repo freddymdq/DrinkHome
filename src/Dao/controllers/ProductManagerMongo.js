@@ -35,11 +35,11 @@ export default class ProductManagerMongo {
   async addProduct(req, res) {
     try {
      // await accesManager.createRecord("PRODUCTO CREADO");
-      const { title, description, price, category, img, code, stock } = req.body;
-      if (!title || !description || !price || !category || !img || !code || !stock) {
+      const { title, description, price, category, status, img, code, stock } = req.body;
+      if (!title || !description || !price || !category || !status || !img || !code || !stock) {
         return res.status(400).send({ error: "Faltan datos" });
       }
-      const product = { title, description, price, category, img, code, stock };
+      const product = { title, description, price, category, status, img, code, stock };
       const result = await productModel.create(product);
       res.status(200).send({ result });
     } catch (error) {

@@ -12,16 +12,16 @@ export default class CartManagerMongo {
       const cart = await cartModel
         .findById(cartId)
         .populate('products.product')
-        .exec();
+        /* .exec(); */
 
       if (!cart) {
-        return res.status(404).json({ error: 'No se encontró el carrito' });
+        return res.status(404).send({ error: 'No se encontró el carrito' });
       }
 
-      return res.json(cart);
+      return res.send(cart);
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'Error al obtener los detalles del carrito.' });
+      return res.status(500).send({ error: 'Error al obtener los detalles del carrito.' });
     }
   }
 // muestra todos los carts

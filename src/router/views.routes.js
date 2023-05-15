@@ -29,14 +29,14 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/products', async (req, res) => {
-    const { page = 1, limit, query, sort } = req.query;
+  try {
+    let { page = 1, limit, query, sort, category } = req.query;
     const opt = { page, limit: parseInt(limit) || 3, lean: true };
     if (sort) {
       opt.sort = { [sort]: 1 };
     } else {
       opt.sort = { title: 1 };
     }
-    // esto no lo vimos pero a mi me funciono asi el filtrado. de lo contrario tendria que aplicar agregate y paginate todo al mismo router.
     const filter = {};
     if (query) {
       filter.$or = [
@@ -44,23 +44,31 @@ router.get('/products', async (req, res) => {
         { title: { $regex: new RegExp(query, 'i') } }
       ];
     }
-    else {
+    if (category) {
+      filter.category = category;
+    } else {
       filter.category = { $exists: true };
     }
     const { docs, hasPrevPage, hasNextPage, nextPage, prevPage } = await productModel.paginate(filter, opt);
     const products = docs;
     const message = products.length === 0 ? 'No se encontraron productos' : '';
+    const urlParams = { page, limit, query, sort, category }; // Almacena los parámetros de la URL
     res.render('prod', {
-        title: "Drink Home",
+      title: "Drink Home",
       products,
       hasPrevPage,
       hasNextPage,
       nextPage,
       prevPage,
       query,
-      message
+      message,
+      urlParams // Pasa los parámetros de la URL a la plantilla
     });
-  });
+  } catch (error) {
+    res.status(500).send({ error: 'Error al obtener los productos' });
+  }
+});
+
 
 // vista cart
 router.get("/cart/:id", async (req, res) => {

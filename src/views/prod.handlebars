@@ -21,10 +21,12 @@
       </div>
     {{/each}}
   </div>
-  {{#if hasPrevPage}}
-  <a href="/products?page={{prevPage}}"><button class="button2">Anterior</button></a>
+  <div>
+  {{#if prevPage}}
+    <a href="/products?{{#if urlParams.query}}query={{urlParams.query}}&{{/if}}{{#if urlParams.sort}}sort={{urlParams.sort}}&{{/if}}{{#if urlParams.category}}category={{urlParams.category}}&{{/if}}page={{prevPage}}"><button class="button2">Anterior</button></a>
   {{/if}}
-   {{#if hasNextPage}}
-  <a href="/products?page={{nextPage}}"><button class="button2">Siguiente</button></a>
+  {{#if nextPage}}
+    <a href="/products?{{#if urlParams.query}}query={{urlParams.query}}&{{/if}}{{#if urlParams.sort}}sort={{urlParams.sort}}&{{/if}}{{#if urlParams.category}}category={{urlParams.category}}&{{/if}}page={{nextPage}}"><button class="button2">Siguiente</button></a>
   {{/if}}
+</div>
 </div>

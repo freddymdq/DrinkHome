@@ -130,7 +130,7 @@ body {
 .titulo {
   text-align: center;
   font-size: 24px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 /* Estilos para la sección de galería */
@@ -186,6 +186,10 @@ p {
 
 }
 .formulario{
-  margin-top: 20px;
+  margin-top: 50px;
   margin-bottom: 40px;
+}
+
+.fondofoto{
+  position: relative;
 }
