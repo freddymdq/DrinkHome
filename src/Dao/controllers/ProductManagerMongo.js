@@ -1,10 +1,45 @@
+import productModel from "../models/products.model.js";
 
+export default class ProductManagerMongo {
+  async getProducts() {
+    const result = await productModel.find();
+    return result;
+  }
+
+  async getProductsById(id) {
+    const result = await productModel.find({ _id: id });
+    return result;
+  }
+
+  async addProduct(productData) {
+    const { title, description, price, category, status, img, code, stock } = productData;
+    if (!title || !description || !price || !category || !status || !img || !code || !stock) {
+      throw new Error("Faltan datos");
+    }
+    const product = { title, description, price, category, status, img, code, stock };
+    const result = await productModel.create(product);
+    return result;
+  }
+
+  async deleteProduct(id) {
+    const result = await productModel.deleteOne({ _id: id });
+    return result;
+  }
+
+  async updateProduct(id, updateProduct) {
+    const result = await productModel.updateOne({ _id: id }, { $set: updateProduct });
+    return result;
+  }
+}
+
+/* TODO JUNTO PARAMS Y METODOS
 import AccesManager from "./AccesManager.js"
 import productModel from "../models/products.model.js"
 
-const accesManager = new AccesManager();
+//const accesManager = new AccesManager();
 
 export default class ProductManagerMongo {
+  // TODOS LOS PRODUCTOS
   async getProducts(req, res) {
     try {
      // await accesManager.createRecord("MOSTRAR PRODUCTOS");
@@ -17,7 +52,7 @@ export default class ProductManagerMongo {
       });
     }
   }
-
+  // PRODUCTO POR ID
   async getProductsById(req, res) {
     try {
       //await accesManager.createRecord("MOSTRAR PRODUCTO POR ID");
@@ -31,7 +66,7 @@ export default class ProductManagerMongo {
       });
     }
   }
-
+  // AGREGAR PRODUCTO AL DB
   async addProduct(req, res) {
     try {
      // await accesManager.createRecord("PRODUCTO CREADO");
@@ -49,7 +84,7 @@ export default class ProductManagerMongo {
       });
     }
   }
-
+  // BORRAR PRODUCTO
   async deleteProduct(req, res) {
     try {
      // await accesManager.createRecord("PRODUCTO BORRADO");
@@ -63,7 +98,7 @@ export default class ProductManagerMongo {
       });
     }
   }
-
+  // ACTUALIZAR PRODUCTO
   async updateProduct(req, res) {
     try {
      // await accesManager.createRecord("ACTUALIZACION DEL PRODUCTO");
@@ -79,3 +114,4 @@ export default class ProductManagerMongo {
     }
   }
 }
+ */

@@ -1,4 +1,93 @@
-import AccesManager from "./AccesManager.js"
+import cartModel from "../models/cart.model.js";
+import productModel from "../models/products.model.js";
+
+export default class CartManagerMongo {
+  // DETALLE CARRITO
+  async getCartDetails(cartId) {
+    const cart = await cartModel
+      .findById(cartId)
+      .populate('products.product');
+    return cart;
+  }
+  // VISTA CARRITOS
+  async getCarts() {
+    const carts = await cartModel.find();
+    return carts;
+  }
+  // VISTA CARRITO POR ID
+  async getCartById(cartId) {
+    const cart = await cartModel.findById(cartId);
+    return cart;
+  }
+  // AGREGAR CARRITO
+  async addCart() {
+    const cart = await cartModel.create({ products: [] });
+    return cart;
+  }
+
+  // BORRAR CARRITO
+  async deleteCart(cartId) {
+    const result = await cartModel.deleteOne({ _id: cartId });
+    return result.deletedCount;
+  }
+
+  // AGREGAR PRODUCTO AL CARRITO
+  async addProductInCart(cartId, productId, quantity) {
+    const product = await productModel.findById(productId);
+    if (!product) {
+      return null;
+    }
+    const cart = await cartModel.findById(cartId);
+    if (!cart) {
+      return null;
+    }
+    const existingProduct = cart.products.find(p => p.product.toString() === productId);
+    if (existingProduct) {
+      existingProduct.quantity = quantity || 1; // Actualiza la cantidad existente con la cantidad especificada o 1 como valor predeterminado
+    } else {
+      cart.products.push({ product: productId, quantity: quantity || 1 }); // Agrega un nuevo producto con la cantidad especificada o 1 como valor predeterminado
+    }
+    await cart.save();
+    return cart;
+  }
+
+  // VACIAR CARRITO
+  async emptyCart(cartId) {
+    const cart = await cartModel.findById(cartId);
+    if (!cart) {
+      return null;
+    }
+    cart.products = [];
+    await cart.save();
+    return cart;
+  }
+  // ACTUALIZAR CANTIDAD PRODUCTOS EN CARRITO
+  async updateProductQuantityInCart(cartId, productId, quantity) {
+    const product = await productModel.findById(productId);
+    if (!product) {
+      return null;
+    }
+    const cart = await cartModel.findById(cartId);
+    if (!cart) {
+      return null;
+    }
+    const existingProduct = cart.products.find(p => p.product.toString() === productId);
+    if (!existingProduct) {
+      return null;
+    }
+    if (quantity === 0) {
+      cart.products = cart.products.filter(p => p.product.toString() !== productId);
+    } else {
+      existingProduct.quantity = quantity;
+    }
+    await cart.save();
+    return cart;
+  }
+
+  // AGREGAR MULTIPLES PRODUCTOS DESDE EL BODY
+}
+
+/*import AccesManager from "./AccesManager.js"
 import cartModel from "../models/cart.model.js";
 import productModel from "../models/products.model.js";
 
@@ -12,7 +101,7 @@ export default class CartManagerMongo {
       const cart = await cartModel
         .findById(cartId)
         .populate('products.product')
-        /* .exec(); */
+        .exec();
 
       if (!cart) {
         return res.status(404).send({ error: 'No se encontró el carrito' });
@@ -50,8 +139,9 @@ async getCartById(req, res) {
   });
 }
 }
-async addCart(req, res) {
+
 // agrega carrito
+async addCart(req, res) {
   try {
 // await accesManager.createRecord('CARRITO CREADO');
     const cart = await cartModel.create({products: []});
@@ -66,7 +156,7 @@ async addCart(req, res) {
 // borra carrito
 async deleteCart(req, res) {
     try {
-      //  await accesManager.createRecord('CARRITO BORRADO');
+      // await accesManager.createRecord('CARRITO BORRADO');
         const cartId = req.params.id;
         const result = await cartModel.deleteOne({ _id: cartId });
         if (result.deletedCount === 0) {
@@ -205,3 +295,4 @@ async updateProductQuantityInCart(req, res) {
   }
 }
 }
+ */

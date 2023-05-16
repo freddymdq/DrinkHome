@@ -1,5 +1,5 @@
 import { Router } from "express";
-import AccesManager from "../Dao/controllers/AccesManager.js";
+//import AccesManager from "../Dao/controllers/AccesManager.js";
 import productModel from "../Dao/models/products.model.js";
 import cartModel from "../Dao/models/cart.model.js";
 
@@ -49,12 +49,14 @@ router.get('/products', async (req, res) => {
     } else {
       filter.category = { $exists: true };
     }
-    const { docs, hasPrevPage, hasNextPage, nextPage, prevPage } = await productModel.paginate(filter, opt);
+    const { docs, hasPrevPage, hasNextPage, nextPage, prevPage, status, totalpage } = await productModel.paginate(filter, opt);
     const products = docs;
     const message = products.length === 0 ? 'No se encontraron productos' : '';
     const urlParams = { page, limit, query, sort, category }; // Almacena los parámetros de la URL
     res.render('prod', {
       title: "Drink Home",
+      status,
+      totalpage,
       products,
       hasPrevPage,
       hasNextPage,
@@ -68,7 +70,23 @@ router.get('/products', async (req, res) => {
     res.status(500).send({ error: 'Error al obtener los productos' });
   }
 });
+router.get('/product/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await productModel
+      .findById(productId)
+      .lean();
+      
+    if (!product) {
+      return res.status(204).end();
+    }
 
+    res.render('product', { product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Error interno del servidor' });
+  }
+});
 
 // vista cart
 router.get("/cart/:id", async (req, res) => {
@@ -79,7 +97,7 @@ router.get("/cart/:id", async (req, res) => {
       .populate("products.product")
       .lean();
       // Filtrar solicitudes para favicon.ico 
-      // esto si no lo pongo me da un error, creo que es por el icono de la page
+      // TENGO que ignorar el favicon.ico que es mi icono de la web porque me tira error
       if (cart === 'favicon.ico') {
         return res.status(204).end();
       }
