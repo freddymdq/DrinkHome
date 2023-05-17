@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/app.js",
     "server": "nodemon src/app.js",
-    "build": "comando-de-construccion"
+    "build": "build.command"
   },
   "keywords": [],
   "author": "",
