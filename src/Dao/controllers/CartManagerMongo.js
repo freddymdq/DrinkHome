@@ -43,14 +43,14 @@ export default class CartManagerMongo {
     }
     const existingProduct = cart.products.find(p => p.product.toString() === productId);
     if (existingProduct) {
-      existingProduct.quantity = quantity || 1; // Actualiza la cantidad existente con la cantidad especificada o 1 como valor predeterminado
+      existingProduct.quantity += 1; // Incrementa la cantidad existente en 1
     } else {
       cart.products.push({ product: productId, quantity: quantity || 1 }); // Agrega un nuevo producto con la cantidad especificada o 1 como valor predeterminado
     }
     await cart.save();
     return cart;
   }
-
+  
   // VACIAR CARRITO
   async emptyCart(cartId) {
     const cart = await cartModel.findById(cartId);
@@ -83,10 +83,11 @@ export default class CartManagerMongo {
     await cart.save();
     return cart;
   }
-
-  // AGREGAR MULTIPLES PRODUCTOS DESDE EL BODY
 }
 
+
+
+// METODOS CON LOS PARAMS DENTRO.
 /*import AccesManager from "./AccesManager.js"
 import cartModel from "../models/cart.model.js";
 import productModel from "../models/products.model.js";
