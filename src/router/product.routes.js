@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import ProductManagerMongo from '../Dao/controllers/ProductManagerMongo.js';
+import productModel from '../Dao/models/products.model.js';
 
 const router = Router();
 const productManager = new ProductManagerMongo();
@@ -7,7 +8,7 @@ const productManager = new ProductManagerMongo();
 // MUESTRA PRODUCTOS
 router.get('/', async (req, res) => {
   try {
-    const products = await productManager.getProducts();
+    const products = await productModel.find();
     res.status(200).send({ products });
   } catch (error) {
     console.error(error);
@@ -19,8 +20,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const productId = req.params.id;
-    const product = await productManager.getProductsById(productId);
-    
+    const product = await productModel.find({ _id: productId });
     res.status(200).send({ product });
   } catch (error) {
     console.error(error);
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const productId = req.params.id;
-    await productManager.deleteProduct(productId);
+    await productModel.deleteOne({ _id: productId });
     res.status(200).send({ msg: 'Producto eliminado exitosamente' });
   } catch (error) {
     console.error(error);
@@ -57,7 +57,7 @@ router.put('/:id', async (req, res) => {
   try {
     const productId = req.params.id;
     const updateData = req.body;
-    await productManager.updateProduct(productId, updateData);
+    await productModel.updateOne({ _id: productId }, { $set: updateData });
     res.status(200).send({ msg: 'Producto actualizado exitosamente' });
   } catch (error) {
     console.error(error);

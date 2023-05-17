@@ -9,27 +9,6 @@ export default class CartManagerMongo {
       .populate('products.product');
     return cart;
   }
-  // VISTA CARRITOS
-  async getCarts() {
-    const carts = await cartModel.find();
-    return carts;
-  }
-  // VISTA CARRITO POR ID
-  async getCartById(cartId) {
-    const cart = await cartModel.findById(cartId);
-    return cart;
-  }
-  // AGREGAR CARRITO
-  async addCart() {
-    const cart = await cartModel.create({ products: [] });
-    return cart;
-  }
-
-  // BORRAR CARRITO
-  async deleteCart(cartId) {
-    const result = await cartModel.deleteOne({ _id: cartId });
-    return result.deletedCount;
-  }
 
   // AGREGAR PRODUCTO AL CARRITO
   async addProductInCart(cartId, productId, quantity) {

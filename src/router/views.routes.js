@@ -98,6 +98,7 @@ router.get("/cart/:id", async (req, res) => {
       .lean();
       // Filtrar solicitudes para favicon.ico 
       // TENGO que ignorar el favicon.ico que es mi icono de la web porque me tira error
+      // DE TODAS FORMAS YA SAQUE EL ICONO PORQUE ME TIRABA OTRO ERROR IGUAL DEJO LA FUNCION PARA RECORDAR
       if (cart === 'favicon.ico') {
         return res.status(204).end();
       }

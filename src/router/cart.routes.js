@@ -1,5 +1,6 @@
 import { Router } from "express";
 import CartManagerMongo from '../Dao/controllers/CartManagerMongo.js';
+import cartModel from "../Dao/models/cart.model.js";
 
 const router = Router()
 const cartManager = new CartManagerMongo();
@@ -7,7 +8,7 @@ const cartManager = new CartManagerMongo();
 // MUESTRA TODOS LOS CARRITOS 
 router.get('/', async (req, res) => {
     try {
-      const carts = await cartManager.getCarts();
+      const carts = await cartModel.find();
       res.send(carts);
     } catch (error) {
       res.status(400).send({
@@ -21,7 +22,7 @@ router.get('/', async (req, res) => {
   router.get('/:id', async (req, res) => {
     try {
       const cartId = req.params.id;
-      const cart = await cartManager.getCartById(cartId);
+      const cart = await cartModel.findById(cartId);
       res.send(cart);
     } catch (error) {
       res.status(400).send({
@@ -46,7 +47,7 @@ router.get('/:id/details', async (req, res) => {
 // CREA CARRITO
 router.post('/', async (req, res) => {
     try {
-      const cart = await cartManager.addCart();
+      const cart = await cartModel.create({ products: [] });
       res.send(cart);
     } catch (error) {
       res.status(400).send({
@@ -60,7 +61,7 @@ router.post('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
       const cartId = req.params.id;
-      const result = await cartManager.deleteCart(cartId);
+      const result = await cartModel.deleteOne({ _id: cartId })
       res.send({ deletedCount: result });
     } catch (error) {
       console.error(error);
@@ -118,17 +119,15 @@ router.put('/:cartId', async (req, res) => {
     const products = req.body;
   
     try {
-      const cart = await cartManager.getCartById(cartId);
+      const cart = await cartModel.findById(cartId);
       if (!cart) {
         return res.status(404).send({ error: 'Carrito no encontrado' });
       }
-  
       for (const product of products) {
         const _id = product._id;
         const quantity = product.quantity || 1;
         await cartManager.addProductInCart(cartId, _id, quantity);
       }
-  
       await cart.save(); // Guardar el carrito actualizado en la base de datos
   
       res.send({ message: 'Productos cargados exitosamente' });
@@ -139,7 +138,6 @@ router.put('/:cartId', async (req, res) => {
   });
 
 
-  
 export default router;
   
 
