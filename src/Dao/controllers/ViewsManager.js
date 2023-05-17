@@ -1,4 +1,5 @@
 import productModel from "../models/products.model.js";
+import cartModel from "../models/cart.model.js";
 
 export default class ViewsManager {
     // manager vista Home
