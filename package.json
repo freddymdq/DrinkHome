@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.js",
-    "server": "nodemon src/app.js",
-    "build": "build.command"
+    "server": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",

@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     res.status(200).send({ products });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: 'Error interno del servidor' });
+    res.status(500).send({ error: 'Error interno' });
   }
 });
 
@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
     res.status(200).send({ product });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: 'Error interno del servidor' });
+    res.status(500).send({ error: 'Error interno' });
   }
 });
 
@@ -33,10 +33,10 @@ router.post('/', async (req, res) => {
   try {
     const productData = req.body;
     await productManager.addProduct(productData);
-    res.status(200).send({ msg: 'Producto creado exitosamente' });
+    res.status(200).send({ msg: 'Producto creado' });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: 'Error interno del servidor' });
+    res.status(500).send({ error: 'Error interno' });
   }
 });
 
@@ -45,10 +45,10 @@ router.delete('/:id', async (req, res) => {
   try {
     const productId = req.params.id;
     await productModel.deleteOne({ _id: productId });
-    res.status(200).send({ msg: 'Producto eliminado exitosamente' });
+    res.status(200).send({ msg: 'Producto eliminado' });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: 'Error interno del servidor' });
+    res.status(500).send({ error: 'Error interno' });
   }
 });
 
@@ -58,10 +58,10 @@ router.put('/:id', async (req, res) => {
     const productId = req.params.id;
     const updateData = req.body;
     await productModel.updateOne({ _id: productId }, { $set: updateData });
-    res.status(200).send({ msg: 'Producto actualizado exitosamente' });
+    res.status(200).send({ msg: 'Producto actualizado'});
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: 'Error interno del servidor' });
+    res.status(500).send({error: 'Error interno'});
   }
 });
 

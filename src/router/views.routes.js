@@ -3,18 +3,19 @@ import ViewsManager from "../Dao/controllers/ViewsManager.js";
 
 const router = Router();
 
+// HOME
 router.get('/', async (req, res) => {
   await ViewsManager.renderHome(req, res);
 });
-
+// ALL PRODUCT
 router.get('/products', async (req, res) => {
   await ViewsManager.renderProducts(req, res);
 });
-
+// 1 PRODUCT
 router.get('/product/:id', async (req, res) => {
   await ViewsManager.renderProduct(req, res);
 });
-
+// CART
 router.get('/cart/:id', async (req, res) => {
   await ViewsManager.renderCart(req, res);
 });
