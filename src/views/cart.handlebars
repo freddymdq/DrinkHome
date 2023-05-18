@@ -3,7 +3,7 @@
     <h1 class="title">Orden de Compra</h1>
     <br>
     <br>
-  <div class="gallery">
+  <div class="gallery" id="product-container">
     {{#each cart.products}}
       <div class="product">
         <h2>{{this.product.title}}</h2>
@@ -13,7 +13,6 @@
         <p class="parra">Price ${{this.product.price}}</p>
         <p>{{this.product.category}}</p>
         <p class="parra">Stock {{this.product.stock}}</p>
-      
       </div>
     {{/each}}
   </div>

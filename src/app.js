@@ -18,6 +18,11 @@ const server = app.listen(PORT, ()=>{
 const MONGO = "mongodb+srv://freddymdq:federico@cluster0.wm7ahcr.mongodb.net/ecommerce?retryWrites=true&w=majority"
 const connect = mongoose.connect(MONGO);
 
+app.get("/setCookie", (req, res) => {
+  //res.cookies("nombreCookie","valor de la cookie", {maxAge:tiempo de vida en milisegundos})
+  res.cookie("LifeCookies","Esta cookies es poderosa", {maxAge:10000}).send("cookie")
+})            
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 // Estaticos
