@@ -7,21 +7,21 @@ import viewsRouter from "./router/views.routes.js";
 import chatRouter from "./router/chat.routes.js"
 import cartRouter from "./router/cart.routes.js"
 import productRouter from "./router/product.routes.js"
+/* import cookieParser from "cookie-parser"; */
 //import messagesModel from "./Dao/models/message.model.js";
+
+
 
 const PORT = process.env.PORT || 8080;
 const app = express();
 const server = app.listen(PORT, ()=>{
-    console.log('Servidor funcionando en el puerto: '+PORT);
+    console.log('Servidor funcionando en el puerto: '+ PORT);
 })
 
 const MONGO = "mongodb+srv://freddymdq:federico@cluster0.wm7ahcr.mongodb.net/ecommerce?retryWrites=true&w=majority"
 const connect = mongoose.connect(MONGO);
 
-app.get("/setCookie", (req, res) => {
-  //res.cookies("nombreCookie","valor de la cookie", {maxAge:tiempo de vida en milisegundos})
-  res.cookie("LifeCookies","Esta cookies es poderosa", {maxAge:10000}).send("cookie")
-})            
+        
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));

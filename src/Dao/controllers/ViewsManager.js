@@ -6,7 +6,7 @@ export default class ViewsManager {
 // static async esto es útil cuando se desea tener un método en la clase que se pueda llamar directamente en la clase misma sin necesidad de instanciarla
     static async renderHome(req, res) {
       const { page = 1, limit, query } = req.query;
-      const opt = { page, limit: parseInt(limit) || 16, lean: true };
+      const opt = { page, limit: parseInt(limit) || 40, lean: true };
             opt.sort = { price: -1 };
       const filter = {};
             if (query) {
