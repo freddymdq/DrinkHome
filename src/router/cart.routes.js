@@ -117,7 +117,6 @@ router.put('/:cartId/products/:productId', async (req, res) => {
 router.put('/:cartId', async (req, res) => {
   const cartId = req.params.cartId;
   const products = req.body;
-
   try {
     const cart = await cartModel.findById(cartId);
     if (!cart) {
@@ -127,28 +126,23 @@ router.put('/:cartId', async (req, res) => {
     for (const product of products) {
       const productId = product.product;
       const quantity = product.quantity || 1;
-
-      // Verificar si el producto ya existe en el carrito
       const existingProduct = cart.products.find(
         (p) => p.product.toString() === productId
       );
 
       if (existingProduct) {
-        // El producto ya existe, reemplazar la cantidad
         existingProduct.quantity = quantity;
       } else {
-        // El producto no existe, agregarlo al carrito
         cart.products.push({ product: productId, quantity });
       }
     }
-
-    await cart.save(); // Guardar el carrito actualizado en la base de datos
+    await cart.save(); 
     res.send({ message: 'Productos cargados exitosamente' });
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: 'Internal server error' });
   }
-});
+}); 
 
 
 export default router;

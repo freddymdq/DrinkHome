@@ -1,4 +1,21 @@
 <div class="container">
+  <nav>
+  <ul>
+    <li><a href="/">HOME</a></li>
+    <li><a href="/products">PRODUCTOS</a></li>
+    <li><a href="/cart/646267ba8cc04a3efca60438">CARRITO</a></li>
+  </ul>
+  <div class="user-dropdown">
+    <button class="user-dropdown-btn">Usuario</button>
+    <div class="user-dropdown-content">
+      <p class="users">Nombre: {{user.name}}</p>
+      <p>Email: {{user.email}}</p>
+      <a href="/api/session/logout">
+        <button>Cerrar Sesión</button>
+      </a>
+    </div>
+  </div>
+</nav>
     <div class="background-image">
     <img src="">
   </div>
@@ -19,7 +36,7 @@
           <img src="{{this.img}}" alt="{{this.title}}">
         <p>{{this.description}}</p>
         <p>Category: {{this.category}}</p>
-        <p>Price: {{this.price}}</p>
+        <p>${{this.price}}</p>
         <p>Stock: {{this.stock}}</p>
         {{!-- <p>Disponibilidad: {{this.status}}</p> --}}
         <button>Agregar al carrito</button>

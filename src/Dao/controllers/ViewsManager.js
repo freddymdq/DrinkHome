@@ -20,6 +20,7 @@ export default class ViewsManager {
       const { docs } = await productModel.paginate(filter, opt);
       const products = docs;
         res.render('home', {
+        user: req.session.user,
         title: "Drink Home",
         products
       });
