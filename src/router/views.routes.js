@@ -30,6 +30,12 @@ router.get('/cart/:id', privateAccess, async (req, res) => {
 });
 
 // SESSION
+router.get('/profile', privateAccess, (req, res) => {
+  res.render('profile', {
+    user: req.session.user
+  });
+});
+
 router.get('/register', publicAccess, (req, res) => {
   res.render('register')
 })
@@ -38,11 +44,7 @@ router.get('/login', publicAccess, (req, res) => {
   res.render('login')
 })
 
-router.get('/profile', privateAccess, (req, res) => {
-  res.render('profile'),{
-    user: req.session.user
-  }
-})
+
 
 
 export default router;

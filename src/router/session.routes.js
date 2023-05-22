@@ -4,49 +4,63 @@ import userModel from "../Dao/models/user.model.js";
 const router = Router()
 
 router.post('/register', async (req, res) => {
-    const {first_name, last_name, email, age, password} = req.body
-    const exist = await userModel.findOne({email})
-        if(exist){
-            return res.status(400).send({status: 'error', error: "El usuario ya existe"})
-        }
+  const { first_name, last_name, email, age, password } = req.body;
+  
+  if (!first_name || !last_name || !email || !age || !password) {
+    return res.status(400).send({ status: 'error', error: "Todos los campos son requeridos" });
+  }
 
-    const user ={
-        first_name, 
-        last_name, 
-        email, 
-        age, 
-        password
-    }
-    
-    const result = await userModel.create(user)
-    res.send({status: 'Succes', error: "El usuario se a registrado"})
-})
+  const exist = await userModel.findOne({ email });
+  if (exist) {
+    return res.status(400).send({ status: 'error', error: "El usuario ya existe" });
+  }
+
+  const user = {
+    first_name,
+    last_name,
+    email,
+    age,
+    password
+  };
+
+  const result = await userModel.create(user);
+  res.send({ status: 'Success', error: "El usuario se ha registrado" });
+});
 
 
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const user = await userModel.findOne({ email, password });
-  
-    if (!user) {
-      return res.status(400).send({ status: 'error', error: "Datos incorrectos" });
-    }
-  
-    let role = 'Usuario'; 
-  
-    if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-      role = 'Admin'; 
-    }
-  
-    req.session.user = {
-      name: `${user.first_name} ${user.last_name}`,
-      email: user.email,
-      age: user.age,
-      role: role, 
+  const { email, password } = req.body;
+  let user;
+
+  if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+    user = {
+      first_name: 'Coder',
+      last_name: 'House',
+      email: email,
+      age: 35,
+      role: 'Admin'
     };
-  
-    res.send({ status: 'Success', payload: req.session.user, message: "Primer logueo" });
-  });
-  
+  } else {
+    user = await userModel.findOne({ email, password });
+
+    if (!user) {
+      return res.status(400).send({ status: 'error', error: "Usuario y/o Contraseña Incorrecta" });
+    }
+  }
+
+  const role = user.role === 'Admin' ? 'Admin' : 'Usuario';
+
+  req.session.user = {
+    name: `${user.first_name} ${user.last_name}`,
+    email: user.email,
+    age: user.age,
+    role: role,
+  };
+
+  res.send({ status: 'Success', payload: req.session.user, message: "Primer logueo" });
+});
+
+
 
 router.get('/logout', (req, res)=>{
     req.session.destroy(err => {

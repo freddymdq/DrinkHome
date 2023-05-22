@@ -60,6 +60,7 @@ nav{
   display: none;
   position: absolute;
   border-radius: 20px;
+  border: white 1px solid;
   background-color: rgb(112, 2, 2);
   min-width: 160px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
@@ -200,7 +201,7 @@ body {
 }
 /*FOOTER*/
 footer{
-  background-color: rgb(112, 2, 2);;
+  background-color: rgb(112, 2, 2);
   margin-top: 100px;
   color: white;
   text-align: center;
@@ -311,10 +312,42 @@ p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 120px;
-  margin-bottom: 20px;
+  margin-top: 200px;
+  margin-bottom: 150px;
 }
 
+/*     LOGIN VIEWS        */
 .loginH1{
   margin-top: 50px;
 }
+.login{
+  margin-top: 23vh;
+  margin-bottom: 23vh;
+}
+
+
+
+/*     PROFILE VIEWS      */
+.profile{
+  margin-top: 23vh;
+  margin-bottom: 23vh;
+}
+.parrafo{
+  color: white;
+  padding: 20px;
+}
+
+.titleProfile{
+  font-size: 59px;
+  margin-bottom: 50px;
+  font-weight: 900;
+}
+/*boton cerrar sesion cs*/
+.cs{
+  margin-top: 60px;
+}
+
+
+
+
+

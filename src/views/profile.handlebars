@@ -1,5 +1,16 @@
-<div class="user">
-    <h1>TU PERFIL</h1>
-    <p class="parra">{{user.name}} {{user.age}} {{user.email}}</p>
-    <a href="/api/session/logout"><button>Salir</button></a>
+<div class="container">
+<nav>
+  <ul>
+    <li><a href="/">HOME</a></li>
+    <li><a href="/products">PRODUCTOS</a></li>
+    <li><a href="/cart/646267ba8cc04a3efca60438">CARRITO</a></li>
+  </ul>
+</nav>
+<div class="profile">
+    <h1 class="titleProfile">Mi Perfil</h1>
+    <p class="parrafo">Nombre: {{user.name}}</p>
+    <p class="parrafo">Email: {{user.email}}</p>
+    <p class="parrafo">Rol: {{user.role}}</p>
+    <a href="/api/session/logout"><button class="cs">Cerrar Sesion</button></a>
+</div>
 </div>

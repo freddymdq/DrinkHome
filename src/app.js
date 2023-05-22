@@ -14,24 +14,15 @@ import MongoStore from "connect-mongo";
 //import messagesModel from "./Dao/models/message.model.js";
 
 
+
 const DB = 'ecommerce';
 const MONGO = "mongodb+srv://freddymdq:federico@cluster0.wm7ahcr.mongodb.net/" + DB
-
 const PORT = process.env.PORT || 8080;
 const app = express();
 const connect = mongoose.connect(MONGO);
 const server = app.listen(PORT, ()=>{
   console.log('Servidor funcionando en el puerto: '+ PORT);
 })
-
-
-/* app.use(cookieParser()); */
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-
-
-// Estaticos
-app.use(express.static(__dirname+'/public'));
 
 app.use (session({
   store: new MongoStore({
@@ -43,6 +34,12 @@ app.use (session({
   saveUninitialized: false
 }));
 
+
+/* app.use(cookieParser()); */
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+// Estaticos
+app.use(express.static(__dirname+'/public'));
 // Handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
