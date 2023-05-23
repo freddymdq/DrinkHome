@@ -44,7 +44,4 @@ router.get('/login', publicAccess, (req, res) => {
   res.render('login')
 })
 
-
-
-
 export default router;

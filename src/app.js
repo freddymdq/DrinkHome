@@ -52,6 +52,7 @@ app.use('/api/chat', chatRouter)
 app.use('/api/products/', productRouter);
 app.use('/api/carts/', cartRouter);
 
+
 // COOKIES / llevar al router.
 /* app.get('/',  (req, res) => {
   res.render('cookies')
@@ -62,7 +63,6 @@ app.post('/cookie',  (req, res) => {
 })
  */
 // Session
-
 
 // WEB SOCKET
 const io = new Server(server)

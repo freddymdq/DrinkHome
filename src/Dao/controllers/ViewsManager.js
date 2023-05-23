@@ -1,5 +1,6 @@
 import productModel from "../models/products.model.js";
 import cartModel from "../models/cart.model.js";
+import userModel from "../models/user.model.js";
 
 export default class ViewsManager {
 // manager vista Home
@@ -23,6 +24,8 @@ export default class ViewsManager {
         user: req.session.user,
         title: "Drink Home",
         products
+  
+
       });
     }
 // vista Products
@@ -52,7 +55,7 @@ static async renderProducts(req, res) {
     const message = products.length === 0 ? 'No se encontraron productos' : '';
     const urlParams = { page, limit, query, sort, category }; // Almacena los parámetros de la URL
         res.render('prod', {
-        title: "Drink Home",status, totalpage, products, hasPrevPage, hasNextPage, nextPage, prevPage, query, message, urlParams // Pasa los parámetros de la URL a la plantilla
+        title: "Drink Home",status, totalpage, products, hasPrevPage, hasNextPage, nextPage, prevPage, query, message, urlParams, user: req.session.user // Pasa los parámetros de la URL a la plantilla
     });
     } catch (error) {
         res.status(500).send({ error: 'Error al obtener los productos' });
@@ -69,7 +72,8 @@ static async renderProducts(req, res) {
       if (!product) {
         return res.status(204).end();
       }
-      res.render('product', { product });
+      res.render('product', { product, 
+        user: req.session.user});
     } catch (error) {
       console.error(error);
       res.status(500).send({ error: 'Error interno del servidor' });
