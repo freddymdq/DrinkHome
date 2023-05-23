@@ -5,14 +5,16 @@ const router = Router()
 
 router.post('/register', async (req, res) => {
   const { first_name, last_name, email, age, password } = req.body;
-  
-  if (!first_name || !last_name || !email || !age || !password) {
-    return res.status(400).send({ status: 'error', error: "Todos los campos son requeridos" });
-  }
+
+
+  // ALERTA NO ME TOMA LA VALIDACIÓN !!!
+/*   if (!first_name || !last_name || !email || !age || !password) {
+    return res.status(400).json({ status: 'error', error: "Todos los campos son requeridos" });
+  } */
 
   const exist = await userModel.findOne({ email });
   if (exist) {
-    return res.status(400).send({ status: 'error', error: "El usuario ya existe" });
+    return res.status(400).json({ status: 'error', error: "El usuario ya existe" });
   }
 
   const user = {
@@ -24,10 +26,10 @@ router.post('/register', async (req, res) => {
   };
 
   const result = await userModel.create(user);
-  res.send({ status: 'Success', error: "El usuario se ha registrado" });
+  res.json({ status: 'Success', message: "El usuario se ha registrado" });
 });
 
-
+// LOGIN
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   let user;

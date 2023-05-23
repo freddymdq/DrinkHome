@@ -21,11 +21,9 @@ export default class ViewsManager {
       const { docs } = await productModel.paginate(filter, opt);
       const products = docs;
         res.render('home', {
-        user: req.session.user,
-        title: "Drink Home",
-        products
-  
-
+          title: "Drink Home",
+          products,
+          user: req.session.user
       });
     }
 // vista Products
@@ -95,7 +93,11 @@ static async renderProducts(req, res) {
       const total = cart.products.reduce((acc, product) => {
         return acc + product.product.price * product.quantity;
       }, 0);
-          res.render("cart", { title: "Carrito", cart, total });
+          res.render("cart", { title: "Carrito", 
+          cart, 
+          total,
+          user: req.session.user
+           });
     } catch (error) {
           res.status(500).send({ message: error.message });
     }
