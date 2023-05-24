@@ -4,7 +4,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "build",
+    "build": "CI = run build",
     "dev": "nodemon src/app.js",
     "server": "nodemon src/app.js"
   },
