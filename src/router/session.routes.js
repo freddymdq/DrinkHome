@@ -5,12 +5,9 @@ const router = Router()
 
 router.post('/register', async (req, res) => {
   const { first_name, last_name, email, age, password } = req.body;
-
-
-  // ALERTA NO ME TOMA LA VALIDACIÓN !!!
-/*   if (!first_name || !last_name || !email || !age || !password) {
+  if (!first_name || !last_name || !email || !age || !password) {
     return res.status(400).json({ status: 'error', error: "Todos los campos son requeridos" });
-  } */
+  }
 
   const exist = await userModel.findOne({ email });
   if (exist) {
@@ -22,7 +19,8 @@ router.post('/register', async (req, res) => {
     last_name,
     email,
     age,
-    password
+    password,
+    role: 'default'
   };
 
   const result = await userModel.create(user);
@@ -34,7 +32,7 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   let user;
 
-  if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+  if (email === 'adminCoder@coder.com' &&  password === 'adminCod3r123') {
     user = {
       first_name: 'Coder',
       last_name: 'House',

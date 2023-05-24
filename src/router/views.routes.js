@@ -13,6 +13,7 @@ const privateAccess = (req, res, next) => {
 }
 
 // HOME
+
 router.get('/', privateAccess, async (req, res) => {
   await ViewsManager.renderHome(req, res);
 });

@@ -1,31 +1,45 @@
 import productModel from "../models/products.model.js";
 import cartModel from "../models/cart.model.js";
-import userModel from "../models/user.model.js";
+
 
 export default class ViewsManager {
 // manager vista Home
 // static async esto es útil cuando se desea tener un método en la clase que se pueda llamar directamente en la clase misma sin necesidad de instanciarla
-    static async renderHome(req, res) {
-      const { page = 1, limit, query } = req.query;
-      const opt = { page, limit: parseInt(limit) || 40, lean: true };
-            opt.sort = { price: -1 };
-      const filter = {};
-            if (query) {
-                filter.$or = [
-                { category: { $regex: new RegExp(query, 'i') } },
-                { title: { $regex: new RegExp(query, 'i') } }
-                ];
-            } else {
-                filter.category = { $exists: true };
-             }
-      const { docs } = await productModel.paginate(filter, opt);
-      const products = docs;
-        res.render('home', {
-          title: "Drink Home",
-          products,
-          user: req.session.user
-      });
-    }
+static async renderHome(req, res) {
+  const { page = 1, limit, query } = req.query;
+  const opt = { page, limit: parseInt(limit) || 40, lean: true };
+  opt.sort = { price: -1 };
+  const filter = {};
+  if (query) {
+    filter.$or = [
+      { category: { $regex: new RegExp(query, 'i') } },
+      { title: { $regex: new RegExp(query, 'i') } }
+    ];
+  } else {
+    filter.category = { $exists: true };
+  }
+
+  const { docs } = await productModel.paginate(filter, opt);
+  const products = docs;
+
+  let message;
+  if (req.session.message) {
+    message = req.session.message;
+    delete req.session.message;
+  }
+
+  res.render('home', {
+    title: "Drink Home",
+    products,
+    user: req.session.user,
+    message: `Bienvenido`,
+    isAdmin: req.session.user.role === 'Admin' // Agregar isAdmin al objeto de datos para la vista
+  });
+  
+}
+
+
+
 // vista Products
 static async renderProducts(req, res) {
   try {
