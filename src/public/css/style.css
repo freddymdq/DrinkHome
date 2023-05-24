@@ -379,4 +379,153 @@ th, td {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+@media screen and (max-width: 480px) {
+  /******************NAV BAR**********************/
+  nav {
+    height: auto;
+    flex-direction: column;
+  }
+
+  nav ul {
+    flex-direction: column;
+  }
+
+  nav li {
+    margin: 5px 0;
+  }
+
+  .user-dropdown {
+    margin-bottom: 10px;
+  }
+
+  /*FIN NAVBAR*/
+
+  /******************BODY**********************/
+  .title {
+    font-size: 30px;
+  }
+
+  .background-image {
+    height: 15vh;
+  }
+
+  .container {
+    margin-top: 20px;
+  }
+
+  .gallery {
+    width: 100%;
+  }
+
+  .product {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 20px;
+    border-radius: 10px;
+  }
+
+  .product:hover {
+    transform: none;
+    background-color: rgb(112, 2, 2);
+    box-shadow: none;
+  }
+
+  /* Estilos para el cuadro de entrada de texto del chat */
+  .chatbox {
+    width: 100%;
+  }
+
+  /* Estilos para el registro de mensajes del chat */
+  #messageLogs {
+    height: 150px;
+  }
+
+  ul {
+    font-size: 14px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .alert {
+    font-size: 24px;
+  }
+
+  .formulario {
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+
+  .fondofoto {
+    height: 200px;
+  }
+
+  .name {
+    width: 100%;
+  }
+
+  /*     LOGIN VIEWS        */
+  .loginH1 {
+    margin-top: 30px;
+  }
+
+  .login {
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+  }
+
+  #loginForm {
+    margin-top: 50px;
+    margin-bottom: 10px;
+  }
+
+  /*register*/
+  #registerForm {
+    margin-top: 100px;
+    margin-bottom: 80px;
+  }
+
+  /*     PROFILE VIEWS      */
+  .profile {
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+  }
+
+  .parrafo {
+    padding: 10px;
+  }
+
+  .titleProfile {
+    font-size: 40px;
+    margin-bottom: 30px;
+  }
+
+  /*boton cerrar sesion cs*/
+  .cs {
+    margin-top: 30px;
+  }
+
+  /******** ADMIN *******/
+  .panel {
+    margin-top: 100px;
+    margin-bottom: 100px;
+  }
+
+  table {
+    margin-top: 50px;
+    margin-bottom: 100px;
+  }
+
+  /*admin agregar productos*/
+  .form-container {
+    margin-top: 50px;
+    margin-bottom: 100px;
+  }
+
+  .title2 {
+    margin-top: 80px;
+    font-size: 30px;
+  }
+}
 
