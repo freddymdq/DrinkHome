@@ -323,11 +323,6 @@ p {
 }
 
 
-
-
-
-
-
 /*     PROFILE VIEWS      */
 .profile{
   margin-top: 23vh;
@@ -350,6 +345,21 @@ p {
 }
 
 
+/******** ADMIN *******/
+.panel{
+  margin-top: 200px;
+}
 
+table {
+  background-color: #550505;
+  margin-top: 120px;
+  border-collapse: collapse;
+  margin-bottom: 200px;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
 
 
