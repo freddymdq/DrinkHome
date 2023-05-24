@@ -347,7 +347,8 @@ p {
 
 /******** ADMIN *******/
 .panel{
-  margin-top: 200px;
+  margin-top: 250px;
+  margin-bottom: 300px;
 }
 
 table {
@@ -360,6 +361,22 @@ table {
 th, td {
   padding: 8px;
   border: 1px solid #ddd;
+}
+
+/*admin agregar productos*/
+.form-container{
+  margin-top: 100px;
+  margin-bottom: 200px;
+}
+.form-group{
+  padding: 20px;
+}
+
+.title2{
+    margin-top: 150px;
+    font-size: 50px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 

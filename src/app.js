@@ -3,6 +3,7 @@ import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import __dirname from "./utils.js";
+import adminRouter from "./router/admin.routes.js";
 import sessionRouter from "./router/session.routes.js";
 import viewsRouter from "./router/views.routes.js";
 import chatRouter from "./router/chat.routes.js"
@@ -51,6 +52,7 @@ app.use('/api/session', sessionRouter);
 app.use('/api/chat', chatRouter)
 app.use('/api/products/', productRouter);
 app.use('/api/carts/', cartRouter);
+app.use('/', adminRouter);
 
 
 // COOKIES / llevar al router.

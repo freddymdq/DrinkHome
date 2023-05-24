@@ -27,3 +27,19 @@ function irAgregarProductos() {
 function volver() {
     window.history.back();
 }
+
+function eliminarUsuario(userId) {
+    fetch(`/admin/db-user/${userId}`, { method: 'DELETE' })
+      .then(response => {
+        if (response.ok) {
+          
+          window.location.reload();
+        } else {
+          
+          console.error('Error al eliminar el usuario');
+        }
+      })
+      .catch(error => {
+        console.error('Error al eliminar el usuario', error);
+      });
+  }

@@ -24,22 +24,6 @@ router.get('/admin', adminAccess, (req, res) => {
   // Renderizar la vista del panel de administración
   res.render('admin', { user: req.session.user });
 });
-
-router.post('/admin/db-user/:userId', adminAccess, async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const deletedUser = await userModel.findByIdAndDelete(userId);
-    
-    if (!deletedUser) {
-      return res.status(404).send({ error: 'Usuario no encontrado' });
-    }
-    
-    res.redirect('/admin/db-user');
-  } catch (error) {
-    res.status(500).send({ error: 'Error al eliminar el usuario de la base de datos' });
-  }
-});
-
 router.get('/admin/db-user', adminAccess, async (req, res) => {
   try {
     const users = await userModel.find().lean();
@@ -49,7 +33,6 @@ router.get('/admin/db-user', adminAccess, async (req, res) => {
   }
 });
 
-
 router.get('/admin/rendimientos', adminAccess, (req, res) => {
   // Renderizar la vista de Rendimientos para administradores
   res.render('rendimientos', { user: req.session.user });
@@ -57,9 +40,8 @@ router.get('/admin/rendimientos', adminAccess, (req, res) => {
 
 router.get('/admin/agregar-productos', adminAccess, (req, res) => {
   // Renderizar la vista de Agregar Productos para administradores
-  res.render('agregar-productos', { user: req.session.user });
+  res.render('addProducts', { user: req.session.user });
 });
-
 
 // HOME
 router.get('/', privateAccess, async (req, res) => {
