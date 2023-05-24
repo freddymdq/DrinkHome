@@ -14,8 +14,6 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 //import messagesModel from "./Dao/models/message.model.js";
 
-
-
 const DB = 'ecommerce';
 const MONGO = "mongodb+srv://freddymdq:federico@cluster0.wm7ahcr.mongodb.net/" + DB
 const PORT = process.env.PORT || 8080;
