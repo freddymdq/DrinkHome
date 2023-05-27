@@ -6,25 +6,21 @@ import productModel from "../Dao/models/products.model.js";
 const router = Router();
 
 const adminAccess = (req, res, next) => {
-  if (!req.session.user || req.session.user.role !== 'Admin') {
-    return res.redirect('/login'); 
+  if (!req.session.user || req.session.user.role !== 'admin') {
+    return res.redirect('/login');
   }
-  next(); 
+  next();
 };
-
-router.get('/admin', adminAccess, (req, res) => {
-  res.render('admin', { user: req.session.user });
-});
 
 router.post('/admin/db-user/:userId', adminAccess, async (req, res) => {
   try {
     const userId = req.params.userId;
     const deletedUser = await userModel.findByIdAndDelete(userId);
-    
+
     if (!deletedUser) {
       return res.status(404).send({ error: 'Usuario no encontrado' });
     }
-    
+
     res.redirect('/admin/db-user');
   } catch (error) {
     res.status(500).send({ error: 'Error al eliminar el usuario de la base de datos' });
@@ -38,7 +34,6 @@ router.post('/admin/agregar-productos', adminAccess, async (req, res) => {
       throw new Error("Faltan datos");
     }
     const productData = { title, description, price, category, status, img, code, stock };
-
     const result = await productModel.create(productData);
     res.redirect('/admin');
   } catch (error) {

@@ -25,7 +25,7 @@ function irAgregarProductos() {
 }
 
 function volver() {
-    window.history.back();
+  window.location.href = "/";
 }
 
 function eliminarUsuario(userId) {

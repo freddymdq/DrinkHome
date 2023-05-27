@@ -6,16 +6,15 @@
 </nav> 
     
     <div class="gallery" >
-        <h1 class="title2">Panel de Controladores</h1>
-        
         <div class="panel">
+        <h1 class="title2">Panel de Administración</h1>
+        <button onclick="irAgregarProductos()">Productos</button>
+        <button onclick="irDBUser()">Usuario</button>
+        <button {{!-- onclick="irRendimientos()" --}}>Rendimiento</button>
         <button {{!-- onclick="irPanelControl()" --}}>Controladores</button>
-        <button onclick="irDBUser()">Data Base User</button>
-        <button {{!-- onclick="irRendimientos()" --}}>Rendimientos</button>
-        <button onclick="irAgregarProductos()">Agregar Productos</button>
-        <button onclick="volver()">Volver</button>
         </div>
     </div>
+        <button onclick="volver()">Home</button>
 </div>
 
 <script src="/js/admin.js"></script>
