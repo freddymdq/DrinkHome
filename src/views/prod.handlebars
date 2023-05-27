@@ -18,7 +18,7 @@
   <div class="user-dropdown">
     <button class="user-dropdown-btn"> {{user.role}}</button>
     <div class="user-dropdown-content">
-      <p class="users">User: {{user.name}}</p>
+      <p class="users">User: {{user.first_name}} {{user.last_name}}</p>
       <p>Email: {{user.email}}</p>
       <a href="/profile"><button>Mi perfil</button> </a>
       <a href="/api/session/logout">

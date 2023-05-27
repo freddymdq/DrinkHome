@@ -48,8 +48,10 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
+
 // routes
 app.use('/', viewsRouter)
+app.use('/api/session', sessionRouter); 
 app.use('/api/sessions', sessionRouter); 
 app.use('/api/chat', chatRouter)
 app.use('/api/products/', productRouter);

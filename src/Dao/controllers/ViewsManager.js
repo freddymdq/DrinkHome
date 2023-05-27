@@ -28,8 +28,8 @@ export default class ViewsManager {
     res.render('home', {
       title: "Drink Home",
       products,
-      user: req.session.user,
       message: `Bienvenido`,
+      user: req.session.user,
       isAdmin: req.session.user.role === 'admin'
     });
   }
@@ -91,6 +91,7 @@ export default class ViewsManager {
       res.render('product', {
         product,
         user: req.session.user,
+        isAdmin: req.session.user.role === 'admin'
       });
     } catch (error) {
       console.error(error);
@@ -117,6 +118,7 @@ static async renderCart(req, res) {
         cart, 
         total,
         user: req.session.user,
+        isAdmin: req.session.user.role === 'admin'
         });
     } catch (error) {
           res.status(500).send({ message: error.message });

@@ -14,35 +14,56 @@ router.get('/failregister', async (req,res)=>{
     console.log('Fallo en el registro');
     res.send({error: 'Error en el registro'})
 })
-router.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }), async (req, res) => {
-  if (!req.user) return res.status(400).send({ status: "error", error: 'Credenciales inválidas' });
+// LOGIN
+router.post('/login', (req, res, next) => {
+  passport.authenticate('login', (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send({ status: 'error', error: 'Error en el servidor' });
+    }
+    if (!user) {
+      // Las credenciales son inválidas
+      return res.status(400).send({ status: 'error', error: 'Credenciales inválidas' });
+    }
 
-  req.session.user = {
-    first_name: req.user.first_name,
-    last_name: req.user.last_name,
-    age: req.user.age,
-    email: req.user.email,
-    role: req.user.role
-  }
+    req.logIn(user, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send({ status: 'error', error: 'Error en el servidor' });
+      }
 
-  if (req.user.role === 'admin') {
-    return res.redirect('/admin');
-  } else {
-    res.send({ status: "success", payload: req.user, message: "Primer logueo!!" });
-  }
+      req.session.user = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        age: user.age,
+        email: user.email,
+        role: user.role
+      };
+
+      if (user.role === 'admin') {
+        return res.redirect('/admin');
+      } else {
+        return res.send({ status: 'success', payload: user, message: 'Primer logueo!!' });
+      }
+    });
+  })(req, res, next);
 });
-router.get('/faillogin', async (req,res)=>{
 
-    console.log('Fallo en el ingreso');
-    res.send({error: 'Error en el ingreso'})
+router.get('/faillogin', async (req, res) => {
+  console.log('Fallo en el ingreso');
+  res.send({ error: 'Error en el ingreso' });
+});
 
-})
+
+// CERRAR SESION
 router.get('/logout', (req,res)=>{
     req.session.destroy(err =>{
         if(err) return res.status(500).send({status:"error", error:"No pudo cerrar sesion"})
         res.redirect('/login');
     })
 })
+
+// RESTABLECER CONTRASEÑA
 router.post('/restartPassword', async (req, res)=>{
     const {email, password } = req.body;
     
@@ -57,6 +78,8 @@ router.post('/restartPassword', async (req, res)=>{
 
     res.send({status:"success", message:"Contraseña actualizada"})
 })
+
+// GIT HUB
 router.get('/github', passport.authenticate('github', {scope:['user:email']}), async (req,res)=>{})
 
 router.get('/githubcallback', passport.authenticate('github',{failureRedirect:'/login'}), async (req,res)=>{

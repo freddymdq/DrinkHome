@@ -77,8 +77,8 @@ const initializePassport = () => {
 
   passport.use('github', new GithubStrategy({
       clientID: 'Iv1.8d20b7aa9310a471',
-      clientSecret: '65bbf5ae2e0f3e1ebc6a575d573da79c34a83827',
-      callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
+      clientSecret: '0382d965480cd94282b99d1ccb6989e629fb616e',
+      callbackURL: 'http://localhost:8080/api/session/githubcallback'
 
     }, async (accesToken, refreshToken,profile,done)=>{
       try {
@@ -95,7 +95,7 @@ const initializePassport = () => {
                       email: email,
                       age: 18,
                       password: '',
-                      role: ""
+                      role: "usuario"
               }
               const result = await userModel.create(newUser);
               done(null,result)
