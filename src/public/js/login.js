@@ -11,7 +11,7 @@ form.addEventListener('submit', async (e) => {
   });
 
   try {
-    const response = await fetch('/api/session/login', {
+    const response = await fetch('/api/sessions/login', {
       method: 'POST',
       body: JSON.stringify(obj),
       headers: {
