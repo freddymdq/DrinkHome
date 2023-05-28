@@ -1,4 +1,5 @@
 import express from "express";
+import flash from "express-flash";
 import handlebars from "express-handlebars";
 import mongoose from "mongoose";
 import session from "express-session";
@@ -35,9 +36,12 @@ app.use (session({
   saveUninitialized: false
 }));
 
+app.use(flash());
+
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));

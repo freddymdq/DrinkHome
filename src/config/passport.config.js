@@ -2,7 +2,7 @@ import passport from 'passport';
 import local from 'passport-local';
 import userModel from '../Dao/models/user.model.js';
 import { createHash, validatePassword } from '../utils.js';
-import GithubStrategy from 'passport-github2'
+import GithubStrategy from 'passport-github2';
 
 const LocalStrategy = local.Strategy;
 
@@ -16,8 +16,8 @@ const initializePassport = () => {
         try {
           const user = await userModel.findOne({ email: username });
           if (user) {
-            console.log('El usuario existe');
-            return done(null, false);
+            console.log('El usuario ya existe');
+            return done(null, false, { message: 'El usuario ya existe' });
           }
           const newUser = {
             first_name,
@@ -29,7 +29,8 @@ const initializePassport = () => {
           };
 
           const result = await userModel.create(newUser);
-          return done(null, result);
+          console.log('Usuario registrado exitosamente');
+          return done(null, result, { message: 'Usuario registrado exitosamente' });
         } catch (error) {
           return done("Error al registrar el usuario: " + error);
         }
@@ -58,17 +59,22 @@ const initializePassport = () => {
             age: 0,
             role: 'admin'
           };
-          return done(null, adminUser);
+          console.log('Ingreso exitoso como administrador');
+          return done(null, adminUser, { message: 'Ingreso exitoso como administrador' });
         }
 
         const user = await userModel.findOne({ email: username });
         if (!user) {
-          console.log('No existe el usuario');
-          return done(null, false);
+          console.log('Usuario no encontrado');
+          return done(null, false, { message: 'Usuario no encontrado' });
         }
 
-        if (!validatePassword(password, user)) return done(null, false);
-        return done(null, user);
+        if (!validatePassword(password, user)) {
+          console.log('Contraseña incorrecta');
+          return done(null, false, { message: 'Contraseña incorrecta' });
+        }
+        console.log('Ingreso exitoso');
+        return done(null, user, { message: 'Ingreso exitoso' });
       } catch (error) {
         return done("Error al intentar ingresar: " + error);
       }
@@ -80,32 +86,33 @@ const initializePassport = () => {
       clientSecret: '0382d965480cd94282b99d1ccb6989e629fb616e',
       callbackURL: 'http://localhost:8080/api/session/githubcallback'
 
-    }, async (accesToken, refreshToken,profile,done)=>{
+    }, async (accesToken, refreshToken, profile, done) => {
       try {
           
           console.log(profile); //vemos toda la info que viene del profile
-          let user = await userModel.findOne({email: profile._json.email})
-          if(!user){
-
-              const email = profile._json.email == null ?  profile._json.username : null;
+          let user = await userModel.findOne({ email: profile._json.email })
+          if (!user) {
+              const email = profile._json.email == null ? profile._json.username : null;
 
               const newUser = {
                       first_name: profile._json.name,
-                      last_name:'',
+                      last_name: '',
                       email: email,
                       age: 18,
                       password: '',
                       role: "usuario"
               }
               const result = await userModel.create(newUser);
-              done(null,result)
-          }else{
-              //ya existe
-              done(null, user)
+              console.log('Usuario registrado exitosamente con GitHub');
+              done(null, result, { message: 'Usuario registrado exitosamente con GitHub' });
+          } else {
+              // ya existe
+              console.log('Inicio de sesión exitoso con GitHub');
+              done(null, user, { message: 'Inicio de sesión exitoso con GitHub' });
           }
 
       } catch (error) {
-          return done(null,error)
+          return done(null, error);
       }
 
   }))
