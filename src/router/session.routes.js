@@ -1,31 +1,42 @@
 import { Router } from 'express';
 import passport from 'passport';
 import userModel from '../Dao/models/user.model.js';
+import cartModel from '../Dao/models/cart.model.js';
 import { createHash, validatePassword } from '../utils.js';
 
 
 const router = Router();
 
-router.post('/register', passport.authenticate('register', { failureRedirect:'/failregister'} ),async (req, res) =>{
+router.post('/register', passport.authenticate('register', { failureRedirect:'/failregister' }), async (req, res) => {
+  try {
+    const user = req.user;
+    const newCart = {
+      userId: user._id,
+    };
 
-    res.send({status:"succes", message:"User registered"});
-})
-router.get('/failregister', async (req,res)=>{
-    console.log('Fallo en el registro');
-    res.send({error: 'Error en el registro'})
-})
+    const cartResult = await cartModel.create(newCart);
+
+    user.cart = cartResult._id;
+    await user.save();
+
+    res.send({ status: "success", message: "User registered" });
+  } catch (error) {
+    console.log('Error en el registro:', error);
+    res.send({ error: 'Error en el registro' });
+  }
+});
+
 // LOGIN
 router.post('/login', (req, res, next) => {
-  passport.authenticate('login', (err, user, info) => {
+  passport.authenticate('login', (err, user) => {
     if (err) {
-      console.error(err);
+      
       return res.status(500).send({ status: 'error', error: 'Error en el servidor' });
     }
     if (!user) {
       // Las credenciales son inválidas
       return res.status(400).send({ status: 'error', error: 'Credenciales inválidas' });
     }
-
     req.logIn(user, (err) => {
       if (err) {
         console.error(err);

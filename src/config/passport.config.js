@@ -88,12 +88,11 @@ const initializePassport = () => {
 
     }, async (accesToken, refreshToken, profile, done) => {
       try {
-          
-          console.log(profile); //vemos toda la info que viene del profile
           let user = await userModel.findOne({ email: profile._json.email })
           if (!user) {
-              const email = profile._json.email == null ? profile._json.username : null;
-
+            // si tiene mail lo encunetra y carga, sino concatena el usuario con el string
+            const email = profile._json.email || `${profile.username}@github.com`;
+             
               const newUser = {
                       first_name: profile._json.name,
                       last_name: '',
@@ -107,7 +106,6 @@ const initializePassport = () => {
               done(null, result, { message: 'Usuario registrado exitosamente con GitHub' });
           } else {
               // ya existe
-              console.log('Inicio de sesión exitoso con GitHub');
               done(null, user, { message: 'Inicio de sesión exitoso con GitHub' });
           }
 
