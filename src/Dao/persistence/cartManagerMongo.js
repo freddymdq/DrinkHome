@@ -2,6 +2,18 @@ import cartModel from "../models/cart.model.js";
 import productModel from "../models/products.model.js";
 
 export default class CartManagerMongo {
+  
+  // CREA CARRITO
+  async createCart() {
+    const cart = await cartModel.create({ products: [] });
+    return cart;
+  };
+
+  // TODOS LSO CARRITOS
+  async getCarts() {
+    const cart = await cartModel.find();
+    return cart;
+  };
   // DETALLE CARRITO
   async getCartDetails(cartId) {
     const cart = await cartModel
@@ -9,6 +21,12 @@ export default class CartManagerMongo {
       .populate('products.product');
     return cart;
   }
+
+  // CARRITO POR ID
+  async getCartById (idCart) {
+    const cart = await cartModel.findOne({_id: idCart});
+    return cart;
+};
 
   // AGREGAR PRODUCTO AL CARRITO
   async addProductInCart(cartId, productId, quantity) {
@@ -62,5 +80,29 @@ export default class CartManagerMongo {
     await cart.save();
     return cart;
   }
+
+  //AGREGA VARIOS PRODUCTOS AL CARRITO
+  async addProductsToCart (cartId, products) {
+    const cart = await cartModel.findById(cartId);
+    for (const product of products) {
+        const alreadyInCart = cart.products.find(item => item.product.toString() === product.product);
+        if (alreadyInCart) {
+            alreadyInCart.quantity = product.quantity;
+        } else {
+            cart.products.push({
+                product: product.product,
+                quantity: product.quantity,
+            });
+        };
+    };
+    await cart.save();
+};
+
+  // BORRA EL CARRITO
+  async deleteCart (){
+    const result = await cartModel.deleteOne({ _id: cartId })
+    res.send({ deletedCount: result });
+  }
+  
 }
 

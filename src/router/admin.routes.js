@@ -4,7 +4,7 @@ import productModel from "../Dao/models/products.model.js";
 
 
 const router = Router();
-
+// MODIFICAR A CONTROLLERS
 const adminAccess = (req, res, next) => {
   if (!req.session.user || req.session.user.role !== 'admin') {
     return res.redirect('/login');

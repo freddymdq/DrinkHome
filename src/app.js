@@ -1,40 +1,37 @@
 import express from "express";
-import flash from "express-flash";
 import handlebars from "express-handlebars";
 import mongoose from "mongoose";
 import session from "express-session";
-import MongoStore from "connect-mongo";
+import MongoStore from 'connect-mongo';
 import passport from "passport";
-
 import __dirname from "./utils.js";
 import adminRouter from "./router/admin.routes.js";
 import sessionRouter from "./router/session.routes.js";
 import viewsRouter from "./router/views.routes.js";
-import chatRouter from "./router/chat.routes.js"
 import cartRouter from "./router/cart.routes.js"
 import productRouter from "./router/product.routes.js"
 import initializePassport from "./config/passport.config.js";
+import "./config/dbConnection.js"
+import { config } from "./config/config.js";
 
 
 
-const DB = 'ecommerce';
-const MONGO = "mongodb+srv://freddymdq:federico@cluster0.wm7ahcr.mongodb.net/" + DB
-const PORT = process.env.PORT || 8080;
+export const port = config.server.port;
 const app = express();
-const connect = mongoose.connect(MONGO);
-const server = app.listen(PORT, ()=>{
-  console.log('Servidor funcionando en el puerto: '+ PORT);
-})
+const httpServer = app.listen(port,()=>console.log(`Server listening on port ${port}`));
 
-app.use (session({
-  store: new MongoStore({
-    mongoUrl: MONGO,
-    ttl:3600
+app.use(session({
+  store: MongoStore.create({
+      mongoUrl:config.mongoDB.url
   }),
-  secret: 'CoderSecret',
-  resave: false,
-  saveUninitialized: false
+  secret:config.server.secretSession,
+  resave:false,
+  saveUninitialized:false
 }));
+
+httpServer.on('error', error => console.log(`Error in server ${error}`));
+
+
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -53,7 +50,6 @@ app.set('view engine', 'handlebars');
 app.use('/', viewsRouter)
 app.use('/api/session', sessionRouter); 
 app.use('/api/sessions', sessionRouter); 
-app.use('/api/chat', chatRouter)
 app.use('/api/products/', productRouter);
 app.use('/api/carts/', cartRouter);
 app.use('/', adminRouter);
