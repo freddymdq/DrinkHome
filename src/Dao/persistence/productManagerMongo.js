@@ -29,6 +29,11 @@ async deleteProductById(idProduct) {
   await productModel.deleteOne({ _id: idProduct });
   return this.getProducts();
 };
+//
+async productsFindLean(){
+  const products = await productModel.find().lean();
+  return products;
+};
 //ACTUALIZA PRODUCTO
 async updateProductById(idProduct, updateData){
   const { title, description, price, category, img, code, stock } = updateData;
@@ -38,4 +43,5 @@ async updateProductById(idProduct, updateData){
   const product = await productModel.updateOne({ _id: idProduct }, { $set: updateData });
   await product.save();
 };
+
 }

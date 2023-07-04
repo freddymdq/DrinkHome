@@ -101,29 +101,27 @@ export default class ViewsManagerMongo {
 
 // vista carrito
 static async renderCart(req, res) {
-    const { id } = req.params;
-    try {
-      const cart = await cartModel
-          .findById(id)
-          .populate("products.product")
-          .lean();
-      if (!cart) {
-        return res.status(204).end();
-      }
-  // Suma los precios de los productos en el carrito
-  const total = cart.products.reduce((acc, product) => {
-    return acc + product.product.price * product.quantity;
-      }, 0);
-        res.render("cart", { title: "Carrito", 
-        cart, 
-        total,
-        user: req.session.user,
-        isAdmin: req.session.user.role === 'admin'
-        });
-    } catch (error) {
-          res.status(500).send({ message: error.message });
+  try {
+    const cartId = req.session.user.cart; // Obtener el ID del carrito del usuario desde la sesión
+    const cart = await cartModel.findOne({ cartId }).populate("products.product").lean();
+    if (!cart) {
+      return res.status(204).end();
     }
+    const total = cart.products.reduce((acc, product) => {
+      return acc + product.product.price * product.quantity;
+    }, 0);
+    res.render("cart", {
+      title: "Carrito",
+      cart,
+      total,
+      user: req.session.user,
+      isAdmin: req.session.user.role === 'admin'
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
   }
+}
+
 }
 
 

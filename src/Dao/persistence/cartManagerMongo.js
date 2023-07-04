@@ -23,10 +23,10 @@ export default class CartManagerMongo {
   }
 
   // CARRITO POR ID
-  async getCartById (idCart) {
-    const cart = await cartModel.findOne({_id: idCart});
+  async getCartById(cartId) {
+    const cart = await cartModel.findById(cartId);
     return cart;
-};
+  }
 
   // AGREGAR PRODUCTO AL CARRITO
   async addProductInCart(cartId, productId, quantity) {
@@ -40,13 +40,14 @@ export default class CartManagerMongo {
     }
     const existingProduct = cart.products.find(p => p.product.toString() === productId);
     if (existingProduct) {
-      existingProduct.quantity += 1; // Incrementa la cantidad existente en 1
+      existingProduct.quantity += 1;
     } else {
-      cart.products.push({ product: productId, quantity: quantity || 1 }); // Agrega un nuevo producto con la cantidad especificada o 1 como valor predeterminado
+      cart.products.push({ product: productId, quantity: quantity || 1 });
     }
     await cart.save();
     return cart;
   }
+  
   
   // VACIAR CARRITO
   async emptyCart(cartId) {
@@ -103,6 +104,5 @@ export default class CartManagerMongo {
     const result = await cartModel.deleteOne({ _id: cartId })
     res.send({ deletedCount: result });
   }
-  
 }
 

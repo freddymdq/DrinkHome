@@ -8,10 +8,14 @@
   </div>
     {{/if}}
   <ul>
-    <li><a href="/">HOME</a></li>
-    <li><a href="/products">PRODUCTOS</a></li>
-    <li><a href="/cart/646267ba8cc04a3efca60438">CARRITO</a></li>
-  </ul>
+      <li><a href="/">HOME</a></li>
+      <li><a href="/products">PRODUCTOS</a></li>
+      {{#if user.cartId}}
+        <li><a href="/cart/{{user.cartId}}">CARRITO</a></li>
+      {{else}}
+        <li><a href="/cart">CARRITO</a></li>
+      {{/if}}
+    </ul>
   {{#if message}}
   {{message}}
     {{/if}}
@@ -20,7 +24,7 @@
     <div class="user-dropdown-content">
       <p class="users">User: {{user.first_name}} {{user.last_name}}</p>
       <p>Email: {{user.email}}</p>
-      <a href="/profile"><button>Mi perfil</button> </a>
+      <a href="/current"><button>Mi perfil</button> </a>
       <a href="/api/session/logout">
         <button>Cerrar Sesión</button>
       </a>

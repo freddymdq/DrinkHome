@@ -61,8 +61,8 @@ router.get('/cart/:id', privateAccess, async (req, res) => {
 });
 
 // SESSION
-router.get('/profile', privateAccess, (req, res) => {
-  res.render('profile', {
+router.get('/current', privateAccess, (req, res) => {
+  res.render('current', {
     user: req.session.user,
     isAdmin: req.session.user.role === 'admin'
   });

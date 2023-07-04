@@ -18,10 +18,11 @@ import { config } from "./config/config.js";
 
 export const port = config.server.port;
 const app = express();
+
 const httpServer = app.listen(port,()=>console.log(`Server listening on port ${port}`));
 
 app.use(session({
-  store: MongoStore.create({
+  store: new MongoStore({
       mongoUrl:config.mongoDB.url
   }),
   secret:config.server.secretSession,

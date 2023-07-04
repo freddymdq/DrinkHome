@@ -32,12 +32,12 @@ export default class SessionControllers {
       if (!user) {
         return res.status(400).send({ status: 'error', error: 'Credenciales inválidas' });
       }
-      req.logIn(user, (err) => {
+      req.logIn(user, async (err) => {
         if (err) {
           console.error(err);
           return res.status(500).send({ status: 'error', error: 'Error en el servidor' });
         }
-
+  
         req.session.user = {
           first_name: user.first_name,
           last_name: user.last_name,
@@ -45,15 +45,22 @@ export default class SessionControllers {
           email: user.email,
           role: user.role,
         };
-
+  
         if (user.role === 'admin') {
           return res.redirect('/admin');
         } else {
+          // Obtener el carrito del usuario y guardarlo en la sesión
+          const cart = await cartModel.findOne({ userId: user._id });
+          if (cart) {
+            req.session.user.cartId = cart._id; // Guardar solo el ID del carrito
+          }
+  
           return res.send({ status: 'success', payload: user, message: 'Primer logueo!!' });
         }
       });
     })(req, res, next);
   }
+  
 
   async faillogin(req, res) {
     console.log('Fallo en el ingreso');

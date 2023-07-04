@@ -1,31 +1,35 @@
 <div class="container">
-<nav>
-  <ul>
-    <li><a href="/">HOME</a></li>
-    <li><a href="/products">PRODUCTOS</a></li>
-    <li><a href="/cart/646267ba8cc04a3efca60438">CARRITO</a></li>
-  </ul>
-  <div class="user-dropdown">
-    <button class="user-dropdown-btn"> {{user.role}}</button>
-    <div class="user-dropdown-content">
-      <p class="users">User: {{user.name}}</p>
-      <p>Email: {{user.email}}</p>
-      <a href="/profile"><button>Mi perfil</button> </a>
-      <a href="/api/session/logout">
-        <button>Cerrar Sesión</button>
-      </a>
+  <nav>
+    <ul>
+      <li><a href="/">HOME</a></li>
+      <li><a href="/products">PRODUCTOS</a></li>
+    {{#if user.cart}}
+      <li><a href="/cart/{{user.cart}}">CARRITO</a></li>
+    {{else}}
+      <li><a href="/cart/:cid">CARRITO</a></li>
+    {{/if}}
+    </ul>
+    <div class="user-dropdown">
+      <button class="user-dropdown-btn">{{user.role}}</button>
+      <div class="user-dropdown-content">
+        <p class="users">User: {{user.name}}</p>
+        <p>Email: {{user.email}}</p>
+        <a href="/profile"><button>Mi perfil</button></a>
+        <a href="/api/session/logout">
+          <button>Cerrar Sesión</button>
+        </a>
+      </div>
     </div>
-  </div>
-</nav>
-    <h1 class="title">ORDEN DE COMPRA</h1>
-    <br>
-    <br>
+  </nav>
+  <h1 class="title">ORDEN DE COMPRA</h1>
+  <br>
+  <br>
   <div class="gallery" id="product-container">
     {{#each cart.products}}
       <div class="product">
         <h2>{{this.product.title}}</h2>
         <p>Unidades: {{this.quantity}}</p>
-          <img src="{{this.product.img}}" alt="{{this.title}}">
+        <img src="{{this.product.img}}" alt="{{this.product.title}}">
         <p>{{this.product.description}}</p>
         <p class="parra">Price ${{this.product.price}}</p>
         <p>{{this.product.category}}</p>
@@ -35,6 +39,5 @@
   </div>
   <br>
   <br>
-    <h2>Total: ${{total}}</h2>
-  </div>
-
+  <h2>Total: ${{total}}</h2>
+</div>
