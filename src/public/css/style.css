@@ -200,6 +200,10 @@ body {
   border-radius: 5px;
 }
 
+#messageLogs{
+  color: white
+}
+
 
 
 /******************FOOTER**********************/
