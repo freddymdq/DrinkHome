@@ -2,6 +2,7 @@ import passport from 'passport';
 import local from 'passport-local';
 import userModel from '../Dao/models/user.model.js';     
 import { createHash, validatePassword } from '../utils.js';
+import { contactService } from "../repository/index.js";
 import GithubStrategy from 'passport-github2';
 
 const LocalStrategy = local.Strategy;
@@ -28,7 +29,7 @@ const initializePassport = () => {
             role: 'usuario'
           };
 
-          const result = await userModel.create(newUser);
+          const result = await contactService.createContact(newUser);
           console.log('Usuario registrado exitosamente');
           return done(null, result, { message: 'Usuario registrado exitosamente' });
         } catch (error) {
@@ -82,8 +83,8 @@ const initializePassport = () => {
   );
 
   passport.use('github', new GithubStrategy({
-      clientID: 'Iv1.8d20b7aa9310a471',
-      clientSecret: '1ef0f6916f50181ceebc2e6977cb3b7c33e8c033',
+      clientID: 'Iv1.2196bd64a6227d75',
+      clientSecret: '5153430f81a1cc24766b2b6ee9214cab2239e6b1',
       callbackURL: 'http://localhost:8080/api/session/githubcallback'
 
     }, async (accesToken, refreshToken, profile, done) => {
@@ -91,17 +92,17 @@ const initializePassport = () => {
           let user = await userModel.findOne({ email: profile._json.email })
           if (!user) {
             // si tiene mail lo encunetra y carga, sino concatena el usuario con el string
-            const email = profile._json.email || `${profile.username}@github.com`;
-             
+            const email = profile._json.email || `${profile._json.name.replace(/\s+/g, '')}@github.com`;
+                    const nameParts = profile._json.name.split(' ');
               const newUser = {
-                      first_name: profile._json.name,
-                      last_name: '',
+                      first_name: nameParts[0],
+                      last_name: nameParts[1] || '',
                       email: email,
                       age: 18,
                       password: '',
                       role: "usuario"
               }
-              const result = await userModel.create(newUser);
+              const result = await contactService.createContactGitHub(newUser);
               console.log('Usuario registrado exitosamente con GitHub');
               done(null, result, { message: 'Usuario registrado exitosamente con GitHub' });
           } else {

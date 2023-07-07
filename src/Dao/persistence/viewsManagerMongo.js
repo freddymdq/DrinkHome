@@ -2,6 +2,8 @@ import productModel from '../models/products.model.js';
 import cartModel from '../models/cart.model.js';
 
 export default class ViewsManagerMongo {
+
+  // HOME
   static async renderHome(req, res) {
     const { page = 1, limit, query } = req.query;
     const opt = { page, limit: parseInt(limit) || 40, lean: true };
@@ -34,6 +36,7 @@ export default class ViewsManagerMongo {
     });
   }
 
+  // CATALOGO
   static async renderProducts(req, res) {
     try {
       let { page = 1, limit, query, sort, category } = req.query;
@@ -79,6 +82,7 @@ export default class ViewsManagerMongo {
     }
   }
 
+  // 1 PRODUCTO
   static async renderProduct(req, res) {
     try {
       const productId = req.params.id;
@@ -99,11 +103,11 @@ export default class ViewsManagerMongo {
     }
   }
 
-// vista carrito
+// VISTA CART
 static async renderCart(req, res) {
   try {
     const cartId = req.session.user.cart; // Obtener el ID del carrito del usuario desde la sesión
-    const cart = await cartModel.findOne({ cartId }).populate("products.product").lean();
+    const cart = await cartModel.findOne({ _id: cartId }).populate("products.product").lean();
     if (!cart) {
       return res.status(204).end();
     }
@@ -120,6 +124,33 @@ static async renderCart(req, res) {
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
+}
+
+// PROFILE
+async currentRender(req,res) {
+  try {
+      res.render('/current',{
+          user: req.session.user
+      });
+  } catch (error) {
+      res.status(500).send({
+          status: "Error",
+          msg: `Error!.`
+      });
+  }
+};
+
+async chatRender(req,res) {
+  try{
+    res.render('/chat',{
+      user: req.session.user
+    } )
+  }catch (error) {
+    res.status(500).send({
+        status: "Error",
+        msg: `Error!.`
+    });
+}
 }
 
 }

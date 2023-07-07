@@ -3,11 +3,8 @@
     <ul>
       <li><a href="/">HOME</a></li>
       <li><a href="/products">PRODUCTOS</a></li>
-    {{#if user.cart}}
-      <li><a href="/cart/{{user.cart}}">CARRITO</a></li>
-    {{else}}
-      <li><a href="/cart/:cid">CARRITO</a></li>
-    {{/if}}
+      <li><a href="/carts/{{user.cart._id}}">CARRITO</a></li>
+    
     </ul>
     <div class="user-dropdown">
       <button class="user-dropdown-btn">{{user.role}}</button>

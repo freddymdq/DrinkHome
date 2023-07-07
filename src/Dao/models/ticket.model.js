@@ -1,32 +1,34 @@
-import {v4 as uuidv4} from 'uuid';
+/* import {v4 as uuidv4} from 'uuid'; */
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const collection = 'ticket';
 
-const genPurchase = () => {
-    return new Date();
-};
-
 const ticketSchema = new mongoose.Schema({
-    code:{
+    
+    code: {
         type: String,
-        default: uuidv4,
         required: true,
         unique: true
     },
-    purchase_dateTime:{
-        type: Date,
-        default: genPurchase
+
+    purchase_dateTime: {
+        type: String,
+        required: true
     },
-    amount:{
+
+    amount: {
         type: Number,
         required: true
     },
-    purchaser:{
+
+    purchaser: {
         type: String,
         required: true
     }
-});
+ })
+
+ ticketSchema.plugin(mongoosePaginate);
 
 const ticketModel = mongoose.model(collection, ticketSchema);
 export default ticketModel;

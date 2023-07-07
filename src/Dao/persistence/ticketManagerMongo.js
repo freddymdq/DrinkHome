@@ -1,53 +1,45 @@
-import cartModel from "../models/cart.model.js";
+import { code, date } from "../../utils.js";
 import ticketModel from "../models/ticket.model.js";
 import userModel from "../models/user.model.js";
-import { code, date } from "../../utils.js";
+import cartModel from "../models/cart.model.js";
 
 export default class TicketManagerMongo {
   async purchaseCart(cartId) {
-    const cart = await cartModel.findById(cartId).populate("products.product");
-    let totalAmount = 0;
-    const productsWithStock = [];
-    const user = await userModel.findOne({ cart: cartId });
-
-    for (const productInCart of cart.products) {
-      const product = productInCart.product;
-      const availableStock = product.stock;
-
-      if (productInCart.quantity <= availableStock) {
-        product.stock -= productInCart.quantity;
-        totalAmount += product.price * productInCart.quantity;
-      } else {
-        totalAmount += product.price * availableStock;
-        productsWithStock.push({
-          product: product._id,
-          quantity: availableStock,
-        });
+    try {
+      const cart = await cartModel.findById(cartId).populate("products.product");
+      let totalAmount = 0;
+      const productStock = [];
+      for (const productInCart of cart.products) {
+        const product = productInCart.product;
+        if (productInCart.quantity <= product.stock) {
+          product.stock -= productInCart.quantity;
+          await product.save();
+          totalAmount += product.price * productInCart.quantity;
+        } else {
+          totalAmount += product.price * product.stock;
+          productStock.push(productInCart);
+          product.stock -= productInCart.quantity;
+          await product.save();
+        }
       }
 
-      await product.save();
+      const generateCode = await code();
+      const generateDate = await date();
+      const user = await userModel.findOne({ cart: cartId });
+      const purchaserEmail = user.email;
+      const ticketData = {
+        code: generateCode,
+        purchase_dateTime: generateDate,
+        amount: totalAmount,
+        purchaser: purchaserEmail,
+      };
+      const ticket = await ticketModel.create(ticketData);
+      cart.products = productStock;
+      await cart.save();
+      return ticket;
+    } catch (error) {
+      throw new Error("No se puede efectuar la compra. Error: " + error.message);
     }
-
-    const genDate = await date();
-    const genCode = await code();
-
-    const dataTicket = {
-      code: genCode,
-      purchase_dateTime: genDate,
-      amount: totalAmount,
-      purchaser: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    };
-
-    const ticket = new ticketModel(dataTicket);
-    await ticket.save();
-
-    cart.products = productsWithStock;
-    await cart.save();
-
-    return ticket;
+    
   }
 }

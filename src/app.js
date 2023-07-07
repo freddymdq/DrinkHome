@@ -1,31 +1,34 @@
-import express from "express";
-import handlebars from "express-handlebars";
-import mongoose from "mongoose";
-import session from "express-session";
-import MongoStore from 'connect-mongo';
+import express from "express"; //
+import handlebars from "express-handlebars"; //
+import session from "express-session"; //
+import MongoStore from 'connect-mongo'; //
+import { Server } from "socket.io"; 
 import passport from "passport";
 import __dirname from "./utils.js";
 import adminRouter from "./router/admin.routes.js";
+import mgsModel from "./Dao/models/mgs.model.js";
+import chatRouter from "./router/chat.routes.js";
 import sessionRouter from "./router/session.routes.js";
 import viewsRouter from "./router/views.routes.js";
+/* import currentRouter from "./router/current.routes.js"; */
 import cartRouter from "./router/cart.routes.js"
 import productRouter from "./router/product.routes.js"
 import initializePassport from "./config/passport.config.js";
 import "./config/dbConnection.js"
-import { config } from "./config/config.js";
+import {options} from "./config/options.js";
 
 
 
-export const port = config.server.port;
+export const port = options.server.port;
 const app = express();
 
 const httpServer = app.listen(port,()=>console.log(`Server listening on port ${port}`));
 
 app.use(session({
   store: new MongoStore({
-      mongoUrl:config.mongoDB.url
+      mongoUrl:options.mongoDB.url
   }),
-  secret:config.server.secretSession,
+  secret:options.server.secretSession,
   resave:false,
   saveUninitialized:false
 }));
@@ -48,9 +51,27 @@ app.set('view engine', 'handlebars');
 
 
 // routes
+/* app.use('/current', currentRouter) */
+app.use('/chat', chatRouter)
 app.use('/', viewsRouter)
 app.use('/api/session', sessionRouter); 
 app.use('/api/sessions', sessionRouter); 
 app.use('/api/products/', productRouter);
 app.use('/api/carts/', cartRouter);
 app.use('/', adminRouter);
+
+
+const io = new Server(httpServer);
+io.on('connected', async Socket => {
+    console.log('socket conectado');
+    Socket.on('message', data=>{
+        const newMessage = new mgsModel({
+            user: data.user,
+            message: data.message
+        });
+        io.emit('messageLogs', newMessage);
+    });
+    Socket.on('authenticated', (data) =>{      
+        Socket.broadcast.emit('Nuevo Usuario conectado', data);
+    });
+});

@@ -6,14 +6,13 @@ import {v4 as uuidv4} from 'uuid';
 export const date = async () =>{
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
-    const dateInfo = `Fecha: ${date} - Hora: ${time}`;
-    return dateInfo;
+    const infoDate = ` Hora: ${time} - Fecha: ${date}`;
+    return infoDate;
 };
 export const code = async () =>{
     const code = uuidv4();
     return code;
 };
-
 
 export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 export const validatePassword = (password, user) => bcrypt.compareSync(password, user.password);

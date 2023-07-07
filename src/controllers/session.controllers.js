@@ -1,28 +1,20 @@
 
 import passport from 'passport';
 import userModel from '../Dao/models/user.model.js';
-import cartModel from '../Dao/models/cart.model.js';
+import { sendGmail } from '../helpers/gmail.js';
 import { createHash, validatePassword } from '../utils.js';
 
 export default class SessionControllers {
-  async register(req, res) {
+  async register (req, res) {
     try {
-      const user = req.user;
-      const newCart = {
-        userId: user._id,
-      };
-
-      const cartResult = await cartModel.create(newCart);
-
-      user.cart = cartResult._id;
-      await user.save();
-
-      res.send({ status: 'success', message: 'User registered' });
+        const email = await sendGmail();
+        console.log(email)
+        res.send({ status: 'success', message: 'User registered' });
     } catch (error) {
-      console.log('Error en el registro:', error);
-      res.send({ error: 'Error en el registro' });
-    }
-  }
+        console.log('Error en el registro:', error);
+        res.send({ error: 'Error en el registro' });
+    };
+};
 
   login(req, res, next) {
     passport.authenticate('login', (err, user) => {
@@ -43,18 +35,13 @@ export default class SessionControllers {
           last_name: user.last_name,
           age: user.age,
           email: user.email,
-          role: user.role,
+          cart: user.cart,
+          role: user.role
         };
   
         if (user.role === 'admin') {
           return res.redirect('/admin');
-        } else {
-          // Obtener el carrito del usuario y guardarlo en la sesión
-          const cart = await cartModel.findOne({ userId: user._id });
-          if (cart) {
-            req.session.user.cartId = cart._id; // Guardar solo el ID del carrito
-          }
-  
+        } else { 
           return res.send({ status: 'success', payload: user, message: 'Primer logueo!!' });
         }
       });

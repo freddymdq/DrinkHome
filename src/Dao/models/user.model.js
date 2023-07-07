@@ -3,7 +3,7 @@ import cartModel from './cart.model.js';
 
 const collection = 'user';
 
-const schema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     first_name: {
         type: String,
         required: true
@@ -33,7 +33,7 @@ const schema = new mongoose.Schema({
     }
 });
 
-schema.pre('save', async function (next) {
+userSchema.pre('save', async function (next) {
     if (!this.cart) {
         const newCart = await cartModel.create({ products: [] });
         this.cart = newCart._id;
@@ -41,5 +41,5 @@ schema.pre('save', async function (next) {
     next();
 });
 
-const userModel = mongoose.model(collection, schema);
+const userModel = mongoose.model(collection, userSchema);
 export default userModel;

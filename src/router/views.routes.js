@@ -1,8 +1,10 @@
 import { Router } from "express";
 import viewsManagerMongo from "../Dao/persistence/viewsManagerMongo.js";
 import userModel from "../Dao/models/user.model.js";
+import ChatController from "../controllers/chat.controllers.js";
 
 const router = Router();
+const chatController = new ChatController();
 
 const publicAccess = (req, res, next) => {
   if (req.session.user) return res.redirect('/');
@@ -60,6 +62,9 @@ router.get('/cart/:id', privateAccess, async (req, res) => {
   await viewsManagerMongo.renderCart(req, res);
 });
 
+router.get('/chat', privateAccess, async (req, res) => {
+  await chatController.getAllMgs(req, res);
+});
 // SESSION
 router.get('/current', privateAccess, (req, res) => {
   res.render('current', {

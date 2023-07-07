@@ -124,12 +124,12 @@ export default class CartController{
             });
         }
     };
-    // TICKET PURSHASE
+    // TICKET COMPRA
     async purchaseCart (req, res) {
       try {
-          const cartId = req.params.id;
-          const result = await ticketManagerMongo.purchaseCart(cartId);
-          console.log(result);
+          const cartId = req.params.id
+          const result = await ticketManagerMongo.purchaseCart(cartId)
+          console.log(result)
           res.status(200).send({
               status: 'success',
               result
