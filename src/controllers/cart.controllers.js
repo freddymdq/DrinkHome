@@ -1,11 +1,8 @@
 import CartManagerMongo from "../Dao/persistence/cartManagerMongo.js"
-import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
 
 const cartManagerMongo = new CartManagerMongo()
-const ticketManagerMongo = new TicketManagerMongo()
 
 export default class CartController{
-
     // NUEVO CARRITO
     async createCart (req, res) {
         try{
@@ -49,7 +46,6 @@ export default class CartController{
         res.status(500).send({ error: 'Error al obtener el carrito' });
       }
     }
-    
 
     // DETALLES DEL CART
     async getCartDetails (req, res) {
@@ -107,6 +103,7 @@ export default class CartController{
             });
           }
         };
+        
     // AGREGA VARIOS PRODUCTOS AL CARRITO
     async addProductsToCart (req, res) {
         try {
@@ -124,24 +121,8 @@ export default class CartController{
             });
         }
     };
-    // TICKET COMPRA
-    async purchaseCart (req, res) {
-      try {
-          const cartId = req.params.id
-          const result = await ticketManagerMongo.purchaseCart(cartId)
-          console.log(result)
-          res.status(200).send({
-              status: 'success',
-              result
-          });
-      } catch (error) {
-          res.status(400).send({
-              status: 'error',
-              message: 'No se puede efectuar la compra.',
-          });
-      }
-  };
-  
+   
+
     // BORRA EL CARRITO
    async delete (req, res) {
     try {

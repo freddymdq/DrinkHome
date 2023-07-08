@@ -2,7 +2,7 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
-const collection = 'ticket';
+const collection = 'tickets';
 
 const ticketSchema = new mongoose.Schema({
     

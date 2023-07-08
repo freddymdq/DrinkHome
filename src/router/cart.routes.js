@@ -1,9 +1,12 @@
 
 import { Router } from "express";
 import CartController from "../controllers/cart.controllers.js";
+import TicketController from "../controllers/ticket.controllers.js";
+
 
 const router = Router();
 const cartController = new CartController();
+const ticketController = new TicketController()
 
 // CREA CARRITO
 router.post('/', cartController.createCart);
@@ -27,6 +30,6 @@ router.delete('/delete/:cid', cartController.delete);
 
 // A REPARAR
 // EMITIR ORDEN DE COMPRA
-router.post('/:cid/purchase', cartController.purchaseCart);
+router.post('/:cid/purchase', ticketController.purchaseCart);
 
 export default router;
