@@ -1,7 +1,8 @@
 import passport from 'passport';
 import local from 'passport-local';
 import userModel from '../Dao/models/user.model.js';
-import { createHash, validatePassword } from '../utils.js';
+import { createHash} from '../utils.js';
+import { validatePassword } from '../utils.js';
 import { contactService } from '../repository/index.js';
 import GithubStrategy from 'passport-github2';
 
@@ -25,7 +26,7 @@ const initializePassport = () => {
             last_name,
             email,
             age,
-            password: createHash(password),
+            password: createHash(password), // Utiliza createHash para generar el hash de la contraseña
             role: 'user',
           };
 
@@ -90,7 +91,7 @@ const initializePassport = () => {
               last_name: nameParts[1] || '',
               email: email,
               age: 18,
-              password: '',
+              password:'',
               role: 'user',
             };
             const result = await contactService.createContactGitHub(newUser);

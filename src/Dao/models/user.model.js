@@ -20,7 +20,10 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password: String,
+    password: {
+        type: String,
+        required: true
+        },
     cart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'carts'

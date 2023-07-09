@@ -7,7 +7,7 @@ const mgsSchema = new mongoose.Schema({
     
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: "users",
         required: true
     },
     message: {
@@ -18,7 +18,7 @@ const mgsSchema = new mongoose.Schema({
 
 mgsSchema.virtual('userFirstName', {
         
-    ref: 'user',
+    ref: 'users',
     localField: 'user',
     foreignField: '_id',
     justOne: true,

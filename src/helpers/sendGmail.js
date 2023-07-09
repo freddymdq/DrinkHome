@@ -4,13 +4,12 @@ const emailTemplate = `<div>
 <h1>Bienvenido/a!!</h1>
 <p>Tu registro fue realizado exitosamente.</p>
 </div>`;
-
-export const sendGmail = async () => {
+export const sendGmail = async (recipient) => {
     const email = await transporter.sendMail({
-        from:"DRINK HOME",
-        to:"freddymdq@gmail.com",
-        subject:"Registro exitoso",
-        html: emailTemplate
+      from: 'DRINK HOME',
+      to: recipient,
+      subject: 'Registro exitoso',
+      html: emailTemplate,
     });
     return email;
-}
+  };

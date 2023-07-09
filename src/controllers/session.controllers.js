@@ -5,16 +5,28 @@ import { sendGmail } from '../helpers/sendGmail.js';
 import { createHash, validatePassword } from '../utils.js';
 
 export default class SessionControllers {
-  async register (req, res) {
-    try {
-        const email = await sendGmail();
-        console.log(email)
-        res.send({ status: 'success', message: 'User registered' });
-    } catch (error) {
+    async register(req, res) {
+      try {
+        // Realizar el registro del usuario y obtener la dirección de correo electrónico
+        const { first_name, last_name, email, age, password } = req.body;
+        const newUser = {
+          first_name,
+          last_name,
+          email,
+          age,
+          password,
+          role: 'user',
+        };
+
+        // Enviar el correo electrónico al usuario registrado
+        await sendGmail(newUser.email);
+        // Responder con éxito
+        res.status(200).json({ status: 'success', message: 'Usuario registrado exitosamente' });
+      } catch (error) {
         console.log('Error en el registro:', error);
-        res.send({ error: 'Error en el registro' });
-    };
-};
+        res.status(500).json({ error: 'Error en el registro' });
+      }
+    }
 
   login(req, res, next) {
     passport.authenticate('login', (err, user) => {
