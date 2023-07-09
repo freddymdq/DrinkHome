@@ -1,8 +1,10 @@
-import express from "express"; //
-import handlebars from "express-handlebars"; //
-import session from "express-session"; //
-import MongoStore from 'connect-mongo'; //
+import express from "express"; 
+import handlebars from "express-handlebars";
+import session from "express-session";
+import MongoStore from 'connect-mongo'; 
 import { Server } from "socket.io"; 
+import "./config/dbConnection.js"
+import {options} from "./config/options.js";
 import passport from "passport";
 import __dirname from "./utils.js";
 import adminRouter from "./router/admin.routes.js";
@@ -14,8 +16,7 @@ import viewsRouter from "./router/views.routes.js";
 import cartRouter from "./router/cart.routes.js"
 import productRouter from "./router/product.routes.js"
 import initializePassport from "./config/passport.config.js";
-import "./config/dbConnection.js"
-import {options} from "./config/options.js";
+
 
 
 
@@ -26,7 +27,8 @@ const httpServer = app.listen(port,()=>console.log(`Server listening on port ${p
 
 app.use(session({
   store: new MongoStore({
-      mongoUrl:options.mongoDB.url
+      mongoUrl:options.mongoDB.url,
+      ttl: 3200
   }),
   secret:options.server.secretSession,
   resave:false,
@@ -39,12 +41,9 @@ httpServer.on('error', error => console.log(`Error in server ${error}`));
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-// Estaticos
 app.use(express.static(__dirname+'/public'));
-// Handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');

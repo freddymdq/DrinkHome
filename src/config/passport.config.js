@@ -1,8 +1,8 @@
 import passport from 'passport';
 import local from 'passport-local';
-import userModel from '../Dao/models/user.model.js';     
+import userModel from '../Dao/models/user.model.js';
 import { createHash, validatePassword } from '../utils.js';
-import { contactService } from "../repository/index.js";
+import { contactService } from '../repository/index.js';
 import GithubStrategy from 'passport-github2';
 
 const LocalStrategy = local.Strategy;
@@ -26,14 +26,14 @@ const initializePassport = () => {
             email,
             age,
             password: createHash(password),
-            role: 'usuario'
+            role: 'user',
           };
 
           const result = await contactService.createContact(newUser);
           console.log('Usuario registrado exitosamente');
           return done(null, result, { message: 'Usuario registrado exitosamente' });
         } catch (error) {
-          return done("Error al registrar el usuario: " + error);
+          return done('Error al registrar el usuario: ' + error);
         }
       }
     )
@@ -52,18 +52,6 @@ const initializePassport = () => {
     'login',
     new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
       try {
-        if (username === 'admin@admin.com' && password === 'admin') {
-          const adminUser = {
-            first_name: 'Admin',
-            last_name: 'Admin',
-            email: username,
-            age: 0,
-            role: 'admin'
-          };
-          console.log('Ingreso exitoso como administrador');
-          return done(null, adminUser, { message: 'Ingreso exitoso como administrador' });
-        }
-
         const user = await userModel.findOne({ email: username });
         if (!user) {
           console.log('Usuario no encontrado');
@@ -77,44 +65,47 @@ const initializePassport = () => {
         console.log('Ingreso exitoso');
         return done(null, user, { message: 'Ingreso exitoso' });
       } catch (error) {
-        return done("Error al intentar ingresar: " + error);
+        return done('Error al intentar ingresar: ' + error);
       }
     })
   );
 
-  passport.use('github', new GithubStrategy({
-      clientID: 'Iv1.2196bd64a6227d75',
-      clientSecret: '5153430f81a1cc24766b2b6ee9214cab2239e6b1',
-      callbackURL: 'http://localhost:8080/api/session/githubcallback'
-
-    }, async (accesToken, refreshToken, profile, done) => {
-      try {
-          let user = await userModel.findOne({ email: profile._json.email })
+  passport.use(
+    'github',
+    new GithubStrategy(
+      {
+        clientID: 'Iv1.2196bd64a6227d75',
+        clientSecret: '5153430f81a1cc24766b2b6ee9214cab2239e6b1',
+        callbackURL: 'http://localhost:8080/api/session/githubcallback',
+      },
+      async (accesToken, refreshToken, profile, done) => {
+        try {
+          let user = await userModel.findOne({ email: profile._json.email });
           if (!user) {
-            // si tiene mail lo encunetra y carga, sino concatena el usuario con el string
+            // si tiene mail lo encuentra y carga, sino concatena el usuario con el string
             const email = profile._json.email || `${profile._json.name.replace(/\s+/g, '')}@github.com`;
-                    const nameParts = profile._json.name.split(' ');
-              const newUser = {
-                      first_name: nameParts[0],
-                      last_name: nameParts[1] || '',
-                      email: email,
-                      age: 18,
-                      password: '',
-                      role: "usuario"
-              }
-              const result = await contactService.createContactGitHub(newUser);
-              console.log('Usuario registrado exitosamente con GitHub');
-              done(null, result, { message: 'Usuario registrado exitosamente con GitHub' });
+            const nameParts = profile._json.name.split(' ');
+            const newUser = {
+              first_name: nameParts[0],
+              last_name: nameParts[1] || '',
+              email: email,
+              age: 18,
+              password: '',
+              role: 'user',
+            };
+            const result = await contactService.createContactGitHub(newUser);
+            console.log('Usuario registrado exitosamente con GitHub');
+            done(null, result, { message: 'Usuario registrado exitosamente con GitHub' });
           } else {
-              // ya existe
-              done(null, user, { message: 'Inicio de sesión exitoso con GitHub' });
+            // ya existe
+            done(null, user, { message: 'Inicio de sesión exitoso con GitHub' });
           }
-
-      } catch (error) {
+        } catch (error) {
           return done(null, error);
+        }
       }
-
-  }))
+    )
+  );
 };
 
 export default initializePassport;

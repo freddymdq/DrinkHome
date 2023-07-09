@@ -3,7 +3,6 @@ import { Router } from "express";
 import CartController from "../controllers/cart.controllers.js";
 import TicketController from "../controllers/ticket.controllers.js";
 
-
 const router = Router();
 const cartController = new CartController();
 const ticketController = new TicketController()
@@ -17,7 +16,7 @@ router.get('/:cid', cartController.getCartById);
 // MUESTRA DETALLES DEL CARRITO
 router.get('/:cid/detail', cartController.getCartDetails);
 // AGREGA VARIOS PRODUCTOS AL CARRITO
-router.put('/:cid', cartController.addProductsToCart);
+router.put('/:cid/', cartController.addProductsToCart);
 // AGREGA 1 PRODUCTO AL CARRITO
 router.post('/:cid/products/:pid', cartController.addProductInCart);
 // AUMENTA LA CANTIDAD DE UNIDADES

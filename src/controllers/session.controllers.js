@@ -1,7 +1,7 @@
 
 import passport from 'passport';
 import userModel from '../Dao/models/user.model.js';
-import { sendGmail } from '../helpers/gmail.js';
+import { sendGmail } from '../helpers/sendGmail.js';
 import { createHash, validatePassword } from '../utils.js';
 
 export default class SessionControllers {
@@ -22,7 +22,7 @@ export default class SessionControllers {
         return res.status(500).send({ status: 'error', error: 'Error en el servidor' });
       }
       if (!user) {
-        return res.status(400).send({ status: 'error', error: 'Credenciales inválidas' });
+        return res.status(400).send({ status: 'error', error: 'Credenciales erroneas' });
       }
       req.logIn(user, async (err) => {
         if (err) {

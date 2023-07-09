@@ -5,14 +5,12 @@ let daoContact;
 
 switch (persistence) {
     case "mongo":
-        const {dbConect} = await import("../config/dbConnection.js")
-            dbConect()
+        const {connectDB} = await import("../config/dbConnection.js")
+            connectDB()
         const {UserManagerMongo} = await import("./persistence/userManagerMongo.js")
         daoContact = new UserManagerMongo()
         break;
     case "memory":
-        break;
-    case "sql":
         break;
 };
 

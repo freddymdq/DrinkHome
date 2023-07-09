@@ -1,8 +1,11 @@
 import CartManagerMongo from "../Dao/persistence/cartManagerMongo.js"
+import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
 
 const cartManagerMongo = new CartManagerMongo()
+const ticketManagerMongo = new TicketManagerMongo()
 
 export default class CartController{
+
     // NUEVO CARRITO
     async createCart (req, res) {
         try{
@@ -46,6 +49,7 @@ export default class CartController{
         res.status(500).send({ error: 'Error al obtener el carrito' });
       }
     }
+    
 
     // DETALLES DEL CART
     async getCartDetails (req, res) {
@@ -62,10 +66,10 @@ export default class CartController{
     // AGREGA PRODUCTOS AL CARRITO
     async addProductInCart(req, res) {
       try {
-        const cartId = req.params.cid;
+        const cartId = req.params.cid
         const productId = req.params.pid;
-        const quantity = req.body.quantity; // Obtener la cantidad desde el cuerpo de la solicitud
-        await cartManagerMongo.addProductInCart(cartId, productId, quantity);
+       /*  const quantity = req.body.quantity; */ // Obtener la cantidad desde el cuerpo de la solicitud
+        await cartManagerMongo.addProductInCart(cartId, productId, /* quantity */);
         res.send({ message: 'Producto agregado al carrito correctamente' });
       } catch (error) {
         res.status(400).send({
@@ -103,13 +107,12 @@ export default class CartController{
             });
           }
         };
-        
     // AGREGA VARIOS PRODUCTOS AL CARRITO
     async addProductsToCart (req, res) {
         try {
             const cartId = req.params.id;
-            const products = req.body;
-            await cartManagerMongo.addProductsToCart(cartId, products);
+            const productId = req.params.productId;
+            await cartManagerMongo.addProductsToCart(cartId, productId);
             res.status(200).send({
                 status: 'success',
                 message: 'Productos agregados al carrito',
@@ -121,7 +124,6 @@ export default class CartController{
             });
         }
     };
-   
 
     // BORRA EL CARRITO
    async delete (req, res) {

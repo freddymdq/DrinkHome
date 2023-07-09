@@ -33,7 +33,7 @@ export default cartModel; */
 import mongoosePaginate from 'mongoose-paginate-v2';
 import mongoose from 'mongoose';
 
-const collection = 'cart';
+const collection = 'carts';
 
 const cartSchema = new mongoose.Schema({
     products: {
@@ -51,7 +51,7 @@ const cartSchema = new mongoose.Schema({
                 }
             }
         ],
-        default: []
+        /* default: [] */
     }
 });
 

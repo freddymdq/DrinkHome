@@ -1,16 +1,11 @@
-// AUN NO IMPLEMENTADO
-
-import mongoose from "mongoose";
 import { options } from "./options.js";
+import mongoose from "mongoose";
 
-
-export const dbConect = async () => {
-
+export const connectDB = async()=>{
     try {
-        await mongoose.connect(options.mongoDB.url);
-        console.log("Conected Success DataBase")
-    }catch (error){
-        console.log("Error with connected at Database")
-    }
-    
-}
+        mongoose.connect(options.mongoDB.url);
+        console.log("Database connected");
+    } catch (error) {
+        console.log(`Error al conectar database ${error}`);
+    };
+};
