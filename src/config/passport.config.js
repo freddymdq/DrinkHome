@@ -5,40 +5,51 @@ import { createHash} from '../utils.js';
 import { validatePassword } from '../utils.js';
 import { contactService } from '../repository/index.js';
 import GithubStrategy from 'passport-github2';
+import cartModel from '../Dao/models/cart.model.js';
+
 
 const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
   passport.use(
-    'register',
+    "register",
     new LocalStrategy(
-      { passReqToCallback: true, usernameField: 'email' },
-      async (req, username, password, done) => {
-        const { first_name, last_name, email, age } = req.body;
-        try {
-          const user = await userModel.findOne({ email: username });
-          if (user) {
-            console.log('El usuario ya existe');
-            return done(null, false, { message: 'El usuario ya existe' });
-          }
-          const newUser = {
-            first_name,
-            last_name,
-            email,
-            age,
-            password: createHash(password), // Utiliza createHash para generar el hash de la contraseña
-            role: 'user',
-          };
-
-          const result = await contactService.createContact(newUser);
-          console.log('Usuario registrado exitosamente');
-          return done(null, result, { message: 'Usuario registrado exitosamente' });
-        } catch (error) {
-          return done('Error al registrar el usuario: ' + error);
+        { passReqToCallback: true, usernameField: "email" },
+        async (req, username, password, done) => {
+            const { first_name, last_name, email, age } = req.body;
+            try {
+                let user = await userModel.findOne({ email: username });
+                if (user) {
+                    console.log("El usuario ya existe");
+                    return done(null, false);
+                }
+                let role;
+                if ( email == "admin@admin.com" && password == "admin") {
+                    role = "admin";
+                }
+                const newUser = {
+                    first_name,
+                    last_name,
+                    email,
+                    age,
+                    password: createHash( password ),
+                    role
+                };
+                const emptyCart = { 
+                    products: [] 
+                }
+                const newCart = await cartModel.create( emptyCart )
+                if (newCart) {
+                    newUser.cart = newCart._id;
+                }
+                const result = await userModel.create( newUser );
+                return done(null, result);
+            } catch (error) {
+                return done("Error en el registro de usuario" + error);
+            }
         }
-      }
     )
-  );
+);
 
   passport.serializeUser((user, done) => {
     done(null, user._id);
@@ -90,7 +101,7 @@ const initializePassport = () => {
               first_name: nameParts[0],
               last_name: nameParts[1] || '',
               email: email,
-              age: 18,
+              age: '',
               password:'',
               role: 'user',
             };

@@ -1,7 +1,8 @@
 import { code, date } from "../../utils.js";
-import ticketModel from "../models/ticket.model.js"
+import ticketModel from "../models/ticket.model.js";
 import userModel from "../models/user.model.js";
 import cartModel from "../models/cart.model.js";
+import { transporter } from "../../config/gmail.js";
 
 export default class TicketManagerMongo {
   async purchaseCart(cartId) {
@@ -43,6 +44,26 @@ export default class TicketManagerMongo {
     cart.products = productsStock;
     await cart.save();
 
+    // Send ticket email to the purchaser
+    await sendTicketByEmail(purchaserEmail, ticket);
+
     return ticket;
   }
 }
+
+async function sendTicketByEmail(recipient, ticket) {
+  const emailTemplate = `<div>
+    <h1>Tu ticket de compra</h1>
+    <p>Código: ${ticket.code}</p>
+    <p>Fecha de compra: ${ticket.purchase_dateTime}</p>
+    <p>Monto: ${ticket.amount}</p>
+  </div>`;
+
+  await transporter.sendMail({
+    from: "DRINK HOME",
+    to: recipient,
+    subject: "Tu ticket de compra",
+    html: emailTemplate,
+  });
+}
+

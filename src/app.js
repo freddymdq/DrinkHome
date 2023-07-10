@@ -16,8 +16,7 @@ import viewsRouter from "./router/views.routes.js";
 import cartRouter from "./router/cart.routes.js"
 import productRouter from "./router/product.routes.js"
 import initializePassport from "./config/passport.config.js";
-
-
+import userModel from "./Dao/models/user.model.js";
 
 
 export const port = options.server.port;
@@ -59,18 +58,34 @@ app.use('/api/products/', productRouter);
 app.use('/api/carts/', cartRouter);
 app.use('/', adminRouter);
 
-
+// Socket.IO
 const io = new Server(httpServer);
-io.on('connected', async Socket => {
-    console.log('socket conectado');
-    Socket.on('message', data=>{
-        const newMessage = new mgsModel({
-            user: data.user,
-            message: data.message
-        });
-        io.emit('messageLogs', newMessage);
+const messages = [];
+
+io.on('connection', socket => {
+    console.log('socket connected')
+  
+    socket.emit('messageLogs', messages)
+  
+    socket.on("message", async (data) => {
+        const user = await userModel.findOne({ email: data.user }).select('email');
+      
+        if (!user) {
+          console.log("User not found:", data.user);
+          return;
+        }
+        const message = {
+          user: user,
+          message: data.message
+        };
+      
+        messages.push(message);
+        io.emit("messageLogs", messages);
+      
+        await mgsModel.create(message);
+      });
+  
+    socket.on('authenticated', data => {
+      socket.broadcast.emit('newUserConnected', data);
     });
-    Socket.on('authenticated', (data) =>{      
-        Socket.broadcast.emit('Nuevo Usuario conectado', data);
-    });
-});
+  });
