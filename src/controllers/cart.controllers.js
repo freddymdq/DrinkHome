@@ -1,5 +1,6 @@
 import CartManagerMongo from "../Dao/persistence/cartManagerMongo.js"
 import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
+import { CART_MANAGER_ERRORS } from "../service/error.message.js"
 
 const cartManagerMongo = new CartManagerMongo()
 const ticketManagerMongo = new TicketManagerMongo()
@@ -15,10 +16,7 @@ export default class CartController{
                 result
             });
         }catch (error) {
-            res.status(400).send({
-                status: "Error",
-                msg: `El carrito solicitado no se puede crear.`
-            });
+          throw new Error(CART_MANAGER_ERRORS.CREATE_CARTS.ERROR_CODE)
         };
     };
 
@@ -31,10 +29,7 @@ export default class CartController{
                 result
             });
         }catch(error){
-            res.status(400).send({
-                status: "Error",
-                msg: `El total de carritos no se puede visualizar.`
-            });
+          throw new Error(CART_MANAGER_ERRORS.GET_CARTS.ERROR_CODE)
         };
     };
 
@@ -45,8 +40,7 @@ export default class CartController{
         const cart = await cartManagerMongo.getCartById(cartId);
         res.send(cart);
       } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: 'Error al obtener el carrito' });
+        throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
       }
     }
     
@@ -72,10 +66,7 @@ export default class CartController{
         await cartManagerMongo.addProductInCart(cartId, productId, /* quantity */);
         res.send({ message: 'Producto agregado al carrito correctamente' });
       } catch (error) {
-        res.status(400).send({
-          status: 'Error',
-          msg: 'No se puede agregar el producto al carrito',
-        });
+        throw new Error(CART_MANAGER_ERRORS.ADD_PRODUCT_TO_CART.ERROR_CODE)
       }
     };
 
