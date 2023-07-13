@@ -1,6 +1,11 @@
 import CartManagerMongo from "../Dao/persistence/cartManagerMongo.js"
 import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
-import { CART_MANAGER_ERRORS } from "../service/error.message.js"
+import { EError } from "../enums/EError.js";
+import { quantityErrorInfo } from "../service/errorInfo.js";
+import { errorParams } from "../service/errorParams.js";
+import ErrorCustom from "../service/error/errorCustom.service.js";
+
+const errorCustom = new ErrorCustom()
 
 const cartManagerMongo = new CartManagerMongo()
 const ticketManagerMongo = new TicketManagerMongo()
@@ -16,8 +21,11 @@ export default class CartController{
                 result
             });
         }catch (error) {
-          throw new Error(CART_MANAGER_ERRORS.CREATE_CARTS.ERROR_CODE)
-        };
+          res.status(400).send({
+              status: "Error",
+              msg: `El carrito solicitado no se puede crear.`
+          });
+      };
     };
 
     // MOSTRAR CARRITO
@@ -29,7 +37,10 @@ export default class CartController{
                 result
             });
         }catch(error){
-          throw new Error(CART_MANAGER_ERRORS.GET_CARTS.ERROR_CODE)
+          res.status(400).send({
+              status: "Error",
+              msg: `El total de carritos no se puede visualizar.`
+          });
         };
     };
 
@@ -38,9 +49,19 @@ export default class CartController{
       try {
         const cartId = req.params.cid;
         const cart = await cartManagerMongo.getCartById(cartId);
-        res.send(cart);
-      } catch (error) {
-        throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
+        if(!cart){
+          errorCustom.createError({
+              name: "Cart get by id error",
+              cause:errorParams(cartId),
+              message:"Error para obtener carrito por el id.",
+              errorCode: EError.INVALID_PARAM
+          });
+      };
+      } catch (error){
+        res.status(400).send({
+          status: 'Error',
+          msg: 'No se puede obtener el carrito',
+        });
       }
     }
     
@@ -49,6 +70,12 @@ export default class CartController{
     async getCartDetails (req, res) {
         try {
             const cartId = req.params.cid;
+            errorCustom.createError({
+              name: "Cart get by id error",
+              cause:errorParams(cartId),
+              message:"Error al obtener el carrito con ID",
+              errorCode: EError.INVALID_PARAM
+          });
             const cart = await cartManagerMongo.getCartDetails(cartId);
             res.send(cart);
           } catch (error) {
@@ -62,18 +89,33 @@ export default class CartController{
       try {
         const cartId = req.params.cid
         const productId = req.params.pid;
-       /*  const quantity = req.body.quantity; */ // Obtener la cantidad desde el cuerpo de la solicitud
-        await cartManagerMongo.addProductInCart(cartId, productId, /* quantity */);
-        res.send({ message: 'Producto agregado al carrito correctamente' });
-      } catch (error) {
-        throw new Error(CART_MANAGER_ERRORS.ADD_PRODUCT_TO_CART.ERROR_CODE)
-      }
+        errorCustom.createError({
+          name: "Get cart by id error",
+          cause: errorParams(cartId),
+          message:"Error obteniendo el carrito com id.",
+          errorCode: EError.INVALID_PARAM
+      });
+      errorCustom.createError({
+          name: "Get product by id error",
+          cause: errorParams(productId),
+          message:"Error obteniendo el uproducto con id",
+          errorCode: EError.INVALID_PARAM
+      });
+       const result = await cartManagerMongo.addProductInCart(cartId, productId, /* quantity */);
+       return res.status(200).send({ status: "success",result});
+      } catch (error) {res.status(400).send({status: 'Error',msg: 'No se puede agregar el producto al carrito',});}
     };
 
     // VACIAR CARRITO
     async emptyCart (req, res) {
         try {
             const cartId = req.params.id;
+            errorCustom.createError({
+              name: "Get cart by id error",
+              cause: errorParams(cartId),
+              message:"Error obteniendo el carrito com id.",
+              errorCode: EError.INVALID_PARAM
+          });
             await cartManagerMongo.emptyCart(cartId);
             res.send({ message: 'Carrito vaciado correctamente' });
           } catch (error) {
@@ -89,30 +131,47 @@ export default class CartController{
         try {
             const cartId = req.params.id;
             const productId = req.params.id;
+            const quantity = req.body.quantity
+            errorCustom.createError({
+              name: "Get cart by id error",
+              cause: errorParams(cartId),
+              message:"Error obteniendo el carrito com id.",
+              errorCode: EError.INVALID_PARAM
+          });
+          errorCustom.createError({
+              name: "Get product by id error",
+              cause: errorParams(productId),
+              message:"Error obteniendo el uproducto con id",
+              errorCode: EError.INVALID_PARAM
+          });
+          const quantityNumb = parseInt(quantity);
+          if(Number.isNaN(quantityNumb)){
+              errorCustom.createError({
+                  name: "Qantity error",
+                  cause:quantityErrorInfo(quantityNumb),
+                  message:"Error al calcular la cantidad solicitada",
+                  errorCode: EError.INVALID_JSON
+              });
+          };
             await cartManagerMongo.updateProductQuantityInCart(cartId, productId);
             res.send({ message: 'Cantidad del producto en el carrito actualizada'});
-          } catch (error) {
-            res.status(400).send({
-              status: 'Error',
-              msg: 'No se puede actualizar la cantidad del producto',
-            });
-          }
+          } catch (error) { res.status(400).send({status: 'Error', msg: 'No se puede actualizar la cantidad del producto',});}
         };
     // AGREGA VARIOS PRODUCTOS AL CARRITO
     async addProductsToCart (req, res) {
         try {
             const cartId = req.params.id;
             const productId = req.params.productId;
-            await cartManagerMongo.addProductsToCart(cartId, productId);
-            res.status(200).send({
-                status: 'success',
-                message: 'Productos agregados al carrito',
-            });
+            errorCustom.createError({
+              name: "Get cart by id error",
+              cause: errorParams(cartId),
+              message:"Error obteniendo el carrito com id.",
+              errorCode: EError.INVALID_PARAM
+          });
+            const result = await cartManagerMongo.addProductsToCart(cartId, productId);
+            res.status(200).send({ status: 'success',result });
         } catch (error) {
-            res.status(400).send({
-                status: 'error',
-                message: 'No se pudieron agregar los productos',
-            });
+            res.status(400).send({ status: 'error', message: 'No se pudieron agregar los productos' });
         }
     };
 

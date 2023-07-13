@@ -3,7 +3,7 @@ import passport from 'passport';
 import userModel from '../Dao/models/user.model.js';
 import { sendGmail } from '../helpers/sendGmail.js';
 import { createHash, validatePassword } from '../utils.js';
-import { AUTH_ERROR, SERVER_ERROR } from '../service/error.message.js'
+
 
 
 export default class SessionControllers {
@@ -25,21 +25,23 @@ export default class SessionControllers {
         // Responder con éxito
         res.status(200).json({ status: 'success', message: 'Usuario registrado exitosamente' });
       } catch (error) {
-        throw new Error(AUTH_ERROR.FAILED_ACC.ERROR_CODE)
+        console.log('Error en el registro:', error);
+        res.send({ error: 'Error en el registro' });
       }
     }
 
   login(req, res, next) {
     passport.authenticate('login', (err, user) => {
       if (err) {
-        throw new Error(SERVER_ERROR.SERVER_ERROR.ERROR_CODE)
+        return res.status(500).send({ status: 'error', error: 'Error en el servidor' });
       }
       if (!user) {
-        throw new Error(AUTH_ERROR.ERROR_CREDENTIAL.ERROR_CODE)
+        return res.status(400).send({ status: 'error', error: 'Credenciales inválidas' });
       }
-      req.logIn(user, async (error) => {
-        if (error) {
-          throw new Error(AUTH_ERROR.FAILED_ACC.ERROR_CODE)
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send({ status: 'error', error: 'Error en el servidor' });
         }
   
         req.session.user = {

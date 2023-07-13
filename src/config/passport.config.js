@@ -6,8 +6,14 @@ import { validatePassword } from '../utils.js';
 import { contactService } from '../repository/index.js';
 import GithubStrategy from 'passport-github2';
 import cartModel from '../Dao/models/cart.model.js';
+// ERROR
+import { EError } from '../enums/EError.js';
+import { userErrorInfo } from '../service/errorInfo.js';
+import { errorAuthentication } from '../service/errorAuthentication.js';
+import { errorParams } from '../service/errorParams.js';
+import ErrorCustom from '../service/error/errorCustom.service.js';
 
-
+const errorCustom = new ErrorCustom()
 const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
@@ -27,6 +33,14 @@ const initializePassport = () => {
                 if ( email == "admin@admin.com" && password == "admin") {
                     role = "admin";
                 }
+                if(!first_name || !last_name || !email || !age) {
+                  errorCustom.createError({
+                      name: "User create error",
+                      cause: userErrorInfo(req.body),
+                      message: "Error creando el usuario.",
+                      errorCode: EError.INVALID_JSON
+                  });
+              };
                 const newUser = {
                     first_name,
                     last_name,
@@ -56,6 +70,12 @@ const initializePassport = () => {
   });
 
   passport.deserializeUser(async (id, done) => {
+    errorCustom.createError({
+      name: "User get by id error",
+      cause:errorParams(user._id),
+      message:"Error al obtener el id del usuario.",
+      errorCode: EError.INVALID_PARAM
+  });
     const user = await userModel.findById(id);
     done(null, user);
   });
@@ -66,15 +86,18 @@ const initializePassport = () => {
       try {
         const user = await userModel.findOne({ email: username });
         if (!user) {
-          console.log('Usuario no encontrado');
+          errorCustom.createError({
+            name: "Email user auth error.",
+            cause: errorAuthentication(user),
+            message: "Error de usuario autenticacion por email",
+            errorCode: EError.AUTH_ERROR
+        });
           return done(null, false, { message: 'Usuario no encontrado' });
         }
 
         if (!validatePassword(password, user)) {
-          console.log('Contraseña incorrecta');
-          return done(null, false, { message: 'Contraseña incorrecta' });
+          return done(null, false, );
         }
-        console.log('Ingreso exitoso');
         return done(null, user, { message: 'Ingreso exitoso' });
       } catch (error) {
         return done('Error al intentar ingresar: ' + error);
