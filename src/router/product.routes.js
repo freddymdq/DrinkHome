@@ -15,5 +15,7 @@ router.delete('/:pid', productController.deleteProductById);
 // ACTUALIZA PRODUCTO ID
 router.put('/:pid', productController.updateProductById);
 
+// FAKER 
+router.post('/mockingproducts', productController.genProduct);
 export default router; 
 

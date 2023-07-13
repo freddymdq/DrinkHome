@@ -17,6 +17,7 @@ import cartRouter from "./router/cart.routes.js"
 import productRouter from "./router/product.routes.js"
 import initializePassport from "./config/passport.config.js";
 import userModel from "./Dao/models/user.model.js";
+import { errorHandler } from "./middleware/errorHandler.js"
 
 
 export const port = options.server.port;
@@ -46,7 +47,7 @@ app.use(express.static(__dirname+'/public'));
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
-
+app.use(errorHandler)
 
 // routes
 /* app.use('/current', currentRouter) */

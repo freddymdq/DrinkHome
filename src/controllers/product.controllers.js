@@ -1,5 +1,6 @@
 import ProductManagerMongo from "../Dao/persistence/ProductManagerMongo.js";
-
+import {PRODUCT_MANAGER_ERRORS} from '../service/error.message.js'
+import {genProduct} from '../utils.js'
 const productManagerMongo = new ProductManagerMongo();
 
 export default class ProductController{
@@ -8,9 +9,8 @@ export default class ProductController{
         try {
             const products = await productManagerMongo.getProducts();
             res.status(200).send({ products });
-          } catch (error) {
-            console.error(error);
-            res.status(500).send({ error: 'Error interno' });
+          } catch (error) { 
+            throw new Error(PRODUCT_MANAGER_ERRORS.NO_PRODUCTO.ERROR_CODE)
           }
         };
     
@@ -21,8 +21,7 @@ export default class ProductController{
             const product = await productManagerMongo.getProductById(productId);
             res.status(200).send({ product });
           } catch (error) {
-            console.error(error);
-            res.status(500).send({ error: 'Error interno' });
+            throw new Error(PRODUCT_MANAGER_ERRORS.NO_PRODUCTO.ERROR_CODE)
           }
         };
     
@@ -33,8 +32,7 @@ export default class ProductController{
             await productManagerMongo.addProduct(productData);
             res.status(200).send({ msg: 'Producto creado' });
           } catch (error) {
-            console.error(error);
-            res.status(500).send({ error: 'Error interno' });
+            throw new Error(RODUCT_MANAGER_ERRORS.ADD_PRODUCTO.ERROR_CODE)
           }
         };
        
@@ -44,9 +42,7 @@ export default class ProductController{
             const productId = req.params.id;
             await productManagerMongo.deleteProductById(productId );
             res.status(200).send({ msg: 'Producto eliminado' });
-          } catch (error) {
-            console.error(error);
-            res.status(500).send({ error: 'Error interno' });
+          } catch (error) { throw new Error(PRODUCT_MANAGER_ERRORS.DELETE_PRODUCT.ERROR_CODE)
           }
         };
        
@@ -62,4 +58,19 @@ export default class ProductController{
             res.status(500).send({error: 'Error interno'});
           }
         }
+
+        // FAKER 
+      async genProduct(req, res) {
+          try {
+              const cant = parseInt(req.query.cant) || 100;
+              let products = [];
+              for(let i=0; i< cant; i++) {
+                  const prod = genProduct()
+                  products.push(prod);
+              };
+              res.json({products});
+          } catch (error) {
+              throw new Error(error);
+          };
+      };
     };
