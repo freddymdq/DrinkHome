@@ -7,7 +7,7 @@ import { contactService } from '../repository/index.js';
 import GithubStrategy from 'passport-github2';
 import cartModel from '../Dao/models/cart.model.js';
 // ERROR
-import ErrorCustom from '../service/error/errorCustom.service.js';
+import { ErrorCustom } from '../service/error/errorCustom.service.js';
 import { EError } from '../enums/EError.js';
 import { userErrorInfo } from '../service/errorInfo.js';
 import { errorAuthentication } from '../service/errorAuthentication.js';
@@ -68,14 +68,14 @@ const initializePassport = () => {
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
-
+// el cause no me toma el id.. y tira error
   passport.deserializeUser(async (id, done) => {
-    ErrorCustom.createError({
+    /* ErrorCustom.createError({
       name: "User get by id error",
       cause: errorParams(user._id),
       message:"Error al obtener el id del usuario.",
       errorCode: EError.INVALID_PARAM
-  });
+  }); */
     const user = await userModel.findById(id);
     done(null, user);
   });

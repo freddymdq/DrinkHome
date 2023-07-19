@@ -3,9 +3,9 @@ import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
 import { EError } from "../enums/EError.js";
 import { quantityErrorInfo } from "../service/errorInfo.js";
 import { errorParams } from "../service/errorParams.js";
-import ErrorCustom from "../service/error/errorCustom.service.js";
+import { ErrorCustom } from '../service/error/errorCustom.service.js';
 
-const errorCustom = new ErrorCustom()
+
 
 const cartManagerMongo = new CartManagerMongo()
 const ticketManagerMongo = new TicketManagerMongo()
@@ -50,7 +50,7 @@ export default class CartController{
         const cartId = req.params.cid;
         const cart = await cartManagerMongo.getCartById(cartId);
         if(!cart){
-          errorCustom.createError({
+          ErrorCustom.createError({
               name: "Cart get by id error",
               cause:errorParams(cartId),
               message:"Error para obtener carrito por el id.",
@@ -70,7 +70,7 @@ export default class CartController{
     async getCartDetails (req, res) {
         try {
             const cartId = req.params.cid;
-            errorCustom.createError({
+            ErrorCustom.createError({
               name: "Cart get by id error",
               cause:errorParams(cartId),
               message:"Error al obtener el carrito con ID",
@@ -89,13 +89,13 @@ export default class CartController{
       try {
         const cartId = req.params.cid
         const productId = req.params.pid;
-        errorCustom.createError({
+        ErrorCustom.createError({
           name: "Get cart by id error",
           cause: errorParams(cartId),
           message:"Error obteniendo el carrito com id.",
           errorCode: EError.INVALID_PARAM
       });
-      errorCustom.createError({
+      ErrorCustom.createError({
           name: "Get product by id error",
           cause: errorParams(productId),
           message:"Error obteniendo el uproducto con id",
@@ -110,7 +110,7 @@ export default class CartController{
     async emptyCart (req, res) {
         try {
             const cartId = req.params.id;
-            errorCustom.createError({
+            ErrorCustom.createError({
               name: "Get cart by id error",
               cause: errorParams(cartId),
               message:"Error obteniendo el carrito com id.",
@@ -132,13 +132,13 @@ export default class CartController{
             const cartId = req.params.id;
             const productId = req.params.id;
             const quantity = req.body.quantity
-            errorCustom.createError({
+            ErrorCustom.createError({
               name: "Get cart by id error",
               cause: errorParams(cartId),
               message:"Error obteniendo el carrito com id.",
               errorCode: EError.INVALID_PARAM
           });
-          errorCustom.createError({
+          ErrorCustom.createError({
               name: "Get product by id error",
               cause: errorParams(productId),
               message:"Error obteniendo el uproducto con id",
@@ -146,7 +146,7 @@ export default class CartController{
           });
           const quantityNumb = parseInt(quantity);
           if(Number.isNaN(quantityNumb)){
-              errorCustom.createError({
+              ErrorCustom.createError({
                   name: "Qantity error",
                   cause:quantityErrorInfo(quantityNumb),
                   message:"Error al calcular la cantidad solicitada",
@@ -162,7 +162,7 @@ export default class CartController{
         try {
             const cartId = req.params.id;
             const productId = req.params.productId;
-            errorCustom.createError({
+            ErrorCustom.createError({
               name: "Get cart by id error",
               cause: errorParams(cartId),
               message:"Error obteniendo el carrito com id.",

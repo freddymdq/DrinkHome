@@ -3,8 +3,7 @@ import {genProduct} from '../utils.js'
 import { EError } from '../enums/EError.js';
 import { productErrorInfo } from '../service/errorInfo.js';
 import { errorParams } from '../service/errorParams.js';
-import ErrorCustom from '../service/error/errorCustom.service.js';
-
+import { ErrorCustom } from '../service/error/errorCustom.service.js';
 const productManagerMongo = new ProductManagerMongo();
 
 
