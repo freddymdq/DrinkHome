@@ -76,12 +76,12 @@ passport.serializeUser((user, done) => {
 });
 
   passport.deserializeUser(async (id, done) => {
-    errorCustom.createError({
+   /*  errorCustom.createError({
       name: "User get by id error",
       cause: errorParams(id),
       message:"Error al obtener el id del usuario.",
       errorCode: EError.INVALID_PARAM
-  });
+  }); */
     const user = await userModel.findById(id);
     done(null, user);
   });

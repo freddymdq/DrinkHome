@@ -50,7 +50,7 @@ const prodLogger = winston.createLogger({
   levels: customLevels.levels,
   transports: [new winston.transports.Console({ level: "http" }),
     new winston.transports.File({
-      filename: path.join(__dirname, "./error.log"),
+      filename: path.join(__dirname, "../logs/error.log"),
       level: "info",
     }),
   ],
