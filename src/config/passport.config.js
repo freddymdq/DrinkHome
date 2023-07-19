@@ -13,7 +13,7 @@ import { userErrorInfo } from '../service/errorInfo.js';
 import { errorAuthentication } from '../service/errorAuthentication.js';
 import { errorParams } from '../service/errorParams.js';
 
-const errorCustom = new ErrorCustom()
+
 const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
@@ -34,7 +34,7 @@ const initializePassport = () => {
                     role = "admin";
                 }
                 if(!first_name || !last_name || !email || !age) {
-                  errorCustom.createError({
+                  ErrorCustom.createError({
                       name: "User create error",
                       cause: userErrorInfo(req.body),
                       message: "Error creando el usuario.",
@@ -65,23 +65,17 @@ const initializePassport = () => {
     )
 );
 
-passport.serializeUser((user, done) => {
-  errorCustom.createError({
-      name: "User get by id error",
-      cause: errorParams(user._id),
-      message:"Error obteniendo el usuario por el id.",
-      errorCode: EError.INVALID_PARAM
+  passport.serializeUser((user, done) => {
+    done(null, user._id);
   });
-  done(null, user._id);
-});
 
   passport.deserializeUser(async (id, done) => {
-   /*  errorCustom.createError({
+    ErrorCustom.createError({
       name: "User get by id error",
-      cause: errorParams(id),
+      cause: errorParams(user._id),
       message:"Error al obtener el id del usuario.",
       errorCode: EError.INVALID_PARAM
-  }); */
+  });
     const user = await userModel.findById(id);
     done(null, user);
   });
@@ -92,7 +86,7 @@ passport.serializeUser((user, done) => {
       try {
         const user = await userModel.findOne({ email: username });
         if (!user) {
-          errorCustom.createError({
+          ErrorCustom.createError({
             name: "Email user auth error.",
             cause: errorAuthentication(user),
             message: "Error de usuario autenticacion por email",

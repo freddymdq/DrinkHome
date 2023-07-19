@@ -6,7 +6,7 @@ import { errorParams } from '../service/errorParams.js';
 import ErrorCustom from '../service/error/errorCustom.service.js';
 
 const productManagerMongo = new ProductManagerMongo();
-const errorCustom = new ErrorCustom()
+
 
 
 export default class ProductController{
@@ -30,7 +30,7 @@ export default class ProductController{
             const productId = req.params.id;
             const idProd = parseInt(productId);
             if(Number.isNaN(idProd)){
-                errorCustom.createError({
+                ErrorCustom.createError({
                     name: "Product get by id error",
                     cause: errorParams(idProd),
                     message:"Error obteniendo el producto por id",
@@ -49,7 +49,7 @@ export default class ProductController{
         try {
             const { title, description, price, category, img, code, stock} = req.body;
             if (!title || !description || !price || !category || !img || !code || !stock) {
-                customError.createError({
+                ErrorCustom.createError({
                     name: "Product create error",
                     cause: productErrorInfo(req.body),
                     message: "Error creando el producto.",
@@ -75,7 +75,7 @@ export default class ProductController{
     async deleteProductById (req, res){
         try {
             const productId = req.params.id;
-            errorCustom.createError({
+            ErrorCustom.createError({
               name: "Product get by id error",
               cause:errorParams(idProd),
               message:"Error obteniendo el uproducto por el id",
@@ -94,14 +94,14 @@ export default class ProductController{
         try {
             const productId = req.params.id;
             const { title, description, price, category, img, code, stock} = req.body;
-            errorCustom.createError({
+            ErrorCustom.createError({
                 name: "Product get by id error",
                 cause:errorParams(idProd),
                 message:"Error obteniendo el producto por el id",
                 errorCode: EError.INVALID_PARAM
             });
             if (!title || !description || !price || !category || !img || !code || !stock) {
-                errorCustom.createError({
+                ErrorCustom.createError({
                     name: "Error create error",
                     cause: productErrorInfo(req.body),
                     message: "Error al creando el producto.",
