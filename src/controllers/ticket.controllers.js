@@ -12,11 +12,13 @@ export default class TicketController {
         status: "success",
         ticket,
       });
-    } catch (error) {
+    } /* catch (error) {
       res.status(400).send({
         status: "error",
         message: "No se puede efectuar la compra.",
-      });
-    }
+      }) */
+      catch (error) {
+        req.logger.error(error);
+      }
   }
 }

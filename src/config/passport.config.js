@@ -7,11 +7,11 @@ import { contactService } from '../repository/index.js';
 import GithubStrategy from 'passport-github2';
 import cartModel from '../Dao/models/cart.model.js';
 // ERROR
+import ErrorCustom from '../service/error/errorCustom.service.js';
 import { EError } from '../enums/EError.js';
 import { userErrorInfo } from '../service/errorInfo.js';
 import { errorAuthentication } from '../service/errorAuthentication.js';
 import { errorParams } from '../service/errorParams.js';
-import ErrorCustom from '../service/error/errorCustom.service.js';
 
 const errorCustom = new ErrorCustom()
 const LocalStrategy = local.Strategy;
@@ -65,14 +65,20 @@ const initializePassport = () => {
     )
 );
 
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
+passport.serializeUser((user, done) => {
+  errorCustom.createError({
+      name: "User get by id error",
+      cause: errorParams(user._id),
+      message:"Error obteniendo el usuario por el id.",
+      errorCode: EError.INVALID_PARAM
   });
+  done(null, user._id);
+});
 
   passport.deserializeUser(async (id, done) => {
     errorCustom.createError({
       name: "User get by id error",
-      cause:errorParams(user._id),
+      cause: errorParams(id),
       message:"Error al obtener el id del usuario.",
       errorCode: EError.INVALID_PARAM
   });

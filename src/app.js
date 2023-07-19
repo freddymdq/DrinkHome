@@ -18,6 +18,7 @@ import productRouter from "./router/product.routes.js"
 import initializePassport from "./config/passport.config.js";
 import userModel from "./Dao/models/user.model.js";
 import { errorHandler } from "./middleware/errorHandler.js"
+import { addLogger } from "./service/logger.js";
 
 
 export const port = options.server.port;
@@ -39,6 +40,8 @@ httpServer.on('error', error => console.log(`Error in server ${error}`));
 
 
 initializePassport();
+// logger
+app.use(addLogger);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
@@ -47,7 +50,7 @@ app.use(express.static(__dirname+'/public'));
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
-app.use(errorHandler)
+app.use(errorHandler);
 
 // routes
 /* app.use('/current', currentRouter) */

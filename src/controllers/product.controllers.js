@@ -15,9 +15,12 @@ export default class ProductController{
         try {
             const products = await productManagerMongo.getProducts();
             res.status(200).send({ products });
-          } catch (error) {
+          } /* catch (error) {
             console.error(error);
             res.status(500).send({ error: 'Error interno' });
+          } */
+          catch (error) {
+            req.logger.error(error);
           }
         };
     
@@ -37,8 +40,7 @@ export default class ProductController{
             const product = await productManagerMongo.getProductById(productId);
             res.status(200).send({ product });
           } catch (error) {
-            console.error(error);
-            res.status(500).send({ error: 'Error interno' });
+            req.logger.error(error);
           }
         };
     
@@ -80,10 +82,10 @@ export default class ProductController{
               errorCode: EError.INVALID_PARAM
           });
             await productManagerMongo.deleteProductById(productId );
-            res.status(200).send({ msg: 'Producto eliminado' });
+            res.status(200).send({ msg: 'Producto eliminado' })
           } catch (error) {
-            console.error(error);
-            res.status(500).send({ error: 'Error interno' });
+            req.logger.error(error);
+            res.status(500).json({ message: "Error al eliminar" })
           }
         };
        
@@ -117,9 +119,9 @@ export default class ProductController{
             };
             await productManagerMongo.updateProductById(productId, updateData);
             res.status(200).send({ msg: 'Producto actualizado exitosamente' });
-            } catch (error) {
-                res.status(500).send({ error: 'Error interno del servidor' });
-            };
+            }  catch (error) {
+                req.logger.error(error);
+              }
     };
 
 

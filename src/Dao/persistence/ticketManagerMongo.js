@@ -48,6 +48,8 @@ export default class TicketManagerMongo {
     await sendTicketByEmail(purchaserEmail, ticket);
 
     return ticket;
+  }catch (error) {
+    req.logger.error(error);
   }
 }
 
