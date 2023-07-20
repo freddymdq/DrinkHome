@@ -19,10 +19,11 @@ export default class SessionControllers {
           password,
           role: 'user',
         };
-
+        
         // Enviar el correo electrónico al usuario registrado
         await sendGmail(newUser.email);
-        // Responder con éxito
+        // este logger no me funciona ... si lo muteo registra pero si lo desmuteo me tira error "undefined"
+        req.logger.info("Usuario registrado");
         res.status(200).json({ status: 'success', message: 'Usuario registrado exitosamente' });
       } catch (error) {
         req.logger.error(error);
@@ -32,6 +33,7 @@ export default class SessionControllers {
 
   login(req, res, next) {
     passport.authenticate('login', (err, user) => {
+      req.logger.info("Usuario logueado");
       if (err) {
         return res.status(500).send({ status: 'error', error: 'Error en el servidor' });
       }
@@ -64,14 +66,15 @@ export default class SessionControllers {
   
 
   async faillogin(req, res) {
-    console.log('Fallo en el ingreso');
-    res.send({ error: 'Error en el ingreso' });
+    req.logger.warn("Fallo de Ingreso");
+    res.send({ error: "Error de ingreso" });
   }
 
   logout(req, res) {
     req.session.destroy((err) => {
       if (err) return res.status(500).send({ status: 'error', error: 'No pudo cerrar sesión' });
       res.redirect('/login');
+      req.logger.info("Usuario desconectado");
     });
   }
 
@@ -96,6 +99,7 @@ export default class SessionControllers {
 
   githubCallback(req, res, next) {
     passport.authenticate('github', { failureRedirect: '/login' })(req, res, next);
+    req.logger.info("Usuario logueado con github");
   }
 }
 

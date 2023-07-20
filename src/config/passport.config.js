@@ -70,12 +70,12 @@ const initializePassport = () => {
   });
 // el cause no me toma el id.. y tira error
   passport.deserializeUser(async (id, done) => {
-    ErrorCustom.createError({
+    /* ErrorCustom.createError({
       name: "User get by id error",
       cause: errorParams(user._id),
       message:"Error al obtener el id del usuario.",
       errorCode: EError.INVALID_PARAM
-  });
+  }); */
     const user = await userModel.findById(id);
     done(null, user);
   });
