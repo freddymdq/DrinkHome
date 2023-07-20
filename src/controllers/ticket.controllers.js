@@ -19,6 +19,7 @@ export default class TicketController {
       }) */
       catch (error) {
         req.logger.error(error);
+        res.status(500).json({ message: error.message });
       }
   }
 }

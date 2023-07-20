@@ -4,6 +4,7 @@ import { EError } from '../enums/EError.js';
 import { productErrorInfo } from '../service/errorInfo.js';
 import { errorParams } from '../service/errorParams.js';
 import { ErrorCustom } from '../service/error/errorCustom.service.js';
+
 const productManagerMongo = new ProductManagerMongo();
 
 
@@ -20,6 +21,7 @@ export default class ProductController{
           } */
           catch (error) {
             req.logger.error(error);
+            res.status(500).json({ message: error.message });
           }
         };
     
@@ -40,6 +42,7 @@ export default class ProductController{
             res.status(200).send({ product });
           } catch (error) {
             req.logger.error(error);
+            res.status(500).json({ message: error.message });
           }
         };
     
@@ -120,6 +123,7 @@ export default class ProductController{
             res.status(200).send({ msg: 'Producto actualizado exitosamente' });
             }  catch (error) {
                 req.logger.error(error);
+                res.status(500).json({ message: error.message });
               }
     };
 

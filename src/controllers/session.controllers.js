@@ -25,8 +25,8 @@ export default class SessionControllers {
         // Responder con éxito
         res.status(200).json({ status: 'success', message: 'Usuario registrado exitosamente' });
       } catch (error) {
-        console.log('Error en el registro:', error);
-        res.send({ error: 'Error en el registro' });
+        req.logger.error(error);
+        res.status(500).json({ message: error.message });
       }
     }
 
