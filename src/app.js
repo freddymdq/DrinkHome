@@ -5,6 +5,10 @@ import MongoStore from 'connect-mongo';
 import { Server } from "socket.io"; 
 import "./config/dbConnection.js"
 import {options} from "./config/options.js";
+
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpecs } from "./config/docConfig.js";
+
 import passport from "passport";
 import __dirname from "./utils.js";
 import adminRouter from "./router/admin.routes.js";
@@ -18,7 +22,7 @@ import productRouter from "./router/product.routes.js"
 import initializePassport from "./config/passport.config.js";
 import userModel from "./Dao/models/user.model.js";
 import { errorHandler } from "./middleware/errorHandler.js"
-import { addLogger } from "./service/logger.js";
+import { addLogger } from "./helpers/logger.js";
 
 
 export const port = options.server.port;
@@ -61,6 +65,7 @@ app.use('/api/sessions', sessionRouter);
 app.use('/api/products/', productRouter);
 app.use('/api/carts/', cartRouter);
 app.use('/', adminRouter);
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Socket.IO
 const io = new Server(httpServer);

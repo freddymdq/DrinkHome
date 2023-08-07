@@ -1,8 +1,8 @@
 import passport from 'passport';
 import local from 'passport-local';
 import userModel from '../Dao/models/user.model.js';
-import { createHash} from '../utils.js';
-import { validatePassword } from '../utils.js';
+import { createHash} from '../helpers/hashAndValidate.js';
+import { validatePassword } from '../helpers/hashAndValidate.js';
 import { contactService } from '../repository/index.js';
 import GithubStrategy from 'passport-github2';
 import cartModel from '../Dao/models/cart.model.js';
@@ -11,7 +11,7 @@ import { ErrorCustom } from '../service/error/errorCustom.service.js';
 import { EError } from '../enums/EError.js';
 import { userErrorInfo } from '../service/errorInfo.js';
 import { errorAuthentication } from '../service/errorAuthentication.js';
-import { errorParams } from '../service/errorParams.js';
+
 
 
 const LocalStrategy = local.Strategy;

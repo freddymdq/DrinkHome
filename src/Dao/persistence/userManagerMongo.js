@@ -1,5 +1,5 @@
 import userModel from "../models/user.model.js"
-import { createHash } from '../../utils.js';
+import { createHash } from '../../helpers/hashAndValidate.js';
 
 export class UserManagerMongo {
     constructor(){

@@ -1,4 +1,5 @@
-import { code, date } from "../../utils.js";
+import { code } from "../../helpers/codeGenerator.js";
+import { date } from "../../helpers/dateGenerator.js";
 import ticketModel from "../models/ticket.model.js";
 import userModel from "../models/user.model.js";
 import cartModel from "../models/cart.model.js";

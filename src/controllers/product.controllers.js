@@ -1,5 +1,5 @@
 import ProductManagerMongo from "../Dao/persistence/ProductManagerMongo.js";
-import {genProduct} from '../utils.js'
+import {genProduct} from '../helpers/createFakerProducts.js'
 import { EError } from '../enums/EError.js';
 import { productErrorInfo } from '../service/errorInfo.js';
 import { errorParams } from '../service/errorParams.js';

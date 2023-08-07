@@ -2,7 +2,7 @@
 import passport from 'passport';
 import userModel from '../Dao/models/user.model.js';
 import { sendGmail } from '../helpers/sendGmail.js';
-import { createHash, validatePassword } from '../utils.js';
+import { createHash, validatePassword } from '../helpers/hashAndValidate.js';
 
 
 

@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import  __dirname  from "../utils.js";
 import path from "path"
 
+
 dotenv.config();
 
 const currentEnv = process.env.NODE_ENV || "development";
