@@ -109,10 +109,10 @@ paths:
 components:
   schemas:
     Product:
-      type: objet
-      propierties:
+      type: object
+      properties:
         _id:
-          type: ObjetId
+          type: ObjectId
           description: id del producto generado por database
         title:
           type: String
@@ -139,7 +139,7 @@ components:
           type: Number
           description: Cantidad en stock del producto
       example:
-        _id: ObjetId('nkjs23123521')
+        _id: ObjectId('nkjs23123521')
         example:
         title: J. WALKER
         description: Whisky Reserve Black Label
@@ -151,7 +151,7 @@ components:
         stock: 35
   requestBodies:
     productModel:
-      type: objet
+      type: object
       properties:
         title:
           type: String

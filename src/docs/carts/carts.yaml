@@ -200,32 +200,32 @@ paths:
 components:
   schemas:
     Cart:
-      type: objet
+      type: object
       properties:
         _id:
-          type: ObjetId
+          type: ObjectId
           description: id del carrito generado por la database
         products:
-          type: objet
-          propierties:
+          type: object
+          properties:
             product:
-              type: ObjetId
+              type: ObjectId
               description: id del producto generado por la database
             quantity:
               type: Number
               description: cantidad del producto en el carrito
       example:
-        _id: ObjetId('lkpñs7896dfsgbdf7')
+        _id: ObjectId('lkpñs7896dfsgbdf7')
         products:
-          - product: ObjetId('782739201jdhr32')
+          - product: ObjectId('782739201jdhr32')
             quantity: 3
-          - product: ObjetId('kfj23192k3a13d2')
+          - product: ObjectId('kfj23192k3a13d2')
             quantity: 14
     Ticket:
-      type: objet
-      propierties:
+      type: object
+      properties:
         _id:
-          type: ObjetId
+          type: ObjectId
           description: id del ticket generado por la database
         code:
           type: String
@@ -240,16 +240,16 @@ components:
           type: String
           description: Email del usuario
       example:
-        _id: ObjetId('grea8976902fds')
+        _id: ObjectId('grea8976902fds')
         code: H72KLTS2
         purchase_dateTime: 01/01/2023 - 22:31:01
         amount: 64337
         purchaser: freddymdq@gmail.com
     Product:
       type: objet
-      propierties:
+      properties:
         _id:
-          type: ObjetId
+          type: ObjectId
           description: id del producto generado por la database
         title:
           type: String
@@ -276,7 +276,7 @@ components:
           type: Number
           description: Stock del producto
       example:
-        _id: ObjetId('kl2k3js23812dsa')
+        _id: ObjectId('kl2k3js23812dsa')
         title: J. WALKER
         description: Whisky Reserve Black Label
         category: Whisky
@@ -287,8 +287,8 @@ components:
         stock: 35
   requestBodies:
     addProduct:
-      type: objet
-      propierties:
+      type: object
+      properties:
         title:
           type: String
           description: Nombre del producto
@@ -320,7 +320,7 @@ components:
         code: KLSJU239123
         stock: 35
     updateProductQuantity:
-      type: objet
+      type: object
       properties:
         quantity:
           type: Number

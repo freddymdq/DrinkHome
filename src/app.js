@@ -58,6 +58,7 @@ app.use(errorHandler);
 
 // routes
 /* app.use('/current', currentRouter) */
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use('/chat', chatRouter)
 app.use('/', viewsRouter)
 app.use('/api/session', sessionRouter); 
@@ -65,7 +66,7 @@ app.use('/api/sessions', sessionRouter);
 app.use('/api/products/', productRouter);
 app.use('/api/carts/', cartRouter);
 app.use('/', adminRouter);
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+
 
 // Socket.IO
 const io = new Server(httpServer);
