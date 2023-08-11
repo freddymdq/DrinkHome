@@ -3,7 +3,7 @@ paths:
     get:
       summary: Obtener todos los carritos de compra
       tags:
-        - Carts
+        - carts
       responses:
         "200":
           description: Todos los carritos fueron obtenidos exitosamente
@@ -20,7 +20,7 @@ paths:
     post:
       sumary: Crear carrito de compra
       tags:
-        - Carts
+        - carts
       responses:
         "200":
           description: Carrito de compras creado exitosamente
@@ -38,7 +38,7 @@ paths:
     get:
       summary: Obtener carrito de compras por el id
       tags:
-        - Carts
+        - carts
       parameters:
         - name: cid
           in: path

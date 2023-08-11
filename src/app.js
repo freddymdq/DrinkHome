@@ -2,15 +2,14 @@ import express from "express";
 import handlebars from "express-handlebars";
 import session from "express-session";
 import MongoStore from 'connect-mongo'; 
+import passport from "passport";
 import { Server } from "socket.io"; 
-import "./config/dbConnection.js"
-import {options} from "./config/options.js";
-
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpecs } from "./config/docConfig.js";
-
-import passport from "passport";
+import "./config/dbConnection.js"
+import {options} from "./config/options.js";
 import __dirname from "./utils.js";
+
 import adminRouter from "./router/admin.routes.js";
 import mgsModel from "./Dao/models/mgs.model.js";
 import chatRouter from "./router/chat.routes.js";
@@ -63,8 +62,8 @@ app.use('/chat', chatRouter)
 app.use('/', viewsRouter)
 app.use('/api/session', sessionRouter); 
 app.use('/api/sessions', sessionRouter); 
-app.use('/api/products/', productRouter);
-app.use('/api/carts/', cartRouter);
+app.use('/api/products', productRouter);
+app.use('/api/carts', cartRouter);
 app.use('/', adminRouter);
 
 

@@ -49,18 +49,23 @@ export default class CartController{
       try {
         const cartId = req.params.cid;
         const cart = await cartManagerMongo.getCartById(cartId);
-        if(!cart){
+        if (!cart) {
           ErrorCustom.createError({
-              name: "Cart get by id error",
-              cause:errorParams(cartId),
-              message:"Error para obtener carrito por el id.",
-              errorCode: EError.INVALID_PARAM
-          });
-      };
-      } catch (error){
-        res.status(400).send({
+            name: "Cart get by id error",
+            cause:errorParams(cartId),
+            message:"Error para obtener carrito por el id.",
+            errorCode: EError.INVALID_PARAM
+        });
+        }
+        res.status(200).send({
+          status: 'success',
+          cart,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({
           status: 'Error',
-          msg: 'No se puede obtener el carrito',
+          msg: 'Error al obtener el carrito por ID.',
         });
       }
     }
@@ -77,7 +82,10 @@ export default class CartController{
               errorCode: EError.INVALID_PARAM
           });
             const cart = await cartManagerMongo.getCartDetails(cartId);
-            res.send(cart);
+            res.status(200).send({
+              status: 'success',
+              cart,
+            });
           } catch (error) {
             console.error(error);
             res.status(500).send({ error: 'Error al obtener los detalles del carrito.' });

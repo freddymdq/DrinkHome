@@ -28,7 +28,7 @@ export default class ProductController{
     // PRODUCTOS POR ID
     async getProductById (req, res){
         try {
-            const productId = req.params.id;
+            const productId = req.params.pid;
             const idProd = parseInt(productId);
             if(Number.isNaN(idProd)){
                 ErrorCustom.createError({
@@ -76,7 +76,7 @@ export default class ProductController{
     // ELIMINA UN PRODUCTO ID
     async deleteProductById (req, res){
         try {
-            const productId = req.params.id;
+            const productId = req.params.pid;
             ErrorCustom.createError({
               name: "Product get by id error",
               cause:errorParams(idProd),
@@ -94,7 +94,7 @@ export default class ProductController{
     // ACTUALIZA UN PRDOCUNTO ID
     async updateProductById (req, res){
         try {
-            const productId = req.params.id;
+            const productId = req.params.pid;
             const { title, description, price, category, img, code, stock} = req.body;
             ErrorCustom.createError({
                 name: "Product get by id error",
