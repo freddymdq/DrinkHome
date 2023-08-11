@@ -101,7 +101,7 @@ paths:
     get:
       summary: Obtener el detalle de los productos de un carrito
       tags:
-        - Carts
+        - carts
       parameters:
         - name: cid
           in: path
@@ -122,7 +122,7 @@ paths:
     post:
       summary: Genera un ticket de compra con la compilacion de datos del mismo
       tags:
-        - Carts
+        - carts
       parameters:
         - name: cid
           in: path
@@ -141,7 +141,7 @@ paths:
     post:
       summary: Agregar a un carrito elegido por su id, un producto elegido por su id
       tags:
-        - Carts
+        - carts
       parameters:
         - name: cid
           in: path
@@ -167,7 +167,7 @@ paths:
     put:
       summary: Editar dentro de un carrito, obtenido por id, la cantidad de productos tambien por id
       tags:
-        - Carts
+        - carts
       parameters:
         - name: cid
           in: path
@@ -246,7 +246,7 @@ components:
         amount: 64337
         purchaser: freddymdq@gmail.com
     Product:
-      type: objet
+      type: object
       properties:
         _id:
           type: ObjectId

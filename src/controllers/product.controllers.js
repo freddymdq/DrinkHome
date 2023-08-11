@@ -1,4 +1,4 @@
-import ProductManagerMongo from "../Dao/persistence/ProductManagerMongo.js";
+import ProductManagerMongo from "../Dao/persistence/productManagerMongo.js";
 import {genProduct} from '../helpers/createFakerProducts.js'
 import { EError } from '../enums/EError.js';
 import { productErrorInfo } from '../service/errorInfo.js';
@@ -77,12 +77,12 @@ export default class ProductController{
     async deleteProductById (req, res){
         try {
             const productId = req.params.pid;
-            ErrorCustom.createError({
+           /*  ErrorCustom.createError({
               name: "Product get by id error",
               cause:errorParams( productId),
               message:"Error obteniendo el uproducto por el id",
               errorCode: EError.INVALID_PARAM
-          });
+          }); */
             await productManagerMongo.deleteProductById( productId );
             res.status(200).send({ msg: 'Producto eliminado' })
           } catch (error) {
