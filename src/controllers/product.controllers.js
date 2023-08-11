@@ -63,7 +63,7 @@ export default class ProductController{
                 description,
                 price,
                 category,
-                thumbnail,
+                img,
                 code,
                 stock
             };
@@ -79,11 +79,11 @@ export default class ProductController{
             const productId = req.params.pid;
             ErrorCustom.createError({
               name: "Product get by id error",
-              cause:errorParams(idProd),
+              cause:errorParams( productId),
               message:"Error obteniendo el uproducto por el id",
               errorCode: EError.INVALID_PARAM
           });
-            await productManagerMongo.deleteProductById(productId );
+            await productManagerMongo.deleteProductById( productId );
             res.status(200).send({ msg: 'Producto eliminado' })
           } catch (error) {
             req.logger.error(error);
@@ -98,7 +98,7 @@ export default class ProductController{
             const { title, description, price, category, img, code, stock} = req.body;
             ErrorCustom.createError({
                 name: "Product get by id error",
-                cause:errorParams(idProd),
+                cause:errorParams(productId),
                 message:"Error obteniendo el producto por el id",
                 errorCode: EError.INVALID_PARAM
             });

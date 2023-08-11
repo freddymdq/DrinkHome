@@ -100,9 +100,9 @@ export default class CartManagerMongo {
 };
 
   // BORRA EL CARRITO
-  async deleteCart (){
-    const result = await cartModel.deleteOne({ _id: cartId })
-    res.send({ deletedCount: result });
-  }
+  async delete(cartId) {
+    const result = await cartModel.deleteOne(cartId);
+    return result.deletedCount > 0;
+}
 }
 

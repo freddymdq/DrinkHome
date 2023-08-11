@@ -1,12 +1,13 @@
 import CartManagerMongo from "../Dao/persistence/cartManagerMongo.js"
 import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
+import ProductManagerMongo from "../Dao/persistence/productManagerMongo.js"
 import { EError } from "../enums/EError.js";
 import { quantityErrorInfo } from "../service/errorInfo.js";
 import { errorParams } from "../service/errorParams.js";
 import { ErrorCustom } from '../service/error/errorCustom.service.js';
 
 
-
+const productManagerMongo = new ProductManagerMongo()
 const cartManagerMongo = new CartManagerMongo()
 const ticketManagerMongo = new TicketManagerMongo()
 
@@ -95,29 +96,43 @@ export default class CartController{
     // AGREGA PRODUCTOS AL CARRITO
     async addProductInCart(req, res) {
       try {
-        const cartId = req.params.cid
-        const productId = req.params.pid;
-        ErrorCustom.createError({
-          name: "Get cart by id error",
-          cause: errorParams(cartId),
-          message:"Error obteniendo el carrito com id.",
-          errorCode: EError.INVALID_PARAM
-      });
-      ErrorCustom.createError({
-          name: "Get product by id error",
-          cause: errorParams(productId),
-          message:"Error obteniendo el uproducto con id",
-          errorCode: EError.INVALID_PARAM
-      });
-       const result = await cartManagerMongo.addProductInCart(cartId, productId, /* quantity */);
-       return res.status(200).send({ status: "success",result});
-      } catch (error) {res.status(400).send({status: 'Error',msg: 'No se puede agregar el producto al carrito',});}
-    };
+          const cartId = req.params.cid;
+          const productId = req.params.pid;
+
+          // Verificar si el carrito existe
+          const cart = await cartManagerMongo.getCartById({_id: cartId});
+          if (!cart) {
+              ErrorCustom.createError({
+                  name: 'Cart get by id error',
+                  cause: errorParams(cartId),
+                  message: 'Error obteniendo el carrito por id.',
+                  errorCode: EError.INVALID_PARAM,
+              });
+          }
+
+          // Verificar si el producto existe
+          const product = await productManagerMongo.getProductById({_id: productId});
+          if (!product) {
+              ErrorCustom.createError({
+                  name: 'Product get by id error',
+                  cause: errorParams(productId),
+                  message: 'Error obteniendo el producto por id.',
+                  errorCode: EError.INVALID_PARAM,
+              });
+          }
+
+          // Agregar el producto al carrito
+          const result = await cartManagerMongo.addProductInCart(cartId, productId);
+          return res.status(200).send({ status: 'success', result });
+      } catch (error) {
+          res.status(400).send({ status: 'Error', msg: 'No se puede agregar el producto al carrito' });
+      }
+  }
 
     // VACIAR CARRITO
     async emptyCart (req, res) {
         try {
-            const cartId = req.params.id;
+            const cartId = req.params.cid;
             ErrorCustom.createError({
               name: "Get cart by id error",
               cause: errorParams(cartId),
@@ -184,15 +199,20 @@ export default class CartController{
     };
 
     // BORRA EL CARRITO
-   async delete (req, res) {
+    async delete(req, res) {
     try {
-      const cartId = req.params.id;
-      const result = await cartManagerMongo.delete(cartId)
-      res.send({ deletedCount: result });
+        const cartId = req.params.id;
+        const deleteResult = await cartManagerMongo.delete(cartId);
+
+        if (deleteResult) {
+            res.status(200).json({ message: 'Carrito eliminado exitosamente' });
+        } else {
+            res.status(404).json({ message: 'Carrito no encontrado' });
+        }
     } catch (error) {
-      console.error(error);
-      res.status(500).send({ error: 'No se puede eliminar el carrito' });
+        console.error(error);
+        res.status(500).json({ error: 'No se pudo eliminar el carrito' });
     }
-  };
+}
 
 }
