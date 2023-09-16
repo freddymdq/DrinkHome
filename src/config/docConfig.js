@@ -1,10 +1,9 @@
-import __dirname from "../helpers/path.js";
-import swaggerJSDoc from "swagger-jsdoc";
-import path from "path";
+import swaggerJSDoc from "swagger-jsdoc"
+import path from "path"
+import __dirname from "../helpers/path.js"
 
 const swaggerOptions = {
-    definition:{
-        openapi: "3.0.1",
+    definition:{ openapi: "3.0.1",
         info:{
             title:"Documentacion api Ecommerce DrinkHome",
             version: "1.0.0",

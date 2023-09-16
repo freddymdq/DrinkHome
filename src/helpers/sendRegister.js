@@ -1,14 +1,13 @@
 import { transporter } from "../config/gmail.js";
 
 const emailTemplate = `<div>
-<h1>Bienvenido/a!!</h1>
+<h1>Bienvenido/a!!</h1
 <p>Tu registro fue realizado exitosamente.</p>
 </div>`;
-export const sendGmail = async (recipient) => {
-    const email = await transporter.sendMail({
+export const sendRegister = async (user) => {const email = await transporter.sendMail({
       from: 'DRINK HOME',
-      to: recipient,
-      subject: 'Registro exitoso',
+      to: `${user.email}`,
+      subject: 'Usuario  Registrado',
       html: emailTemplate,
     });
     return email;

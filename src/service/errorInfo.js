@@ -21,8 +21,8 @@ export const productErrorInfo = (product) =>{
     description: Debe ser un campo string${product.description}
     price: Debe ser un campo number${product.price}
     category: Debe ser un campo string${product.category}
-    img: Debe ser un campo string ${product.category}
-    code: Debe ser un campo string${product.category}
-    stock: Debe ser un campo number${product.category}
+    img: Debe ser un campo string ${product.img}
+    code: Debe ser un campo string${product.code}
+    stock: Debe ser un campo number${product.stock}
     `;
 };

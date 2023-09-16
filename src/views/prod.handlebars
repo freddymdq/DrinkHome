@@ -10,21 +10,19 @@
   <ul>
       <li><a href="/">HOME</a></li>
       <li><a href="/products">PRODUCTOS</a></li>
-      {{#if user.cartId}}
-        <li><a href="/cart/{{user.cartId}}">CARRITO</a></li>
-      {{else}}
-        <li><a href="/cart">CARRITO</a></li>
+      {{#if user.cart}}
+        <li><a href="/cart/{{user.cart}}">CARRITO</a></li>
       {{/if}}
     </ul>
   {{#if message}}
   {{message}}
     {{/if}}
   <div class="user-dropdown">
-    <button class="user-dropdown-btn"> {{user.role}}</button>
+    <button class="user-dropdown-btn">PERFIL</button>
     <div class="user-dropdown-content">
       <p class="users">User: {{user.first_name}} {{user.last_name}}</p>
       <p>Email: {{user.email}}</p>
-      <a href="/current"><button>Mi perfil</button> </a>
+      <a href="/current"><button>Panel</button> </a>
       <a href="/api/session/logout">
         <button>Cerrar Sesión</button>
       </a>

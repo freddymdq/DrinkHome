@@ -3,26 +3,13 @@ import mongoose from "mongoose";
 
 const collection = 'messages'
 
-const mgsSchema = new mongoose.Schema({
-    
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: true
-    },
-    message: {
-        type: String,
-        require: true
-    }
+const mgsSchema = new mongoose.Schema({   
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true},
+    message: { type: String, require: true }
 });
 
-mgsSchema.virtual('userFirstName', {
-        
-    ref: 'users',
-    localField: 'user',
-    foreignField: '_id',
-    justOne: true,
-    autopopulate: { select: 'first_name' }
+mgsSchema.virtual('userFirstName', {     
+    ref: 'users', localField: 'user', foreignField: '_id', justOne: true, autopopulate: { select: 'first_name' }
 });
 
 mgsSchema.plugin(autopopulate)

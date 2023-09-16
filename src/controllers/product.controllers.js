@@ -1,31 +1,26 @@
 import ProductManagerMongo from "../Dao/persistence/productManagerMongo.js";
-import {genProduct} from '../helpers/createFakerProducts.js'
+import { genProduct } from '../helpers/createFakerProducts.js'
 import { EError } from '../enums/EError.js';
 import { productErrorInfo } from '../service/errorInfo.js';
 import { errorParams } from '../service/errorParams.js';
 import { ErrorCustom } from '../service/error/errorCustom.service.js';
 
-const productManagerMongo = new ProductManagerMongo();
-
-
+const productManager = new ProductManagerMongo();
 
 export default class ProductController{
-    // MUESTRA PRODUCTOS
+    
     async getProducts (req, res){
         try {
-            const products = await productManagerMongo.getProducts();
+            const products = await productManager.getProducts();
             res.status(200).send({ products });
-          } /* catch (error) {
-            console.error(error);
-            res.status(500).send({ error: 'Error interno' });
-          } */
+          } 
           catch (error) {
             req.logger.error(error);
             res.status(500).json({ message: error.message });
           }
         };
     
-    // PRODUCTOS POR ID
+
     async getProductById (req, res){
         try {
             const productId = req.params.pid;
@@ -38,15 +33,14 @@ export default class ProductController{
                     errorCode: EError.INVALID_PARAM
                 });
             }
-            const product = await productManagerMongo.getProductById(productId);
+            const product = await productManager.getProductById(productId);
             res.status(200).send({ product });
           } catch (error) {
             req.logger.error(error);
             res.status(500).json({ message: error.message });
           }
         };
-    
-    // AGREGA PRODUCTOS
+
     async addProduct (req,res){
         try {
             const { title, description, price, category, img, code, stock} = req.body;
@@ -58,32 +52,20 @@ export default class ProductController{
                     errorCode: EError.INVALID_JSON
                 });
             };
-            const productData = {
-                title,
-                description,
-                price,
-                category,
-                img,
-                code,
-                stock
+            const productData = {title, description, price, category, img, code, stock
             };
-            await productManagerMongo.addProduct(productData);
+            await productManager.addProduct(productData);
+            res.redirect('/admin');
             res.status(200).send({ msg: 'Producto creado exitosamente' });
         } catch (error) {
             res.status(500).send({ error: 'Error interno del servidor' });
         }}
-       
-    // ELIMINA UN PRODUCTO ID
+
+
     async deleteProductById (req, res){
         try {
             const productId = req.params.pid;
-           /*  ErrorCustom.createError({
-              name: "Product get by id error",
-              cause:errorParams( productId),
-              message:"Error obteniendo el uproducto por el id",
-              errorCode: EError.INVALID_PARAM
-          }); */
-            await productManagerMongo.deleteProductById( productId );
+            await productManager.deleteProductById( productId );
             res.status(200).send({ msg: 'Producto eliminado' })
           } catch (error) {
             req.logger.error(error);
@@ -110,30 +92,22 @@ export default class ProductController{
                     errorCode: EError.INVALID_JSON
                 });
             };
-            const updateData = {
-                title,
-                description,
-                price,
-                category,
-                img,
-                code,
-                stock
+            const updateData = {title,description, price, category, img, code, stock
             };
-            await productManagerMongo.updateProductById(productId, updateData);
+                await productManager.updateProductById(productId, updateData);
             res.status(200).send({ msg: 'Producto actualizado exitosamente' });
             }  catch (error) {
                 req.logger.error(error);
                 res.status(500).json({ message: error.message });
-              }
+            }
     };
 
-
-        // FAKER 
-      async genProduct(req, res) {
-          try {
-              const cant = parseInt(req.query.cant) || 100;
-              let products = [];
-              for(let i=0; i< cant; i++) {
+    // FAKER
+    async genProduct(req, res) {
+        try {
+        const cant = parseInt(req.query.cant) || 100;
+            let products = [];
+            for(let i=0; i< cant; i++) {
                   const prod = genProduct()
                   products.push(prod);
               };

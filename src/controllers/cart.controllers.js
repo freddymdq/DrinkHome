@@ -1,5 +1,4 @@
 import CartManagerMongo from "../Dao/persistence/cartManagerMongo.js"
-import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
 import ProductManagerMongo from "../Dao/persistence/productManagerMongo.js"
 import { EError } from "../enums/EError.js";
 import { quantityErrorInfo } from "../service/errorInfo.js";
@@ -9,7 +8,7 @@ import { ErrorCustom } from '../service/error/errorCustom.service.js';
 
 const productManagerMongo = new ProductManagerMongo()
 const cartManagerMongo = new CartManagerMongo()
-const ticketManagerMongo = new TicketManagerMongo()
+
 
 export default class CartController{
 

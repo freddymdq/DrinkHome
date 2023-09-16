@@ -2,26 +2,10 @@ import { Router } from "express";
 import viewsManagerMongo from "../Dao/persistence/viewsManagerMongo.js";
 import userModel from "../Dao/models/user.model.js";
 import ChatController from "../controllers/chat.controllers.js";
-
+import { publicAccess, privateAccess, adminAccess, premiumAccess } from "../middleware/access.js";
 const router = Router();
 const chatController = new ChatController();
 
-const publicAccess = (req, res, next) => {
-  if (req.session.user) return res.redirect('/');
-  next();
-};
-
-const privateAccess = (req, res, next) => {
-  if (!req.session.user) return res.redirect('/login');
-  next();
-};
-
-const adminAccess = (req, res, next) => {
-  if (!req.session.user || req.session.user.role !== 'admin') {
-    return res.redirect('/login');
-  }
-  next();
-};
 
 // ADMIN
 router.get('/admin', adminAccess, (req, res) => {

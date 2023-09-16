@@ -1,44 +1,12 @@
 import { Router } from "express";
-import userModel from "../Dao/models/user.model.js";
-import productModel from "../Dao/models/products.model.js";
+import AdminControllers from "../controllers/admin.controllers.js";
 
 
 const router = Router();
-// MODIFICAR A CONTROLLERS
-const adminAccess = (req, res, next) => {
-  if (!req.session.user || req.session.user.role !== 'admin') {
-    return res.redirect('/login');
-  }
-  next();
-};
+const adminControllers = new AdminControllers; 
 
-router.post('/admin/db-user/:userId', adminAccess, async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const deletedUser = await userModel.findByIdAndDelete(userId);
+router.post('/admin/db-user/:userId', adminControllers.deleteUserById);
+router.post('/admin/addproduct',  adminControllers.addProduct);
 
-    if (!deletedUser) {
-      return res.status(404).send({ error: 'Usuario no encontrado' });
-    }
+export default router;
 
-    res.redirect('/admin/db-user');
-  } catch (error) {
-    res.status(500).send({ error: 'Error al eliminar el usuario de la base de datos' });
-  }
-});
-
-router.post('/admin/agregar-productos', adminAccess, async (req, res) => {
-  try {
-    const { title, description, price, category, status, img, code, stock } = req.body;
-    if (!title || !description || !price || !category || !status || !img || !code || !stock) {
-      throw new Error("Faltan datos");
-    }
-    const productData = { title, description, price, category, status, img, code, stock };
-    const result = await productModel.create(productData);
-    res.redirect('/admin');
-  } catch (error) {
-    res.status(500).send({ error: 'Error al agregar el producto a la base de datos' });
-  }
-});
-
-export default router

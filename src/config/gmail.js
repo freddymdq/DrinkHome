@@ -1,18 +1,21 @@
 import nodemailer from "nodemailer"
+import { options } from './options.js'
 
+const adminEmail = options.gmail.adminAccount
+const adminPass = options.gmail.adminPass
 
+// Comuunicca node con gmail
 const transporter = nodemailer.createTransport({
-   
-    service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587, 
     auth: {
-      user: 'freddymdq@gmail.com',
-      pass: '',
+      user: adminEmail,
+      pass: adminPass
     },
-    secure: false,
-    tls:{
-        rejectUnauthorized: false
-    }
-  });
+  secure: false,
+  tls: {
+    rejectUnauthorized: false
+  }
+});
 
-
-export {transporter}
+export { transporter }

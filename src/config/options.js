@@ -2,13 +2,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const options = {
+
+export  const options = {
     server:{
         port: process.env.PORT,
         secretSession: process.env.SECRET_SESSION,
         persistence: process.env.PERSISTENCE
     },
-    mongoDB:{
+    mongo:{
         url: process.env.MONGO_URL
     },
     gmail:{

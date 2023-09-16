@@ -17,10 +17,10 @@
       {{message}}
     {{/if}}
     <div class="user-dropdown">
-      <button class="user-dropdown-btn">{{user.role}}</button>
+      <button class="user-dropdown-btn">PERFIL</button>
       <div class="user-dropdown-content">
         <p class="users">{{user.first_name}} {{user.last_name}}</p>
-        <a href="/current"><button>Mi perfil</button> </a>
+        <a href="/current"><button>Panel User</button></a>
         <a href="/api/session/logout">
           <button>Cerrar Sesión</button>
         </a>
@@ -31,7 +31,7 @@
     <img src="">
   </div>
   <div class="formulario">
-    <form action="/products" method="get">
+    <form action="/products" method="GET">
       <input class="input" type="text" name="query" placeholder="Buscar producto...">
       <button type="submit">Buscar</button>
     </form>

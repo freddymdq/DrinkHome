@@ -1,18 +1,19 @@
-import { options } from "./options.js";
 import mongoose from "mongoose";
-import { EError } from "../enums/EError.js"
-import { ErrorCustom } from '../service/error/errorCustom.service.js';
+let connectDB = null
+import { options } from "./options.js";
 
 
-export const connectDB = async()=>{
-    try {
-        mongoose.connect(options.mongoDB.url);
-        console.log("Database connected");
-    } catch (error) { ErrorCustom.createError({
-        name: "Error DB",
-        cause:generateDBError(options.mongoDB.url),
-        message:"Error al intentar conectarse a la base de datos",
-        errorCode: EError.DATABASE_ERROR
-    });
-}
-};
+(async () => {
+  try {
+    if ( connectDB ) {
+      console.log("Ya estás conectado a la base de datos");
+      return connectDB ;
+    } else {
+      connectDB  = await mongoose.connect(options.mongo.url);
+      console.log("Conectado con la base de datos");
+      return connectDB ;
+    }
+  } catch (error) {
+    console.log("Error al conectarse a la base de datos: " + error);
+  }
+})();

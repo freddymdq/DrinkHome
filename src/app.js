@@ -1,45 +1,25 @@
 import express from "express"; 
-import handlebars from "express-handlebars";
-import session from "express-session";
-import MongoStore from 'connect-mongo'; 
 import passport from "passport";
+import handlebars from "express-handlebars";
+import mongoConfig from "./config/mongoConfig.js";
+import routerConfig from "./config/routerConfig.js";
+import initializePassport from "./config/passport.config.js";
+import __dirname from "./utils.js";
+import mgsModel from "./Dao/models/mgs.model.js";
+import userModel from "./Dao/models/user.model.js";
 import { Server } from "socket.io"; 
-import swaggerUi from "swagger-ui-express";
-import { swaggerSpecs } from "./config/docConfig.js";
 import "./config/dbConnection.js"
 import {options} from "./config/options.js";
-import __dirname from "./utils.js";
-
-import adminRouter from "./router/admin.routes.js";
-import mgsModel from "./Dao/models/mgs.model.js";
-import chatRouter from "./router/chat.routes.js";
-import sessionRouter from "./router/session.routes.js";
-import viewsRouter from "./router/views.routes.js";
-/* import currentRouter from "./router/current.routes.js"; */
-import cartRouter from "./router/cart.routes.js"
-import productRouter from "./router/product.routes.js"
-import initializePassport from "./config/passport.config.js";
-import userModel from "./Dao/models/user.model.js";
 import { errorHandler } from "./middleware/errorHandler.js"
 import { addLogger } from "./helpers/logger.js";
 
 
 export const port = options.server.port;
 const app = express();
-
-const httpServer = app.listen(port,()=>console.log(`Server listening on port ${port}`));
-
-app.use(session({
-  store: new MongoStore({
-      mongoUrl:options.mongoDB.url,
-      ttl: 3200
-  }),
-  secret:options.server.secretSession,
-  resave:false,
-  saveUninitialized:false
-}));
-
+const httpServer = app.listen(port,()=>console.log(`Server conectado al puerto ${port}`));
 httpServer.on('error', error => console.log(`Error in server ${error}`));
+
+mongoConfig(app)
 
 
 initializePassport();
@@ -56,15 +36,9 @@ app.set('view engine', 'handlebars');
 app.use(errorHandler);
 
 // routes
-/* app.use('/current', currentRouter) */
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
-app.use('/chat', chatRouter)
-app.use('/', viewsRouter)
-app.use('/api/session', sessionRouter); 
-app.use('/api/sessions', sessionRouter); 
-app.use('/api/products', productRouter);
-app.use('/api/carts', cartRouter);
-app.use('/', adminRouter);
+routerConfig(app)
+
+
 
 
 // Socket.IO

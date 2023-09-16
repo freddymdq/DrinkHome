@@ -4,36 +4,15 @@ import cartModel from './cart.model.js';
 const collection = 'users';
 
 const schema = new mongoose.Schema({
-    first_name: {
-        type: String,
-        required: true
-    },
-    last_name: {
-        type: String,
-        required: true
-    },
-    age: {
-        type: Number,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-        },
-    cart: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'carts'
-    },
-    role: {
-        type: String,
-        required: true,
-        enum: ['user', 'admin'],
-        default: 'user'
-    }
+    first_name: { type: String, required: true},
+    last_name: { type: String, required: true },
+    age: { type: Number, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    cart: { type: mongoose.Schema.Types.ObjectId, ref: 'carts' },
+    role: { type: String, required: true, enum: ['admin', 'premium', 'user'], default: 'user' },
+    last_connected: { type : Date,  default: null },
+    products: { type: [{products:{type: mongoose.Schema.Types.ObjectId, ref: 'products', required: true}}], default: []}
 });
 
 schema.pre('save', async function (next) {

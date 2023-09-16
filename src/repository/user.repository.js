@@ -1,32 +1,27 @@
-import { CreateContactDto } from "../Dao/dto/contact.dto.js";
+import { CreateUserDto } from "../Dao/dto/user.dto.js";
 
-export class ContactRepository {
+export class UserRepository {
   constructor(dao) {
     this.dao = dao;
   }
 
-  async getContacts() {
-    const contacts = await this.dao.get();
-    return contacts;
+  async createUser(user) {
+      const newUser= new CreateUserDto(user)
+      const newCreateUser = await this.dao.createUser(newUser)
+      return newCreateUser
   }
 
-  async createContact(contact) {
-    try {
-      const contactDto = new CreateContactDto(contact);
-      const contactCreated = await this.dao.post(contactDto);
-      return contactCreated;
-    } catch (error) {
-      throw new Error("Error al crear el contacto: " + error);
-    }
+  async getUser(user) {
+    const userDb = await this.dao.getUser(user)
+    return userDb;
   }
-
-  async createContactGitHub(contact) {
-    try {
-      const contactDto = new CreateContactDto(contact);
-      const contactCreated = await this.dao.postGithub(contactDto);
-      return contactCreated;
-    } catch (error) {
-      throw new Error("Error al crear el contacto con GitHub: " + error);
-    }
+  
+  async addGitHub(user) {
+      const newUser= new CreateUserDto(user);
+      const newCreateUser = await this.dao.addGithub(newUser);
+      return newCreateUser;
   }
 }
+
+
+

@@ -1,7 +1,7 @@
-import express from "express";
+import { Router } from "express";
 import ChatController from "../controllers/chat.controllers.js";
 
-const router = express.Router();
+const router = Router();
 const chatController = new ChatController();
 
 router.get("/", chatController.getAllMessages);

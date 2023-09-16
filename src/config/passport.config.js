@@ -1,139 +1,113 @@
 import passport from 'passport';
 import local from 'passport-local';
-import userModel from '../Dao/models/user.model.js';
-import { createHash} from '../helpers/hashAndValidate.js';
-import { validatePassword } from '../helpers/hashAndValidate.js';
-import { contactService } from '../repository/index.js';
 import GithubStrategy from 'passport-github2';
-import cartModel from '../Dao/models/cart.model.js';
-// ERROR
+import { validatePassword  } from '../helpers/hashAndValidate.js';
 import { ErrorCustom } from '../service/error/errorCustom.service.js';
 import { EError } from '../enums/EError.js';
+import cartModel from '../Dao/models/cart.model.js';
+import UserManagerMongo from '../Dao/persistence/userManagerMongo.js';
 import { userErrorInfo } from '../service/errorInfo.js';
-import { errorAuthentication } from '../service/errorAuthentication.js';
-
-
 
 const LocalStrategy = local.Strategy;
+const userManager = new UserManagerMongo()
 
 const initializePassport = () => {
-  passport.use(
-    "register",
-    new LocalStrategy(
-        { passReqToCallback: true, usernameField: "email" },
-        async (req, username, password, done) => {
-            const { first_name, last_name, email, age } = req.body;
-            try {
-                let user = await userModel.findOne({ email: username });
-                if (user) {
-                    console.log("El usuario ya existe");
-                    return done(null, false);
-                }
-                let role;
-                if ( email == "admin@admin.com" && password == "admin") {
-                    role = "admin";
-                }
-                if(!first_name || !last_name || !email || !age) {
-                  ErrorCustom.createError({
-                      name: "User create error",
-                      cause: userErrorInfo(req.body),
-                      message: "Error creando el usuario.",
-                      errorCode: EError.INVALID_JSON
-                  });
-              };
-                const newUser = {
-                    first_name,
-                    last_name,
-                    email,
-                    age,
-                    password: createHash( password ),
-                    role
-                };
-                const emptyCart = { 
-                    products: [] 
-                }
-                const newCart = await cartModel.create( emptyCart )
-                if (newCart) {
-                    newUser.cart = newCart._id;
-                }
-                const result = await userModel.create( newUser );
-                return done(null, result);
-            } catch (error) {
-                return done("Error en el registro de usuario" + error);
-            }
-        }
-    )
-);
-
   passport.serializeUser((user, done) => {
-    done(null, user._id);
+    done(null, user.id);
   });
-// el cause no me toma el id.. y tira error
   passport.deserializeUser(async (id, done) => {
-    /* ErrorCustom.createError({
-      name: "User get by id error",
-      cause: errorParams(user._id),
-      message:"Error al obtener el id del usuario.",
-      errorCode: EError.INVALID_PARAM
-  }); */
-    const user = await userModel.findById(id);
+    const user = await userManager.findUserById(id);
     done(null, user);
   });
 
   passport.use(
-    'login',
-    new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
-      try {
-        const user = await userModel.findOne({ email: username });
-        if (!user) {
+    "register",
+    new LocalStrategy(
+      { passReqToCallback: true, usernameField: "email" },
+      async (req, username, password, done) => {
+        const { first_name, last_name, email, age, role } = req.body;
+        if (!first_name || !last_name || !email) {
           ErrorCustom.createError({
-            name: "Email user auth error.",
-            cause: errorAuthentication(user),
-            message: "Error de usuario autenticacion por email",
-            errorCode: EError.AUTH_ERROR
-        });
-          return done(null, false, { message: 'Usuario no encontrado' });
+            name: "Error",
+            cause: "Faltan datos",
+            message: userErrorInfo(req.body),
+            errorCode: EError.INVALID_JSON,
+          });
         }
-
-        if (!validatePassword(password, user)) {
-          return done(null, false, );
+        try {
+          const newUser = await userManager.register(
+            first_name,
+            last_name,
+            email,
+            age,
+            role,
+            password,
+            username
+          );
+          if (!newUser) {
+            const errorMessage = "El usuario ya existe en la base de datos";
+            return done(null, false, errorMessage);
+          }
+          return done(null, newUser);
+        } catch (error) {
+          return done("Error al registrar el usuario: " + error);
         }
-        return done(null, user, { message: 'Ingreso exitoso' });
-      } catch (error) {
-        return done('Error al intentar ingresar: ' + error);
       }
-    })
+    )
+  );
+  passport.use(
+    "login",
+    new LocalStrategy(
+      { usernameField: "email" },
+      async (username, password, done) => {
+        try {
+          const user = await userManager.login(username);
+          if (!user) {
+            console.log("No existe el usuario");
+            return done(null, false);
+          }
+          if (!validatePassword(password, user)) return done(null, false);
+          user.last_connected = new Date();
+          await user.save();
+          return done(null, user);
+        } catch (error) {
+          return done("Error al intentar ingresar: " + error);
+        }
+      }
+    )
   );
 
+
   passport.use(
-    'github',
+    "github",
     new GithubStrategy(
       {
         clientID: 'Iv1.2196bd64a6227d75',
         clientSecret: '5153430f81a1cc24766b2b6ee9214cab2239e6b1',
         callbackURL: 'http://localhost:8080/api/session/githubcallback',
+        scope: ["user:email"],
       },
       async (accesToken, refreshToken, profile, done) => {
         try {
-          let user = await userModel.findOne({ email: profile._json.email });
+          console.log(profile);
+          const email = profile.emails[0].value;
+          const user = await userManager.findUserByEmail(email);
+          const newCart = await cartModel.create({});
           if (!user) {
-            // si tiene mail lo encuentra y carga, sino concatena el usuario con el string
-            const email = profile._json.email || `${profile._json.name.replace(/\s+/g, '')}@github.com`;
-            const nameParts = profile._json.name.split(' ');
             const newUser = {
-              first_name: nameParts[0],
-              last_name: nameParts[1] || '',
+              first_name: profile._json.name,
+              last_name: "",
               email: email,
-              age: '',
-              password:'',
-              role: 'user',
+              age: 18,
+              password: "",
+              cart: newCart._id,
+              last_connected: new Date(),
+              
             };
-            const result = await contactService.createContactGitHub(newUser);
-            console.log('Usuario registrado exitosamente con GitHub');
-            done(null, result, { message: 'Usuario registrado exitosamente con GitHub' });
+            const result = await userManager.createUser(newUser);
+            done(null, result);
           } else {
-            // ya existe
-            done(null, user, { message: 'Inicio de sesión exitoso con GitHub' });
+            done(null, user);
           }
         } catch (error) {
           return done(null, error);
@@ -144,3 +118,4 @@ const initializePassport = () => {
 };
 
 export default initializePassport;
+

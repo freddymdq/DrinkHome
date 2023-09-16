@@ -18,23 +18,31 @@
                 <th>Apellido</th>
                 <th>Email</th>
                 <th>Contraseña</th>
+                <th>Role</th>
                 <th>Delete</th>
+                <th>Premium</th>
             </tr>
             </thead>
     <tbody>
-        {{#each users}}
-            <tr>
-                <td>{{this.first_name}}</td>
-                <td>{{this.last_name}}</td>
-                <td>{{this.email}}</td>
-                <td>{{this.password}}</td>
-                <td>
-                    <form action="/admin/db-user/{{this._id}}" method="POST">
-                        <button type="submit">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-        {{/each}}
+    {{#each users}}
+        <tr>
+            <td>{{this.first_name}}</td>
+            <td>{{this.last_name}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.password}}</td>
+            <td>{{this.role}}</td>
+            <td>
+                <form action="/admin/db-user/{{this._id}}" method="post">
+                    <button type="submit">Eliminar</button>
+                </form>
+            </td>
+            <td>
+                <form action="/admin/changeRole/{{this._id}}" method="POST">
+                    <button type="submit" onclick="changeRole('{{this._id}}')">Activar</button>
+                </form>
+            </td>
+        </tr>
+    {{/each}}
     </tbody>
         </table>
     </div>

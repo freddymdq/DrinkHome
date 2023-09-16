@@ -1,4 +1,42 @@
-import productModel from "../models/products.model.js"
+import productModel from "../models/products.model.js";
+
+export default class ProductManagerMongo {
+  async addProduct(productData) {
+    const { title, description, price, category, status, img, code, stock } = productData;
+    if (!title || !description || !price || !category || !status || !img || !code || !stock) {
+      throw new Error("Faltan datos");
+    }
+    return await productModel.create(productData);
+  }
+
+  async getProducts() {
+    return await productModel.find();
+  }
+
+  async getProductById(idProduct) {
+    return await productModel.findById(idProduct);
+  }
+
+  async deleteProductById(idProduct) {
+    await productModel.deleteOne({ _id: idProduct });
+    return this.getProducts();
+  }
+
+  async productsFindLean() {
+    return await productModel.find().lean();
+  }
+
+  async updateProductById(idProduct, updateData) {
+    const { title, description, price, category, img, code, stock } = updateData;
+    if (!title || !description || !price || !category || !img || !code || !stock) {
+      throw new Error("Faltan datos");
+    }
+    return await productModel.updateOne({ _id: idProduct }, { $set: updateData });
+  }
+}
+
+
+/* import productModel from "../models/products.model.js"
 
 export default class ProductManagerMongo {
 
@@ -45,3 +83,4 @@ async updateProductById(idProduct, updateData){
 };
 
 }
+ */

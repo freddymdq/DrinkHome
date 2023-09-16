@@ -1,17 +1,18 @@
-import {options} from "../config/options.js";
+import {options} from "../config/options.js"
 
-const persistence = options.server.persistence;
-let daoContact;
+const persistence = options.server.PERSISTENCE
+
+let daoUsers;
 
 switch (persistence) {
     case "mongo":
         const {connectDB} = await import("../config/dbConnection.js")
             connectDB()
         const {UserManagerMongo} = await import("./persistence/userManagerMongo.js")
-        daoContact = new UserManagerMongo()
+        daoUsers = new UserManagerMongo()
         break;
     case "memory":
         break;
 };
 
-export {daoContact}
+export { daoUsers }
