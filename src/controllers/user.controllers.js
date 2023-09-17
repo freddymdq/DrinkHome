@@ -2,6 +2,9 @@ import userModel from '../Dao/models/user.model.js';
 import { createHash } from '../helpers/hashAndValidate.js';
 import { sendRemoveUs } from '../helpers/sendRemoveUs.js';
 import { timeConnect } from '../helpers/timeConnect.js';
+import UserMongoManager from '../Dao/persistence/userManagerMongo.js';
+
+const userMongoManager = new UserMongoManager();
 
 export default class UserController {
   async register(req, res) {
@@ -91,12 +94,12 @@ export default class UserController {
   }
 
   async removeUsers(req, res) {
-    const twoDaysAgo = timeConnect()
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2)
+    const removoTwoDays = timeConnect()
+    twoDaysAgo.setDate(removoTwoDays.getDate() - 2)
 
     try {
       const users = await userModel.find({
-        last_connected: { $lte: twoDaysAgo }, 
+        last_connected: { $lte: removoTwoDays }, 
       });
 
       if (users.length > 0) {
@@ -161,25 +164,34 @@ export default class UserController {
     }
   }
 
-  async changeRole (req, res) {
+  async getUserById(req, res) {
     try {
-      const { role } = req.body;
-      const userId = req.params.uid;
+      const userId = req.params.userId;
       const user = await userModel.findById(userId);
       if (!user) {
-        return res.json({status: "error",message: "El usuario no existe",});
+        return res.status(404).json({ status: "error", message: "Usuario no encontrado" });
       }
-      user.role = role;
-        await userModel.updateOne({ _id: user._id }, user);
-      res.json({ status: "success", message: "Cambio de rango" });
+      res.json({ status: "success", payload: user });
     } catch (error) {
-      console.log(error.message);
-      res.json({status: "error",message: "Hubo un error al cambiar el rol del usuario",
-      });
+      console.error(error);
+      res.status(500).json({ status: "error", message: "Error al obtener el usuario por ID" });
     }
-  };
+  }
 
-
+  async updateUserRole(req, res) {
+    try {
+      const userId = req.params.userId;
+      const newRole = 'premium'; 
+      const updatedUser = await userMongoManager.updateUserRole(userId, newRole);
+      if (!updatedUser) {
+        return res.json({ status: "error", message: "Hubo un error al cambiar el rol del usuario a premium" });
+      }
+      res.json({ status: "success", message: "Se actualizo correctamente el rol del usuario" });
+    } catch (error) {
+      console.error(error.message);
+      res.json({ status: "error", message: "Hubo un error al cambiar el rol del usuario a premium" });
+    }
+  }
 }
  
 

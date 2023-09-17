@@ -29,7 +29,7 @@ function volver() {
 }
 
 function eliminarUsuario(userId) {
-    fetch(`/admin/db-user/${userId}`, { method: 'DELETE' })
+    fetch(`/${userId}/delete`, { method: 'DELETE' })
       .then(response => {
         if (response.ok) {
           
@@ -43,3 +43,23 @@ function eliminarUsuario(userId) {
         console.error('Error al eliminar el usuario', error);
       });
   }
+
+  function changeRole(userId) {
+    fetch(`/${userId}/change`, { method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ role: 'premium' }),
+    })
+      .then(response => {
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          console.error('Error al cambiar el rol del usuario');
+        }
+      })
+      .catch(error => {
+        console.error('Error al cambiar el rol del usuario', error);
+      });
+  }
+  

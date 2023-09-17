@@ -35,7 +35,7 @@ export default class UserMongoManager {
       return false;
     }
   }
-
+  
   async login(username) {
     try {
       const user = await this.userModel.findOne({ email: username }).exec();
@@ -82,6 +82,24 @@ export default class UserMongoManager {
     try {
       const result = await this.userModel.create(user);
       return result || false;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
+  async updateUserRole(userId, newRole) {
+    try {
+      const user = await this.userModel.findById(userId).exec();
+  
+      if (!user) {
+        console.log("No se encontró el usuario");
+        return false;
+      }
+      user.role = newRole;
+  
+      const updatedUser = await user.save();
+      return updatedUser;
     } catch (error) {
       console.error(error);
       return false;

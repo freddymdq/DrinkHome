@@ -11,11 +11,13 @@ function routerConfig(app){
     app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
     app.use('/chat', chatRouter)
     app.use('/', viewsRouter)
-    app.use('/api/session', sessionRouter); 
-    app.use('/api/sessions', sessionRouter); 
+    app.use('/api/sessions', sessionRouter)
+    app.use('/api/session', sessionRouter)
     app.use('/api/products', productRouter);
     app.use('/api/carts', cartRouter);
-    app.use('/api/', userRouter);
+    app.use('/', userRouter);
+    app.use('/api/user', userRouter)
+    app.use('/api/users', userRouter)
 }
 
 export default routerConfig

@@ -57,10 +57,7 @@ export default class CartController{
             errorCode: EError.INVALID_PARAM
         });
         }
-        res.status(200).send({
-          status: 'success',
-          cart,
-        });
+        res.status(200).send({status: 'success',cart});
       } catch (error) {
         console.error(error);
         res.status(500).send({

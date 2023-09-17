@@ -32,13 +32,13 @@
             <td>{{this.password}}</td>
             <td>{{this.role}}</td>
             <td>
-                <form action="/admin/db-user/{{this._id}}" method="post">
+                <form action="/{{this._id}}/delete" method="post">
                     <button type="submit">Eliminar</button>
                 </form>
             </td>
             <td>
-                <form action="/admin/changeRole/{{this._id}}" method="POST">
-                    <button type="submit" onclick="changeRole('{{this._id}}')">Activar</button>
+                <form action="/{{this._id}}/change" method="POST">
+                    <button type="submit">Activar</button>
                 </form>
             </td>
         </tr>

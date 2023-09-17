@@ -12,7 +12,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#components/schemas/Cart'
+                  $ref: '#components/schemas/carts'
         "401":
           description: Error por falta de permisos
         "500":
