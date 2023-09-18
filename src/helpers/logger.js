@@ -4,9 +4,11 @@ import  __dirname  from "./path.js";
 import path from "path"
 
 
+
 dotenv.config();
 
 const currentEnv = process.env.NODE_ENV || "development";
+
 
 const customLevels = {
   levels:{
@@ -49,8 +51,7 @@ const devLogger = winston.createLogger({
 const prodLogger = winston.createLogger({
   levels: customLevels.levels,
   transports: [new winston.transports.Console({ level: "http" }),
-    new winston.transports.File({
-      filename: path.join(__dirname, "../logs/error.log"),
+    new winston.transports.File({filename: path.join(__dirname, "../logs/error.log"),
       level: "info",
     }),
   ],

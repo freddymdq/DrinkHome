@@ -1,6 +1,7 @@
 import productModel from '../models/products.model.js';
 import cartModel from '../models/cart.model.js';
 
+
 export default class ViewsManagerMongo {
 
   // HOME
@@ -78,7 +79,7 @@ export default class ViewsManagerMongo {
         isAdmin: req.session.user.role === 'admin'
       });
     } catch (error) {
-      res.status(500).send({ error: 'Error al obtener los productos' });
+        req.logger.error(error)
     }
   }
 
@@ -106,7 +107,7 @@ export default class ViewsManagerMongo {
 // VISTA CART
 static async renderCart(req, res) {
   try {
-    const cartId = req.session.user.cart; // Obtener el ID del carrito del usuario desde la sesión
+    const cartId = req.session.user.cart; 
     const cart = await cartModel.findOne({ _id: cartId }).populate("products.product").lean();
     if (!cart) {
       return res.status(204).end();

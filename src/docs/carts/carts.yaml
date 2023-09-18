@@ -1,201 +1,217 @@
+openapi: "3.0.0"
+info:
+  title: "API de Carritos de Compra DRINKHOME"
+  description: "API para manejar carritos de compra"
+  version: "1.0.0"
+
 paths:
   /api/carts/:
     get:
-      summary: Obtener todos los carritos de compra
+      summary: "Obtener todos los carritos de compra"
       tags:
-        - carts
+        - "carts"
       responses:
         "200":
-          description: Todos los carritos fueron obtenidos exitosamente
+          description: "Todos los carritos fueron obtenidos exitosamente"
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#components/schemas/carts'
+                  $ref: "#/components/schemas/Cart"
         "401":
-          description: Error por falta de permisos
+          description: "Error por falta de permisos"
         "500":
-          description: Error interno
+          description: "Error interno"
     post:
-      sumary: Crear carrito de compra
+      summary: "Crear carrito de compra"
       tags:
-        - carts
+        - "carts"
       responses:
         "200":
-          description: Carrito de compras creado exitosamente
+          description: "Carrito de compras creado exitosamente"
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/Cart'
+                $ref: "#/components/schemas/Cart"
         "401":
-          description: Error por falta de permisos
+          description: "Error por falta de permisos"
         "500":
-          description: Error interno
-  /api/carts/{cid}:
+          description: "Error interno"
+
+  "/api/carts/{cid}":
     get:
-      summary: Obtener carrito de compras por el id
+      summary: "Obtener carrito de compras por el id"
       tags:
-        - carts
+        - "carts"
       parameters:
         - name: cid
           in: path
           required: true
-          description: cid es el id del carrito de compras 
+          description: "ID del carrito de compras"
           schema:
-            $type: string
+            type: string
       responses:
         "200":
-          description: Se obtuvo el carrito de compras exitosamente
+          description: "Se obtuvo el carrito de compras exitosamente"
           content:
             application/json:
               schema:
-                $ref: '#components/schemas/Cart'
+                $ref: "#/components/schemas/Cart"
         "500":
-          description: Error interno
+          description: "Error interno"
     put:
-      summary: Agregar productos al carrito
+      summary: "Agregar productos al carrito"
       tags:
-        - Carts
+        - "carts"
       parameters:
         - name: cid
           in: path
           required: true
-          description: cid es el id del carrito de compras
+          description: "ID del carrito de compras"
           schema:
-            $type: string
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#components/requestBodies/addProduct'
+              $ref: "#/components/requestBodies/AddProductToCart"
       responses:
         "200":
-          description: Se agrego exitosamente el producto al carrito
+          description: "Se agregó exitosamente el producto al carrito"
           content:
             application/json:
               schema:
-                $ref: '#components/schemas/Cart'
+                $ref: "#/components/schemas/Cart"
         "500":
-          description: Error interno 
+          description: "Error interno"
     delete:
-      summary: Eliminar un carrito por id
+      summary: "Eliminar un carrito por id"
       tags:
-        - Carts
+        - "carts"
       parameters:
         - name: cid
           in: path
           required: true
-          description: cid es el id del carrito que desea eliminar
+          description: "ID del carrito que desea eliminar"
           schema:
-            $type: string
+            type: string
       responses:
         "200":
-          description: Se elimino el carrito correctamente
+          description: "Se eliminó el carrito correctamente"
         "500":
-          description: Error interno del servidor
-  /api/carts/{cid}/detail:
+          description: "Error interno del servidor"
+
+  "/api/carts/{cid}/detail":
     get:
-      summary: Obtener el detalle de los productos de un carrito
+      summary: "Obtener el detalle de los productos de un carrito"
       tags:
-        - carts
+        - "carts"
       parameters:
         - name: cid
           in: path
           required: true
-          description: cid es el id del carrito de compras que desea obtener los detalles
+          description: "ID del carrito de compras del cual desea obtener los detalles"
           schema:
-            $type: string
+            type: string
       responses:
         "200":
-          description: Se obtuvo los detalles de los productos de dicho carro, exitorsamente
+          description: "Se obtuvo los detalles de los productos de dicho carro, exitosamente"
           content:
             application/json:
               schema:
-                $ref: '#components/schemas/Cart'
+                $ref: "#/components/schemas/Cart"
         "500":
-          description: Error interno
-  /api/carts/{cid}/purchase:
+          description: "Error interno"
+
+  "/api/carts/{cid}/purchase":
     post:
-      summary: Genera un ticket de compra con la compilacion de datos del mismo
+      summary: "Genera un ticket de compra con la compilación de datos del mismo"
       tags:
-        - carts
+        - "carts"
       parameters:
         - name: cid
           in: path
           required: true
-          description: cid es el id del carrito del cual desea generar su ticket
-      responses:
-      "200":
-        description: Se genero exitosamente el ticket
-        content:
-          application/json:
-            schema:
-              $ref: '#components/schemas/Ticket'
-      "500":
-        description: Error interno del servidor
-  /api/carts/{cid}/products/{pid}:
-    post:
-      summary: Agregar a un carrito elegido por su id, un producto elegido por su id
-      tags:
-        - carts
-      parameters:
-        - name: cid
-          in: path
-          required: true
-          description: cid es el id del carrito al que se le desea cargar un producto
+          description: "ID del carrito del cual desea generar su ticket"
           schema:
-            $type: string
-        - name: pid
-          in: path
-          required: true
-          description: pid es el id del producto que se desea cargar al carrito
-          schema:
-            $type: string
+            type: string
       responses:
         "200":
-          description: Ingreso exitoso del producto en el carrito
+          description: "Se generó exitosamente el ticket"
           content:
             application/json:
               schema:
-                $ref: '#components/schemas/Cart'
+                $ref: "#/components/schemas/Ticket"
         "500":
-          description: Error interno
-    put:
-      summary: Editar dentro de un carrito, obtenido por id, la cantidad de productos tambien por id
+          description: "Error interno del servidor"
+
+  "/api/carts/{cid}/products/{pid}":
+    post:
+      summary: "Agregar a un carrito elegido por su id, un producto elegido por su id"
       tags:
-        - carts
+        - "carts"
       parameters:
         - name: cid
           in: path
           required: true
-          description: cid es el id del carrito al que se le cambia la cantidad de unidades de un producto
+          description: "ID del carrito al que se le desea cargar un producto"
           schema:
-            $type: string
+            type: string
         - name: pid
           in: path
           required: true
-          description: pid es el id del producto al que lse le quiere modificar la cantidad de unidades de un carrito especifico
+          description: "ID del producto que se desea cargar al carrito"
           schema:
-            $type: string
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#components/requestBodies/updateProductQuantityInCart'
+              $ref: "#/components/requestBodies/AddProductToCart"
       responses:
         "200":
-          description: Se modifico de manera exitosa la cantidad del producto en el carrito
+          description: "Ingreso exitoso del producto en el carrito"
           content:
             application/json:
               schema:
-                $ref: '#components/schemas/Cart'
+                $ref: "#/components/schemas/Cart"
         "500":
-          description: Error interno del servidor
+          description: "Error interno"
+    put:
+      summary: "Editar la cantidad de unidades de un producto en un carrito"
+      tags:
+        - "carts"
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: "ID del carrito al que se le cambia la cantidad de unidades de un producto"
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: "ID del producto al que se le quiere modificar la cantidad de unidades en el carrito"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/UpdateProductQuantityInCart"
+      responses:
+        "200":
+          description: "Se modificó de manera exitosa la cantidad del producto en el carrito"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "500":
+          description: "Error interno"
 
 components:
   schemas:
@@ -203,127 +219,107 @@ components:
       type: object
       properties:
         _id:
-          type: ObjectId
-          description: id del carrito generado por la database
+          type: string
+          description: "ID del carrito generado por la base de datos"
         products:
-          type: object
-          properties:
-            product:
-              type: ObjectId
-              description: id del producto generado por la database
-            quantity:
-              type: Number
-              description: cantidad del producto en el carrito
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: "ID del producto generado por la base de datos"
+              quantity:
+                type: integer
+                description: "Cantidad del producto en el carrito"
       example:
-        _id: ObjectId('lkpñs7896dfsgbdf7')
+        _id: "lkpñs7896dfsgbdf7"
         products:
-          - product: ObjectId('782739201jdhr32')
+          - product: "782739201jdhr32"
             quantity: 3
-          - product: ObjectId('kfj23192k3a13d2')
+          - product: "kfj23192k3a13d2"
             quantity: 14
     Ticket:
       type: object
       properties:
         _id:
-          type: ObjectId
-          description: id del ticket generado por la database
+          type: string
+          description: "ID del ticket generado por la base de datos"
         code:
-          type: String
-          description: El code del ticket (unico)
+          type: string
+          description: "El código del ticket (único)"
         purchase_dateTime:
-          type: String
-          description: la fecha y hora generada del ticket
+          type: string
+          description: "La fecha y hora generada del ticket"
         amount:
-          type: Number
-          description: Suma el total de los productos dentro del carrito (Stock disponible)
+          type: number
+          description: "Suma del total de los productos dentro del carrito (Stock disponible)"
         purchaser:
-          type: String
-          description: Email del usuario
+          type: string
+          description: "Email del usuario"
       example:
-        _id: ObjectId('grea8976902fds')
-        code: H72KLTS2
-        purchase_dateTime: 01/01/2023 - 22:31:01
+        _id: "grea8976902fds"
+        code: "H72KLTS2"
+        purchase_dateTime: "01/01/2023 - 22:31:01"
         amount: 64337
-        purchaser: freddymdq@gmail.com
+        purchaser: "freddymdq@gmail.com"
     Product:
       type: object
       properties:
         _id:
-          type: ObjectId
-          description: id del producto generado por la database
+          type: string
+          description: "ID del producto generado por la base de datos"
         title:
-          type: String
-          description: Nombre del producto
+          type: string
+          description: "Nombre del producto"
         description:
-          type: String
-          description: Descripcion del producto
+          type: string
+          description: "Descripción del producto"
         category:
-          type: String
-          description: Categoria del producto
+          type: string
+          description: "Categoría del producto"
         price:
-          type: Number
-          description: Precio del producto
+          type: number
+          description: "Precio del producto"
         img:
-          type: String
-          description: Imagen del producto
+          type: string
+          description: "Imagen del producto"
         status:
           type: boolean
-          description: Status del producto
+          description: "Estado del producto"
         code:
-          type: String
-          description: Codigo del producto
+          type: string
+          description: "Código del producto"
         stock:
-          type: Number
-          description: Stock del producto
+          type: integer
+          description: "Stock del producto"
       example:
-        _id: ObjectId('kl2k3js23812dsa')
-        title: J. WALKER
-        description: Whisky Reserve Black Label
-        category: Whisky
+        _id: "kl2k3js23812dsa"
+        title: "J. WALKER"
+        description: "Whisky Reserve Black Label"
+        category: "Whisky"
         price: 12000
-        img: http://www.whisky.com/jwalker
+        img: "http://www.whisky.com/jwalker"
         status: true
-        code: KLSJU239123
+        code: "KLSJU239123"
         stock: 35
+
   requestBodies:
-    addProduct:
-      type: object
-      properties:
-        title:
-          type: String
-          description: Nombre del producto
-        description:
-          type: String
-          description: Descripcion del producto
-        category:
-          type: String
-          description: Categoria del producto
-        price:
-          type: Number
-          description: Precio del producto
-        img:
-          type: String
-          description: Imagen del producto
-        code:
-          type: String
-          description: Codigo del producto
-        stock:
-          type: Number
-          description: Stock del producto
-      example:
-        title: J. WALKER
-        description: Whisky Reserve Black Label
-        category: Whisky
-        price: 12000
-        img: http://www.whisky.com/jwalker
-        status: true
-        code: KLSJU239123
-        stock: 35
-    updateProductQuantity:
-      type: object
-      properties:
-        quantity:
-          type: Number
-          description: Cantidad actualizada deel producto en el arrito
-      example:
-        quantity: 8
+    AddProductToCart:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Product"
+    UpdateProductQuantityInCart:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              quantity:
+                type: integer
+                description: "Cantidad actualizada del producto en el carrito"
+          example:
+            quantity: 8

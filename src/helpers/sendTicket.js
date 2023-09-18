@@ -1,24 +1,20 @@
 // DE MOMENTO ESTE ESTA DIRECTAMENTE EN EL MANAGERTICKET 
-
-/* 
 import { transporter } from "../config/gmail.js";
 
-
-const emailTemplate = 
-`<div>
-    <h1>Tu ticket de compra</h1>
-    <p>Código: ${ticket.code}</p>
-    <p>Fecha de compra: ${ticket.purchase_dateTime}</p>
-    <p>Monto: ${ticket.amount}</p>
-  </div>`;
-  
-export const sendTicket = async (recipient, ticket) => {
-    const email = await transporter.sendTicket({
+const sendTicket = async (user, ticket) => {
+    const email = await transporter.sendMail({
       from: 'DRINK HOME',
-      to: recipient, ticket,
+      to: `${user.email}`,
       subject: 'Tu ticket de compra',
-      html: emailTemplate,
+      html: 
+      `<div>
+        <h1>Tu ticket de compra</h1>
+        <p>Código: ${ticket.code}</p>
+        <p>Fecha de compra: ${ticket.purchase_dateTime}</p>
+      <p>Monto: ${ticket.amount}</p>
+    </div>`
   });
     return email;
 };
- */
+
+export default sendTicket

@@ -1,6 +1,8 @@
 
 // Cuando conecto
-export const timeConnect = () => { 
+const timeConnect = () => { 
      const date = new Date()
      return date
 }
+
+export default timeConnect

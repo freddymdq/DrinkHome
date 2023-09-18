@@ -78,12 +78,7 @@ export default class ProductController{
         try {
             const productId = req.params.pid;
             const { title, description, price, category, img, code, stock} = req.body;
-            ErrorCustom.createError({
-                name: "Product get by id error",
-                cause:errorParams(productId),
-                message:"Error obteniendo el producto por el id",
-                errorCode: EError.INVALID_PARAM
-            });
+            
             if (!title || !description || !price || !category || !img || !code || !stock) {
                 ErrorCustom.createError({
                     name: "Error create error",

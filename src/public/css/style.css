@@ -94,15 +94,6 @@ body {
   text-align: center;
 }
 
-.background-image{
-  background-image: url("../assest/portadaDrinkhome3.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 25vh;
-  width: 100%;
-  margin-top: 30px;
-}
-
 .container {
     width: 100%;
     margin: 0 auto;

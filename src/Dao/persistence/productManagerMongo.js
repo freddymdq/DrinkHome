@@ -36,6 +36,79 @@ export default class ProductManagerMongo {
 }
 
 
+//export default class ProductManagerMongo {
+ /*  constructor() {
+    this.productModel = productModel;
+  }
+
+  async addProduct(productData) {
+    try {
+      const { title, description, price, category, status, img, code, stock } = productData;
+      if (!title || !description || !price || !category || !status || !img || !code || !stock) {
+        throw new Error("Faltan datos");
+      }
+
+      const newProduct = await productModel.create(productData);
+      return newProduct;
+    } catch (error) {
+      throw new Error(`Error al agregar el producto: ${error.message}`);
+    }
+  }
+
+  async getProducts() {
+    try {
+      const products = await productModel.find();
+      return products;
+    } catch (error) {
+      throw new Error(`Error al obtener los productos: ${error.message}`);
+    }
+  }
+
+  async getProductById(id) {
+    try {
+      const product = await productModel.findById(id);
+      return product;
+    } catch (error) {
+      throw new Error(`Error al obtener el producto por ID: ${error.message}`);
+    }
+  }
+
+  async deleteProductById(id) {
+    try {
+      await productModel.deleteOne({ _id: id });
+      return true;
+    } catch (error) {
+      throw new Error(`Error al eliminar el producto por ID: ${error.message}`);
+    }
+  }
+
+  async productsFindLean() {
+    try {
+      const products = await productModel.find().lean();
+      return products;
+    } catch (error) {
+      throw new Error(`Error al obtener productos de forma optimizada: ${error.message}`);
+    }
+  }
+
+  async updateProductById(id, updateData) {
+    try {
+      const { title, description, price, category, img, code, stock } = updateData;
+      if (!title || !description || !price || !category || !img || !code || !stock) {
+        throw new Error("Faltan datos");
+      }
+
+      const result = await productModel.updateOne({ _id: id }, { $set: updateData });
+      return result;
+    } catch (error) {
+      throw new Error(`Error al actualizar el producto por ID: ${error.message}`);
+    }
+  }
+}
+
+ */
+
+
 /* import productModel from "../models/products.model.js"
 
 export default class ProductManagerMongo {

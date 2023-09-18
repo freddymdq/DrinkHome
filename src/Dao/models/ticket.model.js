@@ -4,7 +4,6 @@ import mongoosePaginate from 'mongoose-paginate-v2';
 const collection = 'ticket';
 
 const ticketSchema = new mongoose.Schema({
-    
     code: { type: String, required: true, unique: true },
     purchase_dateTime: { type: String, required: true },
     amount: { type: Number, required: true },
