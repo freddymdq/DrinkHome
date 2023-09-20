@@ -1,4 +1,4 @@
-export const date = async () =>{
+export const datetime = async () =>{
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
     const infoDate = ` Hora: ${time} - Fecha: ${date}`;

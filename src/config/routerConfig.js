@@ -1,4 +1,4 @@
-import userRouter from "../router/user.routes.js";
+/* import userRouter from "../router/user.routes.js";
 import chatRouter from "../router/chat.routes.js";
 import sessionRouter from "../router/session.routes.js";
 import viewsRouter from "../router/views.routes.js";
@@ -20,4 +20,4 @@ function routerConfig(app){
     app.use('/api/users', userRouter)
 }
 
-export default routerConfig
+export default routerConfig */

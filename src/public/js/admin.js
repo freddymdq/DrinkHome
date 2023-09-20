@@ -21,7 +21,7 @@ function irRendimientos() {
 }
 
 function irAgregarProductos() {
-    window.location.href = "/admin/agregar-productos";
+    window.location.href = "/agregar-productos";
 }
 
 function volver() {
@@ -29,21 +29,19 @@ function volver() {
 }
 
 function eliminarUsuario(userId) {
-    fetch(`/${userId}/delete`, { method: 'DELETE' })
-      .then(response => {
-        if (response.ok) {
-          
-          window.location.reload();
-        } else {
-          
-          console.error('Error al eliminar el usuario');
-        }
-      })
-      .catch(error => {
-        console.error('Error al eliminar el usuario', error);
-      });
-  }
-
+  fetch(`/${userId}/delete`, { method: 'DELETE' })
+    .then(response => {
+      if (response.ok) {
+        // La solicitud se completó con éxito, ahora puedes redirigir al usuario
+        window.location.href = "/admin/db-user";
+      } else {
+        console.error('Error al eliminar el usuario');
+      }
+    })
+    .catch(error => {
+      console.error('Error al eliminar el usuario', error);
+    });
+}
   function changeRole(userId) {
     fetch(`/${userId}/change`, { method: 'PUT',
       headers: {
@@ -53,7 +51,7 @@ function eliminarUsuario(userId) {
     })
       .then(response => {
         if (response.ok) {
-          window.location.reload();
+          window.location.href = "/admin/db-user";
         } else {
           console.error('Error al cambiar el rol del usuario');
         }

@@ -4,7 +4,7 @@
   <ul>
     <li><a href="/">HOME</a></li>
     <li><a href="/products">PRODUCTOS</a></li>
-    <li><a href="/cart/646267ba8cc04a3efca60438">CARRITO</a></li>
+    <li><a href="/cart/{{user.cart._id}}">CARRITO</a></li>
   </ul>
   <div class="user-dropdown">
     <button class="user-dropdown-btn"> {{user.role}}</button>
@@ -32,6 +32,6 @@
         <p>Price: {{this.product.price}}</p>
         <p>Stock: {{this.product.stock}}</p>
         <p>Disponibilidad: {{this.product.status}}</p>
-         <button class="add-to-cart-button" data-product-id="{{this._id}}">Agregar al carrito</button>
+         <button class="cartB" data-product-id="{{this._id}}" data-user-id="{{../user._id}}" data-cart-id="{{../user.cart}}">Agregar al carrito</button>
       </div>
   </div>

@@ -48,7 +48,7 @@
                 <p>Category: {{this.category}}</p>
                 <p>Price: {{this.price}}</p>
                 <p>Stock: {{this.stock}}</p>
-                <button class="addTocart" dataProdId="{{this._id}}">Agregar al carrito</button>
+                 <button class="cartB" data-product-id="{{this._id}}" data-user-id="{{../user._id}}" data-cart-id="{{../user.cart}}">Agregar al carrito</button>
             </div>
         {{/each}}
     </div>
@@ -61,3 +61,5 @@
         {{/if}}
     </div>
 </div>
+
+<script src="/js/buyProd.js"></script>

@@ -14,9 +14,9 @@ router.get('/:cid', cartController.getCartById);
 // MUESTRA DETALLES DEL CARRITO
 router.get('/:cid/detail', cartController.getCartDetails);
 // AGREGA VARIOS PRODUCTOS AL CARRITO
-router.put('/:cid/products/:pid', cartController.addProductsToCart);
+router.post('/:cid/products/:pid', cartController.addProductsToCart);
 // AGREGA 1 PRODUCTO AL CARRITO
-router.post('/:cid/products/:pid', cartController.addProductInCart);
+router.post('/:cid/product/:pid', cartController.addProductInCart);
 // AUMENTA LA CANTIDAD DE UNIDADES
 router.put('/:cid/uprod/:pid', cartController.updateProductQuantityInCart);
 // VACIA EL CARRITO

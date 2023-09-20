@@ -17,7 +17,7 @@
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Email</th>
-                <th>Contraseña</th>
+                <th>Ultima Coneccion</th>
                 <th>Role</th>
                 <th>Delete</th>
                 <th>Premium</th>
@@ -29,7 +29,7 @@
             <td>{{this.first_name}}</td>
             <td>{{this.last_name}}</td>
             <td>{{this.email}}</td>
-            <td>{{this.password}}</td>
+            <td>{{this.last_connected}}</td>
             <td>{{this.role}}</td>
             <td>
                 <form action="/{{this._id}}/delete" method="post">
@@ -37,7 +37,7 @@
                 </form>
             </td>
             <td>
-                <form action="/{{this._id}}/change" method="POST">
+                <form action="/{{this._id}}/change" method="post">
                     <button type="submit">Activar</button>
                 </form>
             </td>

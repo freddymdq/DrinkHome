@@ -17,7 +17,7 @@
       {{message}}
     {{/if}}
     <div class="user-dropdown">
-      <button class="user-dropdown-btn">PERFIL</button>
+      <button class="user-dropdown-btn">{{user.role}}</button>
       <div class="user-dropdown-content">
         <p class="users">{{user.first_name}} {{user.last_name}}</p>
         <a href="/current"><button>Panel User</button></a>
@@ -43,8 +43,10 @@
       <p>{{this.description}}</p>
       <p>${{this.price}}</p>
       <p>Stock: {{this.stock}}</p>
-       <button class="add-to-cart-button" data-product-id="{{this._id}}">Agregar al carrito</button>
+      <button class="cartB" data-product-id="{{this._id}}" data-user-id="{{../user._id}}" data-cart-id="{{../user.cart}}">Agregar al carrito</button>
     </div>
     {{/each}}
   </div>
 </div>
+
+<script src="js/buyProd.js"></script>

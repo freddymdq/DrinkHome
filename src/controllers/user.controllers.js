@@ -89,13 +89,13 @@ export default class UserController {
       res.json({ status: "success", message: "Contraseña actualizada" })
     } catch (error) {
       console.error(error);
-        res.status(500).json({ error: "Error interno del servidor" })
+        res.status(500).json({ error: "Error interno" })
     }
   }
 
   async removeUsers(req, res) {
     const removoTwoDays = timeConnect()
-    twoDaysAgo.setDate(removoTwoDays.getDate() - 2)
+    removoTwoDays.setDate(removoTwoDays.getDate() - 2)
 
     try {
       const users = await userModel.find({
@@ -112,7 +112,7 @@ export default class UserController {
         });
         res.status(200).json({ message: "success", users: result });
       } else {
-        res.status(400).json({ message: "No hay usuarios inactivos para borrar" });
+        res.status(400).json({ message: "No hay usuarios inactivos" });
       }
     } catch (error) {
       console.error(error);
@@ -177,21 +177,21 @@ export default class UserController {
       res.status(500).json({ status: "error", message: "Error al obtener el usuario por ID" });
     }
   }
-
   async updateUserRole(req, res) {
     try {
       const userId = req.params.userId;
       const newRole = 'premium'; 
       const updatedUser = await userMongoManager.updateUserRole(userId, newRole);
       if (!updatedUser) {
-        return res.json({ status: "error", message: "Hubo un error al cambiar el rol del usuario a premium" });
+        return res.send({ status: "error", message: "Hubo un error al cambiar el rol del usuario a premium" });
       }
-      res.json({ status: "success", message: "Se actualizo correctamente el rol del usuario" });
+      req.logger.info("Rango de usuario a : PREMIUM ");
+        res.redirect('/admin/db-user');
+     
     } catch (error) {
       console.error(error.message);
-      res.json({ status: "error", message: "Hubo un error al cambiar el rol del usuario a premium" });
+      res.status(500).json({ status: "error", message: "Hubo un error al cambiar el rol del usuario a premium" });
     }
   }
 }
- 
 

@@ -9,6 +9,10 @@ export  const options = {
         secretSession: process.env.SECRET_SESSION,
         persistence: process.env.PERSISTENCE
     },
+    github: {
+        clientId: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    },
     mongo:{
         url: process.env.MONGO_URL
     },

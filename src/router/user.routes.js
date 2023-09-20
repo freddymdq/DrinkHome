@@ -1,21 +1,21 @@
 import { Router } from "express";
 import UserController from "../controllers/user.controllers.js";
 import { adminAccess } from "../middleware/access.js";
+
 const router = Router();
 const userController = new UserController();
 
-// muestra usuario
 router.get("/", userController.getUsers)
-router.post("/")
-// borra usuario
-router.delete('/admin/:userId', adminAccess, userController.deleteUserById);
-// cambia el roll de usuario
+router.get("/userId", userController.getUserById)
+router.delete('/:userId', adminAccess, userController.deleteUserById);
 router.put('/:userId', adminAccess, userController.updateUserRole)
-// cambia el rol de usuario desde el front
-router.post("/:userId/change",adminAccess, userController.updateUserRole);
-// borra un usuario por inactividad
 router.delete("/:userId/notConnected", adminAccess, userController.removeUsers);
-// borra usuario desde el Front
+
+
+// ESTOS SON SOLO DEL FRONT
 router.post("/:userId/delete", adminAccess, userController.deleteUserById);
 
+// PROFE ESTE EN PARTICULALR ME DIO MUCHO DOLOR DE CABEZA TUVE QUE BORRAR TODO EL PROYECTO Y BAJAR LA ENTREGA PORQUE ME TIRABA ERRORES MUY RAROS.
+// INCLUSO AUN FUNCIONANDO NO LOGRO ENTENDER PORQUE NO VUELVE A REDIRECCIONAR LA PAGINA DE INICIO
+router.post("/:userId/change",adminAccess, userController.updateUserRole);
 export default router; 

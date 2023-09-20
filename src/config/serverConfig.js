@@ -1,4 +1,4 @@
-import {options} from "./options.js";
+/* import {options} from "./options.js";
 
 const PORT = options.server.port;
 
@@ -10,4 +10,4 @@ function serverConfig() {
   return server;
 }
 
-export default serverConfig;
+export default serverConfig; */
