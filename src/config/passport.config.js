@@ -1,6 +1,6 @@
 import passport from 'passport';
 import local from 'passport-local';
-import GitHubStrategy from 'passport-github2';
+import GithubStrategy from 'passport-github2';
 import { validatePassword  } from '../helpers/hashAndValidate.js';
 import { ErrorCustom } from '../service/error/errorCustom.service.js';
 import { EError } from '../enums/EError.js';
@@ -80,7 +80,7 @@ const initializePassport = () => {
 
 
   passport.use(
-    "github", new GitHubStrategy(
+    "github", new GithubStrategy(
       { clientID:'Iv1.2196bd64a6227d75',
         clientSecret: '5153430f81a1cc24766b2b6ee9214cab2239e6b1',
         callbackURL: 'http://localhost:8080/api/session/githubcallback',
