@@ -94,34 +94,29 @@ export default class CartController{
       try {
           const cartId = req.params.cid;
           const productId = req.params.pid;
-
-          // Verificar si el carrito existe
-          const cart = await cartManagerMongo.getCartById({_id: cartId});
+          const userRole = req.body.role; 
+          const cart = await cartManagerMongo.getCartById(cartId);
           if (!cart) {
-              ErrorCustom.createError({
-                  name: 'Cart get by id error',
-                  cause: errorParams(cartId),
-                  message: 'Error obteniendo el carrito por id.',
-                  errorCode: EError.INVALID_PARAM,
-              });
+              res.status(404).send({ error: 'Carrito no encontrado' });
+              return;
           }
-
-          // Verificar si el producto existe
-          const product = await productManagerMongo.getProductById({_id: productId});
+    
+          const product = await productManagerMongo.getProductById(productId);
           if (!product) {
-              ErrorCustom.createError({
-                  name: 'Product get by id error',
-                  cause: errorParams(productId),
-                  message: 'Error obteniendo el producto por id.',
-                  errorCode: EError.INVALID_PARAM,
-              });
+              res.status(404).send({ error: 'Producto no encontrado' });
+              return;
           }
-
-          // Agregar el producto al carrito
-          const result = await cartManagerMongo.addProductInCart(cartId, productId);
-          return res.status(200).send({ status: 'success', result });
+          if (userRole === 'user') {
+              // Usuario permitido para comprar, agrega el producto al carrito
+              cart.products.push({ product: productId, quantity: 1 });
+              await cart.save();
+              res.status(200).send({ msg: 'Producto agregado al carrito con éxito' });
+          } else {
+              res.status(403).send({ error: 'NO PUEDES COMPRAR TU PRODUCTO' });
+          }
       } catch (error) {
-          res.status(400).send({ status: 'Error', msg: 'No se puede agregar el producto al carrito' });
+          console.error(error);
+          res.status(500).send({ error: 'Error interno del servidor' });
       }
   }
 

@@ -32,7 +32,6 @@ function eliminarUsuario(userId) {
   fetch(`/${userId}/delete`, { method: 'DELETE' })
     .then(response => {
       if (response.ok) {
-        // La solicitud se completó con éxito, ahora puedes redirigir al usuario
         window.location.href = "/admin/db-user";
       } else {
         console.error('Error al eliminar el usuario');

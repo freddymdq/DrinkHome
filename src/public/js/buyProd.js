@@ -28,23 +28,27 @@ addToCart.forEach(button => {
   });
 });
 
+
 const purchaseBtn = document.getElementById('purchaseB');
-purchaseBtn.addEventListener('click', (i) => {
- i.preventDefault();
-  const cartId = i.target.dataset.cartId;
-  fetch(`/api/carts/${cartId}/purchase`, {
+purchaseBtn.addEventListener('click', (e) => {
+ e.preventDefault();
+  const cartId = i.target.getAttribute('data-cart-id');
+  fetch(`/carts/${cartId}/purchase`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        console.error('ALGO SALIO MAL');
-      }
-    })
+    
+.then((response) => {
+  if (response.status === 200) {
+    return response.json();
+  } else {
+    console.error('ALGO SALIÓ MAL');
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = 'Hubo un error al procesar la compra. Por favor, inténtalo nuevamente.';
+  }
+})
     .then((data) => {
       window.location.href = '/orden';
       console.log('COMPRA FINALIZASA');

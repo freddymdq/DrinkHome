@@ -1,6 +1,6 @@
 import {options} from "../config/options.js"
 
-const persistence = options.server.PERSISTENCE
+const persistence = options.server.persistence
 
 let daoUsers;
 

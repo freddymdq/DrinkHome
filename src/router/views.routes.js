@@ -23,9 +23,12 @@ router.get('/admin/db-user', adminAccess, async (req, res) => {
 router.get('/admin/rendimientos', adminAccess, (req, res) => {
   res.render('rendimientos', { user: req.session.user });
 });
-router.get('/admin/agregar-productos', adminAccess, premiumAccess, (req, res) => {
+router.get('/agregar-productos', adminAccess,  (req, res) => {
   res.render('addProducts', { user: req.session.user });
 });
+
+router.get('/agregar-productos', premiumAccess, (req, res) => {
+  res.render('addProducts', { user: req.session.user });})
 
 // HOME
 router.get('/', privateAccess, async (req, res) => {
@@ -54,7 +57,8 @@ router.get('/chat', privateAccess, async (req, res) => {
 router.get('/current', privateAccess, (req, res) => {
   res.render('current', {
     user: req.session.user,
-    isAdmin: req.session.user.role === 'admin'
+    isAdmin: req.session.user.role === 'admin',
+    isPremium: req.session.user.role === 'premium'
   });
 });
 

@@ -3,7 +3,7 @@
   <ul>
     <li><a href="/">HOME</a></li>
     <li><a href="/products">PRODUCTOS</a></li>
-    <li><a href="/cart">CARRITO</a></li>
+    <li><a href="/cart/{{user.cart}}">CARRITO</a></li>
   </ul>
 </nav>
 <div class="profile">
@@ -14,6 +14,10 @@
     <a href="/api/session/logout"><button class="cs">Cerrar Sesion</button></a>
       {{#if isAdmin}}
         <a href="/admin"><button>Panel Control</button></a>
+      {{/if}}
+
+      {{#if isPremium}}
+      <a href="/agregar-productos"><button> Agregar Productos (Premium)</button></a>
       {{/if}}
       
        
