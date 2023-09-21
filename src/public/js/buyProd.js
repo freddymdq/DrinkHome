@@ -23,37 +23,8 @@ addToCart.forEach(button => {
         }
       })
       .catch(error => {
-        console.error('ERROR INTERNO', error);
+        console.error('ERROR INTERNO');
       });
   });
 });
 
-
-const purchaseBtn = document.getElementById('purchaseB');
-purchaseBtn.addEventListener('click', (e) => {
- e.preventDefault();
-  const cartId = i.target.getAttribute('data-cart-id');
-  fetch(`/carts/${cartId}/purchase`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    
-.then((response) => {
-  if (response.status === 200) {
-    return response.json();
-  } else {
-    console.error('ALGO SALIÓ MAL');
-    const errorMessage = document.getElementById('error-message');
-    errorMessage.textContent = 'Hubo un error al procesar la compra. Por favor, inténtalo nuevamente.';
-  }
-})
-    .then((data) => {
-      window.location.href = '/orden';
-      console.log('COMPRA FINALIZASA');
-    })
-    .catch((error) => {
-      console.error('ERROR INTERNO', error);
-    });
-});

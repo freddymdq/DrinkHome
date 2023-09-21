@@ -4,7 +4,6 @@ import { EError } from '../enums/EError.js';
 import { productErrorInfo } from '../service/errorInfo.js';
 import { errorParams } from '../service/errorParams.js';
 import { ErrorCustom } from '../service/error/errorCustom.service.js';
-import productModel from "../Dao/models/products.model.js";
 
 const productManager = new ProductManagerMongo();
 
@@ -42,32 +41,25 @@ export default class ProductController{
           }
         };
 
-        async addProduct(req, res) {
-            try {
-                const { title, description, price, category, img, code, stock } = req.body;
-                const userId = req.user.id;
-                const isAdmin = req.user.role === 'admin';
-                const isPremium = req.user.role === 'premium';
-        
-                // Crear un nuevo producto en lugar de instanciarlo manualmente
-                const product = await productModel.create({
-                    title,
-                    description,
-                    price,
-                    category,
-                    status: true,
-                    img,
-                    code,
-                    stock,
-                    owner: userId,
-                    purchaseRestricted: isAdmin || isPremium,
+    async addProduct (req,res){
+        try {
+            const { title, description, price, category, img, code, stock} = req.body;
+            if (!title || !description || !price || !category || !img || !code || !stock) {
+                ErrorCustom.createError({
+                    name: "Product create error",
+                    cause: productErrorInfo(req.body),
+                    message: "Error creando el producto.",
+                    errorCode: EError.INVALID_JSON
                 });
-                res.status(200).send({ msg: 'Producto creado exitosamente' })
-            } catch (error) {
-                console.error(error);
-                res.status(500).send({ error: 'Error interno del servidor' });
-            }
-        }
+            };
+            const productData = {title, description, price, category, img, code, stock };
+            await productManager.addProduct(productData);
+            res.redirect('/admin');
+            res.status(200).send({ msg: 'Producto creado exitosamente' });
+        } catch (error) {
+            res.status(500).send({ error: 'Error interno del servidor' });
+        }}
+
 
     async deleteProductById (req, res){
         try {

@@ -1,4 +1,4 @@
-import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
+/* import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
 
 const ticketManagerMongo = new TicketManagerMongo();
 
@@ -18,4 +18,4 @@ export default class TicketController {
         res.status(500).json({ message: error.message });
       }
   }
-}
+} */

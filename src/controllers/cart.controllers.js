@@ -1,11 +1,12 @@
 import CartManagerMongo from "../Dao/persistence/cartManagerMongo.js"
 import ProductManagerMongo from "../Dao/persistence/productManagerMongo.js"
+import TicketManagerMongo from "../Dao/persistence/ticketManagerMongo.js";
 import { EError } from "../enums/EError.js";
 import { quantityErrorInfo } from "../service/errorInfo.js";
 import { errorParams } from "../service/errorParams.js";
 import { ErrorCustom } from '../service/error/errorCustom.service.js';
 
-
+const ticketManagerMongo = new TicketManagerMongo()
 const productManagerMongo = new ProductManagerMongo()
 const cartManagerMongo = new CartManagerMongo()
 
@@ -94,32 +95,58 @@ export default class CartController{
       try {
           const cartId = req.params.cid;
           const productId = req.params.pid;
-          const userRole = req.body.role; 
-          const cart = await cartManagerMongo.getCartById(cartId);
+
+          // Verificar si el carrito existe
+          const cart = await cartManagerMongo.getCartById({_id: cartId});
           if (!cart) {
-              res.status(404).send({ error: 'Carrito no encontrado' });
-              return;
+              ErrorCustom.createError({
+                  name: 'Cart get by id error',
+                  cause: errorParams(cartId),
+                  message: 'Error obteniendo el carrito por id.',
+                  errorCode: EError.INVALID_PARAM,
+              });
           }
-    
-          const product = await productManagerMongo.getProductById(productId);
+
+          // Verificar si el producto existe
+          const product = await productManagerMongo.getProductById({_id: productId});
           if (!product) {
-              res.status(404).send({ error: 'Producto no encontrado' });
-              return;
+              ErrorCustom.createError({
+                  name: 'Product get by id error',
+                  cause: errorParams(productId),
+                  message: 'Error obteniendo el producto por id.',
+                  errorCode: EError.INVALID_PARAM,
+              });
           }
-          if (userRole === 'user') {
-              // Usuario permitido para comprar, agrega el producto al carrito
-              cart.products.push({ product: productId, quantity: 1 });
-              await cart.save();
-              res.status(200).send({ msg: 'Producto agregado al carrito con éxito' });
-          } else {
-              res.status(403).send({ error: 'NO PUEDES COMPRAR TU PRODUCTO' });
-          }
+
+          // Agregar el producto al carrito
+          const result = await cartManagerMongo.addProductInCart(cartId, productId);
+          return res.status(200).send({ status: 'success', result });
       } catch (error) {
-          console.error(error);
-          res.status(500).send({ error: 'Error interno del servidor' });
+          res.status(400).send({ status: 'Error', msg: 'No se puede agregar el producto al carrito' });
       }
   }
 
+  /* async addProductInCart (req, res, next) {
+    try {
+      const cartId = req.session?.user?.cart; const prodId = req.params.pid; const userId = req.user.id.toString();const product = await productModel.findById(prodId);
+      const productOwner = product.owner?.toString();
+      if (productOwner === userId) {
+        return res
+          .status(404)
+          .send({ error: 'No puedes agregar este producto al carrito' });
+      }
+      const final = await cartManagerMongo.addProductInCart(cartId, prodId);
+      return res
+      .status(200)
+      .send({
+        status: 'success',
+        final
+      });
+    } catch (error) {
+      next(error);
+    };
+  };
+ */
     // VACIAR CARRITO
     async emptyCart (req, res) {
         try {
@@ -214,15 +241,17 @@ export default class CartController{
         res.status(500).json({ error: 'No se pudo eliminar el carrito' });
     }
 }
-
-    async purchaseCart(req, res) {
-      try {
-        const cartId = req.params.cid;
-        const ticket = await cartManagerMongo.purchaseCart(cartId); 
-      res.status(200).send({status: "success",ticket });
-       } catch (error) {
-        req.logger.error(error);
-        res.status(500).json({ message: error.message });
-      }
+  async purchaseCart (req, res, next) {
+    try {
+      const cartId = req.params.id;
+      const ticket = await ticketManagerMongo.purchaseCart(cartId);
+      res
+      .status(200)
+      .send({
+      status: 'success',
+      ticket
+      });
+    } catch (error) {
+      next(error);
     }
-}
+      }};
