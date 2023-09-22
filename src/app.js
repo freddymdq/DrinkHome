@@ -21,8 +21,8 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpecs } from "./config/docConfig.js";
 
 
-  
 export const PORT = options.server.port;
+
 const app = express();
 const httpServer = app.listen(PORT,()=>console.log(`Server conectado al puerto ${PORT}`));
 httpServer.on('error', error => console.log(`Error in server ${error}`));
