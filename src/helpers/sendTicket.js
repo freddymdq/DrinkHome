@@ -1,10 +1,9 @@
-// DE MOMENTO ESTE ESTA DIRECTAMENTE EN EL MANAGERTICKET 
 import { transporter } from "../config/gmail.js";
 
-const sendTicket = async (user, codeGenerator, dateGenerator, totalAmount ) => {
+const sendTicket = async (purchaserEmail, codeGenerator, dateGenerator, totalAmount ) => {
     const email = await transporter.sendMail({
       from: 'DRINK HOME',
-      to: `${user.email}`,
+      to: `${purchaserEmail}`,
       subject: 'Tu ticket de compra',
       html: 
       `<div>

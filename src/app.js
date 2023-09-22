@@ -23,13 +23,11 @@ import { swaggerSpecs } from "./config/docConfig.js";
 
   
 export const PORT = options.server.port;
-
 const app = express();
 const httpServer = app.listen(PORT,()=>console.log(`Server conectado al puerto ${PORT}`));
 httpServer.on('error', error => console.log(`Error in server ${error}`));
 
 mongoConfig(app)
-
 
 initializePassport();
 // logger
@@ -48,16 +46,10 @@ app.use(errorHandler);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use('/chat', chatRouter)
 app.use('/', viewsRouter)
-app.use('/api/sessions', sessionRouter)
 app.use('/api/session', sessionRouter)
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
-app.use('/', userRouter);
 app.use('/api/user', userRouter)
-app.use('/api/users', userRouter)
-
-
-
 
 // Socket.IO
 const io = new Server(httpServer);

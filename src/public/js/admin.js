@@ -7,11 +7,9 @@ function irDBUser() {
     fetch('/admin/db-user')
     .then(response => response.json())
     .then(data => {
-      // Hacer algo con los datos de los usuarios recibidos
       console.log(data);
     })
     .catch(error => {
-      // Manejar el error en caso de que ocurra
       console.error(error);
     });
 }
@@ -34,11 +32,11 @@ function eliminarUsuario(userId) {
       if (response.ok) {
         window.location.href = "/admin/db-user";
       } else {
-        console.error('Error al eliminar el usuario');
+        console.error('NO SE PUDO ELIMINAR EL USUARIO');
       }
     })
     .catch(error => {
-      console.error('Error al eliminar el usuario', error);
+      console.error('ERROR INTERNO', error);
     });
 }
   function changeRole(userId) {
@@ -52,11 +50,11 @@ function eliminarUsuario(userId) {
         if (response.ok) {
           window.location.href = "/admin/db-user";
         } else {
-          console.error('Error al cambiar el rol del usuario');
+          console.error('ERROR CAMBIO DE ROL');
         }
       })
       .catch(error => {
-        console.error('Error al cambiar el rol del usuario', error);
+        console.error('ERROR INTERNO CAMBIO ROL', error);
       });
   }
   

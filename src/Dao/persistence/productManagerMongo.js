@@ -2,11 +2,12 @@ import productModel from "../models/products.model.js";
 
 export default class ProductManagerMongo {
   async addProduct(productData) {
-    const { title, description, price, category, status, img, code, stock } = productData;
-    if (!title || !description || !price || !category || !status || !img || !code || !stock) {
+    const { title, description, price, category, status, img, code, stock, owner } = productData;
+    if (!title || !description || !price || !category || !status || !img || !code || !stock || !owner) {
       throw new Error("Faltan datos");
     }
-    return await productModel.create(productData);
+    const result = await productModel.create(productData);
+    return result;
   }
 
   async getProducts() {

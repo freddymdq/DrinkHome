@@ -8,8 +8,10 @@ const mgsSchema = new mongoose.Schema({
     message: { type: String, require: true }
 });
 
-mgsSchema.virtual('userFirstName', {     
-    ref: 'users', localField: 'user', foreignField: '_id', justOne: true, autopopulate: { select: 'first_name' }
+mgsSchema.virtual('userFirstName', 
+{ 
+    ref: 'users',  localField: 'user',  foreignField: '_id',  justOne: true,  autopopulate: 
+ { select: 'first_name' }
 });
 
 mgsSchema.plugin(autopopulate)

@@ -7,9 +7,7 @@ import  sendTicket  from '../../helpers/sendTicket.js';
 
 export default class TicketManagerMongo {
     async purchaseCart (cartId) {
-        const cart = await cartModel
-            .findById(cartId)
-            .populate('products.product');
+        const cart = await cartModel.findById(cartId).populate('products.product');
             let totalAmount = 0;
             const productsToRemove = [];
             for (const productInCart of cart.products) {
@@ -31,17 +29,19 @@ export default class TicketManagerMongo {
           amount: totalAmount,
           purchaser: purchaserEmail,
         };
-        const ticket = await ticketModel.create(ticketData);
-        cart.products = productsStock;
-        await cart.save();
-        // envio de ticket al mail
-        await sendTicket(purchaserEmail, ticket);
+        console.log(ticketData);
+        const ticketCreated = await ticketModel.create(ticketData);
+        console.log(ticketCreated)
+       
+       // ME TIRA ERROR EN EL ENVIO DEL TICKET
+        /*  await sendTicket(purchaserEmail, codeGenerator, dateGenerator, totalAmount);
+        
         for (const productToRemove of productsToRemove) {
             cart.products = cart.products.filter(
               (productInCart) => productInCart._id.toString() !== productToRemove._id.toString()
             );
           };
           await cart.save();
-          return ticketData;
+          return ticketData; */
       }}
 

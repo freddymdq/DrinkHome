@@ -67,18 +67,10 @@ export default class CartController{
         });
       }
     }
-    
-
     // DETALLES DEL CART
     async getCartDetails (req, res) {
         try {
             const cartId = req.params.cid;
-          /*   ErrorCustom.createError({
-              name: "Cart get by id error",
-              cause:errorParams(cartId),
-              message:"Error al obtener el carrito con ID",
-              errorCode: EError.INVALID_PARAM
-          }); */
             const cart = await cartManagerMongo.getCartDetails(cartId);
             res.status(200).send({
               status: 'success',
@@ -125,40 +117,13 @@ export default class CartController{
           res.status(400).send({ status: 'Error', msg: 'No se puede agregar el producto al carrito' });
       }
   }
-
-  /* async addProductInCart (req, res, next) {
-    try {
-      const cartId = req.session?.user?.cart; const prodId = req.params.pid; const userId = req.user.id.toString();const product = await productModel.findById(prodId);
-      const productOwner = product.owner?.toString();
-      if (productOwner === userId) {
-        return res
-          .status(404)
-          .send({ error: 'No puedes agregar este producto al carrito' });
-      }
-      const final = await cartManagerMongo.addProductInCart(cartId, prodId);
-      return res
-      .status(200)
-      .send({
-        status: 'success',
-        final
-      });
-    } catch (error) {
-      next(error);
-    };
-  };
- */
     // VACIAR CARRITO
     async emptyCart (req, res) {
         try {
             const cartId = req.params.cid;
-            ErrorCustom.createError({
-              name: "Get cart by id error",
-              cause: errorParams(cartId),
-              message:"Error obteniendo el carrito com id.",
-              errorCode: EError.INVALID_PARAM
-          });
+            console.log(cartId);
             await cartManagerMongo.emptyCart(cartId);
-            res.send({ message: 'Carrito vaciado correctamente' });
+            res.status(200).send({ status: 'succes', message: 'Carrito vaciado correctamente' });
           } catch (error) {
             res.status(400).send({
               status: 'Error',
@@ -199,7 +164,7 @@ export default class CartController{
           productId,
           quantity
         );
-        res.send({ message: "Cantidad del producto en el carrito actualizada" });
+        res.status(200).send({ status: 'succes', message: "Cantidad del producto en el carrito actualizada" });
       } catch (error) {
         res.status(400).send({
           status: "Error",
@@ -219,7 +184,7 @@ export default class CartController{
               errorCode: EError.INVALID_PARAM
           });
             const result = await cartManagerMongo.addProductsToCart(cartId, productId);
-            res.status(200).send({ status: 'success',result });
+            res.status(200).send({ status: 'success', result });
         } catch (error) {
             res.status(400).send({ status: 'error', message: 'No se pudieron agregar los productos' });
         }
@@ -232,26 +197,21 @@ export default class CartController{
         const deleteResult = await cartManagerMongo.delete(cartId);
 
         if (deleteResult) {
-            res.status(200).json({ message: 'Carrito eliminado exitosamente' });
+            res.status(200).send({ status: 'succes', message: 'Carrito eliminado exitosamente' });
         } else {
-            res.status(404).json({ message: 'Carrito no encontrado' });
+            res.status(404).send({ message: 'Carrito no encontrado' });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'No se pudo eliminar el carrito' });
+        res.status(500).send({ status: 'error', error: 'No se pudo eliminar el carrito' });
     }
 }
   async purchaseCart (req, res, next) {
     try {
-      const cartId = req.params.id;
+      const cartId = req.params.cid;
       const ticket = await ticketManagerMongo.purchaseCart(cartId);
-      res
-      .status(200)
-      .send({
-      status: 'success',
-      ticket
-      });
+      res.status(200).send({ status: 'success', ticket });
     } catch (error) {
       next(error);
     }
-      }};
+  }};

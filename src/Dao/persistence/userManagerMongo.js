@@ -3,7 +3,6 @@ import { createHash } from '../../helpers/hashAndValidate.js';
 import userModel from "../models/user.model.js"
 import cartModel from "../models/cart.model.js";
 
-
 export default class UserMongoManager {
   constructor() {
     this.userModel = userModel;

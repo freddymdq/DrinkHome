@@ -9,7 +9,7 @@ import { options } from "./options.js";
       console.log("Ya estás conectado a la base de datos");
       return connectDB ;
     } else {
-      connectDB  = await mongoose.connect(options.mongo.url);
+      connectDB  = mongoose.connect(options.mongo.url);
       console.log("Conectado con la base de datos");
       return connectDB ;
     }

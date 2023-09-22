@@ -16,7 +16,7 @@ export default class ProductController{
           } 
           catch (error) {
             req.logger.error(error);
-            res.status(500).json({ message: error.message });
+            res.status(500).send({ message: error.message });
           }
         };
     
@@ -37,24 +37,19 @@ export default class ProductController{
             res.status(200).send({ product });
           } catch (error) {
             req.logger.error(error);
-            res.status(500).json({ message: error.message });
+            res.status(500).send({ message: error.message });
           }
         };
 
     async addProduct (req,res){
         try {
-            const { title, description, price, category, img, code, stock} = req.body;
-            if (!title || !description || !price || !category || !img || !code || !stock) {
-                ErrorCustom.createError({
-                    name: "Product create error",
-                    cause: productErrorInfo(req.body),
-                    message: "Error creando el producto.",
-                    errorCode: EError.INVALID_JSON
-                });
+            const { title, description, price, category, status, img, code, stock, owner} = req.body;
+            if (!title || !description || !price || !category || !status || !img || !code || !stock || !owner) {
+                console.log(error);
             };
-            const productData = {title, description, price, category, img, code, stock };
+            const productData = {title, description, price, category, status , img, code, stock, owner };
             await productManager.addProduct(productData);
-            res.redirect('/admin');
+            // res.redirect('/admin');
             res.status(200).send({ msg: 'Producto creado exitosamente' });
         } catch (error) {
             res.status(500).send({ error: 'Error interno del servidor' });
