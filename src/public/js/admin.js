@@ -21,7 +21,7 @@ function irRendimientos() {
 }
 
 function irAgregarProductos() {
-    window.location.href = "/agregar-productos";
+    window.location.href = "/admin/agregar-productos";
 }
 
 function volver() {

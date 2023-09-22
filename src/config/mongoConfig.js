@@ -1,13 +1,15 @@
 import session from "express-session";
 import passport from "passport";
-import MongoStore from "connect-mongo";
 import initializePassport from "./passport.config.js";
+import MongoStore from "connect-mongo";
 import {options} from "./options.js";
 
 const MONGO_URL = options.mongo.url;
 const SECRET_SESSION = options.server.secretSession;
 
+
 function mongoConfig(app) {
+
   app.use(session({
         store: new MongoStore({
         mongoUrl:MONGO_URL,
@@ -17,6 +19,7 @@ function mongoConfig(app) {
       resave:false,
       saveUninitialized:false
   }));
+
   initializePassport();
   app.use(passport.initialize());
   app.use(passport.session());

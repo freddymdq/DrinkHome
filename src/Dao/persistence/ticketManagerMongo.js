@@ -3,7 +3,7 @@ import ticketModel from '../models/ticket.model.js';
 import userModel from '../models/user.model.js';
 import { code } from '../../helpers/codeGenerator.js';
 import { datetime } from '../../helpers/dateGenerator.js'
-import  sendTicket  from '../../helpers/sendTicket.js';
+import  sendTicket  from '../../config/gmail.js';
 
 export default class TicketManagerMongo {
     async purchaseCart (cartId) {
@@ -34,7 +34,7 @@ export default class TicketManagerMongo {
         console.log(ticketCreated)
        
        // ME TIRA ERROR EN EL ENVIO DEL TICKET
-        /*  await sendTicket(purchaserEmail, codeGenerator, dateGenerator, totalAmount);
+         await sendTicket(purchaserEmail, codeGenerator, dateGenerator, totalAmount);
         
         for (const productToRemove of productsToRemove) {
             cart.products = cart.products.filter(
@@ -42,6 +42,6 @@ export default class TicketManagerMongo {
             );
           };
           await cart.save();
-          return ticketData; */
+          return ticketData;
       }}
 

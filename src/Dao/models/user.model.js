@@ -12,7 +12,11 @@ const schema = new mongoose.Schema({
     cart: { type: mongoose.Schema.Types.ObjectId, ref: 'carts' },
     last_connected: { type : Date,  default: null },
     role: { type: String, required: true, enum: ['admin', 'premium', 'user'], default: 'user' },
-    products: { type: [{products:{type: mongoose.Schema.Types.ObjectId, ref: 'products', required: true}}], default: []}
+    products: { 
+        type: [{ 
+            products:{type: mongoose.Schema.Types.ObjectId, ref: 'products', required: true}}], 
+    default: []
+}
 });
 
 schema.pre('save', async function (next) {

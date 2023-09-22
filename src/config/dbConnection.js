@@ -1,19 +1,19 @@
 import mongoose from "mongoose";
-let connectDB = null
+let dataBase = null
+
 import { options } from "./options.js";
 
 
 (async () => {
   try {
-    if ( connectDB ) {
-      console.log("Ya estás conectado a la base de datos");
-      return connectDB ;
+    if ( dataBase ) {
+      console.log("READY CONNECTED DATABASE");
+      return dataBase ;
     } else {
-      connectDB  = mongoose.connect(options.mongo.url);
-      console.log("Conectado con la base de datos");
-      return connectDB ;
+      dataBase  = mongoose.connect(options.mongo.url);
+      console.log("SECURITY CONNECTED DATABASE");
+      return dataBase ;
     }
   } catch (error) {
-    console.log("Error al conectarse a la base de datos: " + error);
-  }
-})();
+    console.log("ERROR CONNECTED DATABASE " + error);
+  }})();

@@ -12,7 +12,11 @@ const schema = new mongoose.Schema({
     img: {  type: String,  require: true},
     code: {  type: String,  require: true },
     stock: {  type: Number,  require: true },
-    owner: {  type: mongoose.Schema.Types.ObjectId,  required: true,  ref: 'users' } ,  
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'users'
+      }
 })
 
 schema.plugin(mongoosePaginate)

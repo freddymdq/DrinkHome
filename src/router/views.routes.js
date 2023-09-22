@@ -23,7 +23,7 @@ router.get('/admin/db-user', adminAccess, async (req, res) => {
 router.get('/admin/rendimientos', adminAccess, (req, res) => {
   res.render('rendimientos', { user: req.session.user });
 });
-router.get('/agregar-productos', adminAccess,  (req, res) => {
+router.get('/admin/agregar-productos', adminAccess,  (req, res) => {
   res.render('addProducts', { user: req.session.user });
 });
 

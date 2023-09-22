@@ -6,7 +6,7 @@ const router = Router();
 const userController = new UserController();
 
 router.get("/", userController.getUsers)
-router.get('/:userId', userController.getUserById)
+router.get('/:userId',adminAccess, userController.getUserById)
 router.delete('/:userId', adminAccess, userController.deleteUserById);
 router.put('/:userId', adminAccess, userController.updateUserRole)
 router.delete("/:userId/notConnected", adminAccess, userController.removeUsers);

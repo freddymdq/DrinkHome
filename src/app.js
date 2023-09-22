@@ -53,6 +53,7 @@ app.use('/api/user', userRouter)
 
 // APP PARA LAS ACTIVIDADES DESDE EL FRONT
 app.use('/', userRouter)
+app.use('/', productRouter)
 
 // Socket.IO
 const io = new Server(httpServer);

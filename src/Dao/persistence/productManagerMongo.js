@@ -1,12 +1,13 @@
 import productModel from "../models/products.model.js";
 
 export default class ProductManagerMongo {
-  async addProduct(productData) {
-    const { title, description, price, category, status, img, code, stock, owner } = productData;
+  async addProduct(prodData) {
+    const { title, description, price, category, status, img, code, stock, owner } =prodData;
     if (!title || !description || !price || !category || !status || !img || !code || !stock || !owner) {
-      throw new Error("Faltan datos");
+      throw new Error("Se neitan todos los datos del producto");
     }
-    const result = await productModel.create(productData);
+    const product = { title, description, category, status, price, img, code, stock, owner}
+    const result = await productModel.create(product);
     return result;
   }
 
@@ -27,12 +28,12 @@ export default class ProductManagerMongo {
     return await productModel.find().lean();
   }
 
-  async updateProductById(prodId, updateData) {
-    const { title, description, price, category, img, code, stock, owner } = updateData;
+  async updateProductById(prodId, prodData) {
+    const { title, description, price, category, img, code, stock, owner } = prodData;
     if (!title || !description || !price || !category || !img || !code || !stock || !owner) {
       throw new Error("Faltan datos");
     }
-    return await productModel.updateOne({ _id: prodId }, { $set: updateData });
+    return await productModel.updateOne({ _id: prodId }, { $set: prodData });
   }
 }
 

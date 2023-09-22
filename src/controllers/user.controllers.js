@@ -1,6 +1,6 @@
 import userModel from '../Dao/models/user.model.js';
 import { createHash } from '../helpers/hashAndValidate.js';
-import  sendRemoveUs  from '../helpers/sendRemoveUs.js';
+import  { sendRemoveUs }  from '../config/gmail.js';
 import  timeConnect  from '../helpers/timeConnect.js';
 import UserMongoManager from '../Dao/persistence/userManagerMongo.js';
 
@@ -94,12 +94,12 @@ export default class UserController {
   }
 
   async removeUsers(req, res) {
-    const removoTwoDays = timeConnect()
-    removoTwoDays.setDate(removoTwoDays.getDate() - 2)
-
+    const inactivity = timeConnect()
+    inactivity.setDate(inactivity.getDate() - 2)
     try {
       const users = await userModel.find({
-        last_connected: { $lte: removoTwoDays }, 
+        last_connected: { $lte: inactivity },
+        role: {$nin: 'admin'} 
       });
 
       if (users.length > 0) {
@@ -108,9 +108,9 @@ export default class UserController {
           console.log(result);
         });
           const result = await userModel.deleteMany({
-            last_connected: { $lte: twoDaysAgo }
+            last_connected: { $lte: inactivity }
         });
-        res.status(200).json({ message: "success", users: result });
+        res.status(200).json({ message: "Se eliminarios cuentas inactivas", users: result });
       } else {
         res.status(400).json({ message: "No hay usuarios inactivos" });
       }
@@ -148,6 +148,7 @@ export default class UserController {
       const users = await userModel.find().lean().exec();
       const db = users.map((o) => {
         return {
+          _id: users._id,
           first_name: o.first_name,
           last_name: o.last_name,
           email: o.email,
