@@ -51,6 +51,9 @@ app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/user', userRouter)
 
+// APP PARA LAS ACTIVIDADES DESDE EL FRONT
+app.use('/', userRouter)
+
 // Socket.IO
 const io = new Server(httpServer);
 const messages = [];

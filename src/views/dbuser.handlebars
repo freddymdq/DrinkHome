@@ -33,12 +33,12 @@
             <td>{{this.role}}</td>
             <td>
                 <form action="/{{this._id}}/delete" method="post">
-                    <button type="submit">Eliminar</button>
+                    <button type="submit" class="delete-button" data-user-id="{{this._id}}">Eliminar</button>
                 </form>
             </td>
             <td>
                 <form action="/{{this._id}}/change" method="post">
-                    <button type="submit">Activar</button>
+                    <button type="submit" class="change-role-button" data-user-id="{{this._id}}">Cambiar a Premium</button>
                 </form>
             </td>
         </tr>

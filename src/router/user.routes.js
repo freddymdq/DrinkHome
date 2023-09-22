@@ -10,6 +10,8 @@ router.get('/:userId', userController.getUserById)
 router.delete('/:userId', adminAccess, userController.deleteUserById);
 router.put('/:userId', adminAccess, userController.updateUserRole)
 router.delete("/:userId/notConnected", adminAccess, userController.removeUsers);
-router.post("/:userId/delete", adminAccess, userController.deleteUserById);
-router.post("/:userId/change",adminAccess, userController.updateUserRole);
+
+//ROTAS PARA MANEJAS LAS SOLICITUDES DESDE EL FRONT USUARIO ADMIN
+router.post('/:userId/delete', userController.deleteUserById);
+router.post("/:userId/change", userController.updateUserRole);
 export default router; 
