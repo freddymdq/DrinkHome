@@ -121,7 +121,7 @@ export default class UserController {
 
   async deleteUserById(req, res) {
     try {
-      const userId = req.params.userId;
+      const userId = req.params.id;
       const userToDelete = await userModel.findById(userId);
 
       if (!userToDelete) {

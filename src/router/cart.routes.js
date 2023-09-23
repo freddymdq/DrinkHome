@@ -11,7 +11,7 @@ router.get('/:cid/detail', cartController.getCartDetails);
 router.post('/:cid/products/:pid', cartController.addProductsToCart);
 router.post('/:cid/product/:pid', cartController.addProductInCart);
 router.put('/:cid/uprod/:pid', cartController.updateProductQuantityInCart);
-router.delete('/empty/:cid', cartController.emptyCart);
+router.delete('/:cid/empty', cartController.emptyCart);
 router.delete('/:cid', cartController.delete);
 router.post('/:cid/purchase', cartController.purchaseCart);
 

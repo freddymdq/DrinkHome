@@ -17,7 +17,7 @@ purchaseBtn.addEventListener('click', (e) => {
       }
     })
     .then((data) => {
-      window.location.href = '/orden';
+      window.location.href = '/';
       console.log('COMPRA FINALIZADA, REVISE SU TICKET');
     })
     .catch((error) => {

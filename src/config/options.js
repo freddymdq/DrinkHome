@@ -14,7 +14,7 @@ export const options = {
     },
     gmail:{
         adminAccount: process.env.ADMIN_EMAIL,
-        adminPass: process.env.ADMIN_PASSWORD,
+        adminPass: process.env.ADMIN_PASS,
     },
     nodeEnv: process.env.NODE_ENV,
 };

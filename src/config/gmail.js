@@ -4,6 +4,7 @@ import { options } from './options.js';
 const adminEmail = options.gmail.adminAccount;
 const adminPass = options.gmail.adminPass;
 
+
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -59,17 +60,18 @@ const transporter = nodemailer.createTransport({
       subject: 'Tu ticket de compra',
       html: 
       `<div>
-        <h1>TICKET FISCAL</h1>
+        <h1>DRINK HOME</h1>
+        <h2>TICKET FISCAL</h2>
         <H2>RESPONSABLE INSCRIPTO</H2>
-        <h4>Copete Tomas Muchoi</h4>
+        <h4>Tomas Mucho Copete</h4>
         <h4>CUIT:20-21202912-3</h4>
-        <p>Código: ${codeGenerator}</p>
+        <p>Código de compra: ${codeGenerator}</p>
         <p>Fecha de compra: ${dateGenerator}</p>
         <p>Precio final: ${totalAmount}</p>
-        <h5>GRACIAS POR HABERNOS TENIDO EN CUENTA</h5>
+        <h5>GRACIAS POR ELEGIRNOS</h5>
     </div>`
   });
 };
 
 
-export default transporter
+export  {transporter}

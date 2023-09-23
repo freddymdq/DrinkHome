@@ -19,17 +19,23 @@ import cartRouter from "./router/cart.routes.js"
 import productRouter from "./router/product.routes.js"
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpecs } from "./config/docConfig.js";
+import  errorConfig  from "./config/errorConfig.js";
 
 
 export const PORT = options.server.port;
 
 const app = express();
-const httpServer = app.listen(PORT,()=>console.log(`Server conectado al puerto ${PORT}`));
+
+
+
+const httpServer = app.listen(PORT,()=>console.log(`Server connected in port: ${PORT}`));
 httpServer.on('error', error => console.log(`Error in server ${error}`));
 
 mongoConfig(app)
-
+errorConfig(app)
 initializePassport();
+
+
 // logger
 app.use(addLogger);
 app.use(passport.initialize());

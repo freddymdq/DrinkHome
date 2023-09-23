@@ -3,7 +3,7 @@ import ticketModel from '../models/ticket.model.js';
 import userModel from '../models/user.model.js';
 import { code } from '../../helpers/codeGenerator.js';
 import { datetime } from '../../helpers/dateGenerator.js'
-import  sendTicket  from '../../config/gmail.js';
+import  {sendTicket}  from '../../config/gmail.js';
 
 export default class TicketManagerMongo {
     async purchaseCart (cartId) {
